@@ -1,11 +1,69 @@
-
-* {
+*{
   font-family: Arial;
+  box-sizing: border-box;
+}
+
+#header{
+    display: flex;
+    flex-flow: column;
+    position: fixed;
+    justify-content: space-between;
+
+    background-color: #fbcf3b;
+    width: 100%;
+    margin: 0;
+    height: 25%;
+}
+
+#header .space{
+    display:flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#header .space .logo{
+    border: 3px red solid;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex: 10%;
+
+    padding: 16px;
+}
+
+#header .space .search-product{
+    border: 3px red solid;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex: 65%;
+
+    padding: 16px;
+}
+
+#header .space .search-product #product-input{
+    margin-right: 16px;
+    padding: 8px;
+    width: 70%;
+}
+
+#header .space .mystuff{
+    border: 3px red solid;
+    display:flex;
+    flex: 25%;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-around;
+
+    padding: 16px;
 }
 
 /* navbar stuff */
 
-#navbar {
+#navbar{
+    width: 100%;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -14,12 +72,12 @@
     text-align: center;
 }
 
-#navbar li {
+#navbar li{
     display: inline-block;
 }
 
 /* navbar button */
-#navbar li a.btn {
+.navbarbtn{
     display: inline-block;
     color: white;
     text-align: center;
@@ -30,7 +88,7 @@
 }
 
 /* nav bar dropdown button */
-.dropbtn {
+.dropbtn{
     display: inline-block;
     color: white;
     text-align: center;
@@ -40,16 +98,16 @@
     font-weight: bold;
 }
 
-#navbar li a.btn:hover, .dropdown:hover .dropbtn, .dropdown-content a:hover{
+.navbarbtn:hover, .dropdown:hover .dropbtn, .dropdown-content a:hover{
     background-color: white;
     color: #007bc7;
 }
 
-li.dropdown {
+li.dropdown{
     display: inline-block;
 }
 
-.dropdown-content {
+.dropdown-content{
     display: none;
     position: absolute;
     background-color: #eeeeee;
@@ -58,7 +116,7 @@ li.dropdown {
     z-index: 1;
 }
 
-.dropdown-content a {
+.dropdown-content a{
     color: black;
     padding: 12px 16px;
     text-decoration: none;
@@ -72,7 +130,7 @@ li.dropdown {
 }
 */
 
-.dropdown:hover .dropdown-content {
+.dropdown:hover .dropdown-content{
     display: block;
 }
 

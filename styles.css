@@ -1,3 +1,8 @@
+
+* {
+  font-family: Arial;
+}
+
 /* navbar stuff */
 
 #navbar {
@@ -5,7 +10,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #007bc7;
     text-align: center;
 }
 
@@ -13,18 +18,31 @@
     display: inline-block;
 }
 
-#navbar li a, .dropbtn {
+/* navbar button */
+#navbar li a.btn {
     display: inline-block;
     color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-    background-color: #333;
+    background-color: #007bc7;
+    font-weight: bold;
 }
 
+/* nav bar dropdown button */
+.dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    background-color: #007bc7;
+    font-weight: bold;
+}
 
-#navbar li a:hover, .dropdown:hover .dropbtn {
-    background-color: red;
+#navbar li a.btn:hover, .dropdown:hover .dropbtn, .dropdown-content a:hover{
+    background-color: white;
+    color: #007bc7;
 }
 
 li.dropdown {
@@ -34,7 +52,7 @@ li.dropdown {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #333;
+    background-color: #eeeeee;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
@@ -47,8 +65,12 @@ li.dropdown {
     display: block;
     text-align: left;
 }
+/*
+.dropdown-content a:hover {
+    background-color: white;
 
-.dropdown-content a:hover {background-color: #f1f1f1}
+}
+*/
 
 .dropdown:hover .dropdown-content {
     display: block;

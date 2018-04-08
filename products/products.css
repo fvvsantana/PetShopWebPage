@@ -1,0 +1,33 @@
+
+#categories a{
+	text-decoration: none;
+	color: grey;
+}
+
+#categories li{
+	padding: 4px;
+}
+
+
+#categories .title{
+    color: #007bc7;
+}
+
+.animals-list, .categories-list{
+	list-style-type: none;
+}
+
+.animals-list{
+	margin: 0;
+	padding: 0;
+}
+
+#categories a:hover{
+	text-decoration: underline;
+	color: black;
+}
+
+.animal-name{
+	padding: 0;
+	margin: 0;
+}

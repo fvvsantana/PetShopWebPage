@@ -6,7 +6,6 @@
 #header{
     display: flex;
     flex-flow: column;
-    position: fixed;
     justify-content: space-between;
 
     background-color: #fbcf3b;
@@ -132,3 +131,4 @@ li.dropdown{
 }
 
 /***************************/
+

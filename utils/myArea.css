@@ -40,6 +40,16 @@
   border: 1px solid lightgray;
 }
 
+.myAreaInfo {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 60%;
+  padding: 20px;
+  border: 1px solid gray;
+}
+
 /* exibe a barra lateral em cima da área principal caso a tela seja menor que 700 pixels */
 @media screen and (max-width: 700px) {
   .row {

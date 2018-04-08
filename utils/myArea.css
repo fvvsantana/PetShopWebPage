@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.sidebar {
+  flex: 30%;
+}
+
+/* barra lateral com os links para navegação */
+.sidemenu {
+  display: flex;
+  flex-direction: column;
+  background-color: lightgray;
+  padding: 20px;
+  margin: 20px;
+  margin-left:100px;
+}
+
+/* links da barra lateral */
+.sidemenu a {
+  background-color: #333;
+  color: white;
+  padding: 14px 50px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.sidemenu a:hover {
+  background-color: gray;
+}
+
+/* área principal onde serão mostradas as informações solicitadas na barra lateral */
+.main {
+  flex: 70%;
+  background-color: white;
+  padding: 20px;
+  margin: 20px;
+  margin-right: 100px;
+  border: 1px solid lightgray;
+}
+
+/* exibe a barra lateral em cima da área principal caso a tela seja menor que 700 pixels */
+@media screen and (max-width: 700px) {
+  .row {
+    flex-direction: column;
+  }
+}

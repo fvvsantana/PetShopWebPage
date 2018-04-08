@@ -24,7 +24,6 @@
 }
 
 #header .space .logo{
-    border: 3px red solid;
     display:flex;
     justify-content: center;
     align-items: center;
@@ -34,7 +33,6 @@
 }
 
 #header .space .search-product{
-    border: 3px red solid;
     display:flex;
     justify-content: center;
     align-items: center;
@@ -50,7 +48,6 @@
 }
 
 #header .space .mystuff{
-    border: 3px red solid;
     display:flex;
     flex: 25%;
     justify-content: center;

@@ -1,16 +1,17 @@
 .row {
   display: flex;
   flex-flow: row;
+  margin-right: 100px;
+  margin-left:100px;
 }
 
 /* barra lateral com os links para navegação */
 .sidemenu {
   display: flex;
   flex-direction: column;
-  background-color: lightgray;
+  background-color: #fbcf3b;
   padding: 20px;
   margin: 20px;
-  margin-left:100px;
 }
 
 /* links da barra lateral */
@@ -35,7 +36,6 @@
   background-color: white;
   padding: 20px;
   margin: 20px;
-  margin-right: 100px;
   border: 1px solid lightgray;
 }
 

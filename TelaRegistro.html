@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <link rel="stylesheet" href="CssTelaRegistro.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <header id="header">
+    <div class="space">
+      <div class="logo">
+        <img src="image/logo.png" alt="Logo" width="100%"> 
+      </div >
+      <form class="search-product">
+        <input type="text" id="product-input" placeholder="O que você procura?">
+        <a class="navbarbtn" href="#">Buscar</a>
+        
+      </form>
+      <div class="mystuff">
+        <a class="navbarbtn" href="#">Minha área</a>
+        <a class="navbarbtn" href="#">Meu carrinho</a>
+      </div>
+    </div>
+    <nav>
+      <ul id="navbar">
+        <li class="dropdown">
+          <a href="#products" class="dropbtn">Produtos</a>
+          <div class="dropdown-content">
+            <a href="#">Cães</a>
+            <a href="#">Gatos</a>
+            <a href="#">Pássaros</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#services" class="dropbtn">Serviços</a>
+          <div class="dropdown-content">
+            <a href="#">Médicos</a>
+            <a href="#">Estéticos</a>
+          </div>
+        </li>
+        <li><a class="navbarbtn" href="#who-we-are">Quem somos</a></li>
+      </ul>
+    </nav>
+  </header>
+	
+	<h2 class="tituloTela">Minha área</h2>
+	<h4 class="tituloTela">Alterar registro</h4>
+
+	<form>
+		<div class="container">
+				
+			<label for="telefone"><b>Telefone</b></label><br>
+				<input type="tel" placeholder="Telefone para contato" name="telefone" maxlength="11"><br><br>
+				
+			<label for="endereço"><b>Endereço</b></label><br>
+				<input type="text" placeholder="Insira seu endereço" name="endereço"><br><br>
+
+			<label for="senha"><b>Alterar senha</b></label><br>
+				<input type="password" placeholder="Crie uma nova senha" name="senha"><br><br>
+
+			<label for="repetir-senha"><b>Confirmar Nova Senha</b></label><br>
+				<input type="password" placeholder="Confirmar nova senha" name="repetir-senha"><br>
+				
+
+			<button type="submit" class="registro"><b>Confirmar</b></button>
+		</div>
+  
+	</form>
+	
+</body>
+
+</html>

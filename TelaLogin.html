@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="CssTelaLogin.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nome do pet shop</title>
+</head>
+<style>
+
+</style>
+</head>
+<body>
+
+  <header id="header">
+    <div class="space">
+      <div class="logo">
+        <img src="image/logo.png" alt="Logo" width="100%"> 
+      </div >
+      <form class="search-product">
+        <input type="text" id="product-input" placeholder="O que você procura?">
+        <a class="navbarbtn" href="#">Buscar</a>
+        
+      </form>
+      <div class="mystuff">
+        <a class="navbarbtn" href="#">Minha área</a>
+        <a class="navbarbtn" href="#">Meu carrinho</a>
+      </div>
+    </div>
+    <nav>
+      <ul id="navbar">
+        <li class="dropdown">
+          <a href="#products" class="dropbtn">Produtos</a>
+          <div class="dropdown-content">
+            <a href="#">Cães</a>
+            <a href="#">Gatos</a>
+            <a href="#">Pássaros</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#services" class="dropbtn">Serviços</a>
+          <div class="dropdown-content">
+            <a href="#">Médicos</a>
+            <a href="#">Estéticos</a>
+          </div>
+        </li>
+        <li><a class="navbarbtn" href="#who-we-are">Quem somos</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+<h2 class="tituloTela">Login de usuário</h2>
+
+<form>
+  <div class="container">
+  
+    <label for="usuario"><b>CPF</b></label><br>
+    <input type="text" placeholder="Usuário" name="usuario" required><br><br>
+	
+    <label for="senha"><b>Senha</b></label><br>
+    <input type="password" placeholder="Senha" name="senha" required><br>
+	
+	<label><input type="checkbox" name="lembrar"> Lembrar de mim</label><br>
+	
+    <button class="senha" type="submit">Login</button>
+        
+  </div>
+ </form>
+
+  <div class="container">
+    <a href="#">Esqueci minha senha</a>
+  </div>
+   <div class="container">
+    <a href="#">Criar conta</a>
+  </div>
+
+</body>
+</html>

@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
     <link rel="stylesheet" href="css/register.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Registrar</title>
 </head>
 
 <body>
@@ -11,39 +12,42 @@
   <header id="header">
     <div class="space">
       <div class="logo">
-        <img src="image/logo.png" alt="Logo" width="100%"> 
+		<a href="main.html">
+			<img src="image/logo.png" alt="Logo" width="100%"> 
+		</a>
       </div >
       <form class="search-product">
         <input type="text" id="product-input" placeholder="O que você procura?">
-        <a class="navbarbtn" href="#">Buscar</a>
+        <a class="navbarbtn" href="products.html">Buscar</a>
         
       </form>
       <div class="mystuff">
-        <a class="navbarbtn" href="#">Minha área</a>
-        <a class="navbarbtn" href="#">Meu carrinho</a>
+        <a class="navbarbtn" href="myprofile.html">Minha área</a>
+        <a class="navbarbtn" href="cart.html">Meu carrinho</a>
       </div>
     </div>
     <nav>
       <ul id="navbar">
         <li class="dropdown">
-          <a href="#products" class="dropbtn">Produtos</a>
+          <a href="products.html" class="dropbtn">Produtos</a>
           <div class="dropdown-content">
-            <a href="#">Cães</a>
-            <a href="#">Gatos</a>
-            <a href="#">Pássaros</a>
+            <a href="products.html">Cães</a>
+            <a href="products.html">Gatos</a>
+            <a href="products.html">Pássaros</a>
           </div>
         </li>
         <li class="dropdown">
-          <a href="#services" class="dropbtn">Serviços</a>
+          <a href="services.html" class="dropbtn">Serviços</a>
           <div class="dropdown-content">
-            <a href="#">Médicos</a>
-            <a href="#">Estéticos</a>
+            <a href="service_view.html">Médicos</a>
+            <a href="service_view.html">Estéticos</a>
           </div>
         </li>
-        <li><a class="navbarbtn" href="#who-we-are">Quem somos</a></li>
+        <li><a class="navbarbtn" href="about.html">Quem somos</a></li>
       </ul>
     </nav>
   </header>
+  
 	<form>
 		<div class="container">
 			<p><b>Preencha os campos abaixo para criar uma conta</b></p>

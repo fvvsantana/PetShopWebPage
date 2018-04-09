@@ -2,7 +2,8 @@
   display: flex;
   flex-flow: row;
   margin-right: 100px;
-  margin-left:100px;
+  margin-left: 100px;
+  margin-top: 40px;
 }
 
 /* barra lateral com os links para navegação */

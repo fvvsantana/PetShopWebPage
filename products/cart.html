@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="../styles.css">
+	<link rel="stylesheet" href="cart.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Nome do pet shop</title>
+</head>
+<body>
+
+	<header id="header">
+		<div class="space">
+			<div class="logo">
+				<img src="../image/logo.png" alt="Logo" width="100%"> 
+			</div >
+			<form class="search-product">
+				<input type="text" id="product-input" placeholder="O que você procura?">
+				<a class="navbarbtn" href="#">Buscar</a>
+
+			</form>
+			<div class="mystuff">
+				<a class="navbarbtn" href="#">Minha área</a>
+				<a class="navbarbtn" href="#">Meu carrinho</a>
+			</div>
+		</div>
+		<nav>
+			<ul id="navbar">
+				<li class="dropdown">
+					<a href="#products" class="dropbtn">Produtos</a>
+					<div class="dropdown-content">
+						<a href="#">Cães</a>
+						<a href="#">Gatos</a>
+						<a href="#">Pássaros</a>
+					</div>
+				</li>
+				<li class="dropdown">
+					<a href="#services" class="dropbtn">Serviços</a>
+					<div class="dropdown-content">
+						<a href="#">Médicos</a>
+						<a href="#">Estéticos</a>
+					</div>
+				</li>
+				<li><a class="navbarbtn" href="#who-we-are">Quem somos</a></li>
+			</ul>
+		</nav>
+	</header>
+	<div id="page">
+		<div class="row">
+
+			<section>
+				<table id="cart-info">
+					<tr>
+						<th>Meu carrinho</th>
+						<th>Produto</th>
+						<th>Preço</th>
+						<th>Quantidade</th>
+						<th>Total</th>
+						<th></th>
+					</tr>
+					<tr>
+						<td><a href="#"><img src="../image/products/product01.jpg" alt="prod1" width="50%"></a></td>
+						<td><a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a></td>
+						<td><h2>R$ 209,99</h2></td>
+						<td>
+							<span><a class="btn" href="#">-</a></span>
+							<input type="text" id="amount-input" placeholder="1">
+							<span><a class="btn" href="#">+</a></span>
+						</td>
+						<td><h2>R$ 209,99</h2></td>
+						<td><span><a class="btn" href="#">Remover</a></span></td>
+					</tr>
+				</table>
+			</section>
+
+		</div>
+	</div>
+
+
+
+</body>
+</html>

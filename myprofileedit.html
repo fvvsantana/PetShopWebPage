@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="utils/myArea.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nome do pet shop</title>
+</head>
+<style>
+
+</style>
+</head>
+<body>
+
+  <header id="header">
+    <div class="space">
+      <div class="logo">
+        <img src="image/logo.png" alt="Logo" width="100%"> 
+      </div >
+      <form class="search-product">
+        <input type="text" id="product-input" placeholder="O que você procura?">
+        <a class="navbarbtn" href="#">Buscar</a>
+        
+      </form>
+      <div class="mystuff">
+        <a class="navbarbtn" href="#">Minha área</a>
+        <a class="navbarbtn" href="#">Meu carrinho</a>
+      </div>
+    </div>
+    <nav>
+      <ul id="navbar">
+        <li class="dropdown">
+          <a href="#products" class="dropbtn">Produtos</a>
+          <div class="dropdown-content">
+            <a href="#">Cães</a>
+            <a href="#">Gatos</a>
+            <a href="#">Pássaros</a>
+          </div>
+        </li>
+        <li class="dropdown">
+          <a href="#services" class="dropbtn">Serviços</a>
+          <div class="dropdown-content">
+            <a href="#">Médicos</a>
+            <a href="#">Estéticos</a>
+          </div>
+        </li>
+        <li><a class="navbarbtn" href="#who-we-are">Quem somos</a></li>
+      </ul>
+    </nav>
+  </header>
+
+<div class="row">
+  <aside>
+    <div class="sidemenu">
+      <a href="#">Meu perfil</a>
+      <a href="#">Meu pet</a>
+      <a href="#">Histórico de serviços</a>
+    </div>
+  </aside>
+  <section>
+    <div class="main">
+      <h1 style="color:blue">Meu perfil</h1>
+      <h3>Alterar informações pessoais</h3>
+      <div class="myAreaInfo">
+        <div>
+          <h4>E-mail:</h4>
+          <input type="email" name="email">
+        </div>
+        <div>
+          <h4>Telefone:</h4>
+          <input type="tel" name="telefone">
+        </div>
+        <div>
+          <h4>Telefone comercial:</h4>
+          <input type="tel" name="telefone">
+        </div>
+        <div>
+          <h4>Nova senha:</h4>
+          <input type="password" name="senha">
+        </div>
+        <div>
+          <h4>Confirme senha</h4>
+          <input type="password" name="senha">
+        </div>
+        <div>
+          <input type="submit" value="Enviar">
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>

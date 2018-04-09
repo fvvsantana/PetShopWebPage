@@ -1,0 +1,75 @@
+.row {
+  display: flex;
+  flex-flow: row;
+  margin-right: 100px;
+  margin-left: 100px;
+  margin-top: 40px;
+}
+
+/* barra lateral com os links para navegação */
+.sidemenu {
+  display: flex;
+  flex-direction: column;
+  background-color: #fbcf3b;
+  padding: 20px;
+  margin: 20px;
+}
+
+/* links da barra lateral */
+.sidemenu a {
+  background-color: #007bc7;
+  color: white;
+  padding: 14px 50px;
+  text-decoration: none;
+  text-align: center;
+  margin: 8px;
+}
+
+.sidemenu a:hover {
+  background-color: white;
+  color: #007bc7;
+}
+
+/* área principal onde serão mostradas as informações solicitadas na barra lateral */
+.main {
+  display: flex;
+  flex-flow: column;
+
+  background-color: white;
+  padding: 20px;
+  margin: 20px;
+  border: 1px solid lightgray;
+}
+
+.myAreaInfo {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 60%;
+  padding: 20px;
+  border: 1px solid lightgray;
+}
+
+.foo{
+  display: flex;
+  flex-flow: row;
+}
+
+.myAreaInfo div{
+  margin: 13px;
+  width: 150px;
+}
+
+#photo {
+  display: flex;
+  flex-flow: column;
+  border: 1px solid lightgray;
+}
+
+/* exibe a barra lateral em cima da área principal caso a tela seja menor que 700 pixels */
+@media screen and (max-width: 700px) {
+  .row {
+    flex-direction: column;
+  }
+}

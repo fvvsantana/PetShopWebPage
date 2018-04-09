@@ -1,0 +1,33 @@
+
+#side-menu a{
+	text-decoration: none;
+	color: grey;
+}
+
+#side-menu li{
+	padding: 4px;
+}
+
+
+#side-menu .title{
+    color: #007bc7;
+}
+
+.first-list, .second-list{
+	list-style-type: none;
+}
+
+.first-list{
+	margin: 0;
+	padding: 0;
+}
+
+#side-menu a:hover{
+	text-decoration: underline;
+	color: black;
+}
+
+.first-topic{
+	padding: 0;
+	margin: 0;
+}

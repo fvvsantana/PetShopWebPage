@@ -49,13 +49,12 @@
 		<div class="row">
 
 			<section>
-				<table id="cart-info">
+				<table class="cart-table">
 					<tr>
 						<th>Meu carrinho</th>
 						<th>Produto</th>
 						<th>Preço</th>
 						<th>Quantidade</th>
-						<th>Total</th>
 						<th></th>
 					</tr>
 					<tr>
@@ -67,10 +66,25 @@
 							<input type="text" id="amount-input" placeholder="1">
 							<span><a class="btn" href="#">+</a></span>
 						</td>
-						<td><h2>R$ 209,99</h2></td>
 						<td><span><a class="btn" href="#">Remover</a></span></td>
 					</tr>
 				</table>
+
+				<table class="cart-table">
+					<tr>
+						<th>Subtotal</th>
+						<td><h2>R$ 209,99</h2></td>
+					</tr>
+					<tr>
+						<th>Frete</th>
+						<td><a href="#">Calcular valor</a></td>
+					</tr>
+					<tr>
+						<th>Total</th>
+						<td><h2>R$ 209,99</h2></td>
+					</tr>
+				</table>
+				<span><a class="confirmation-btn" href="#">Confirmar pedido</a></span>
 			</section>
 
 		</div>

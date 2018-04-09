@@ -1,10 +1,6 @@
 .row {
   display: flex;
-  flex-wrap: wrap;
-}
-
-.sidebar {
-  flex: 30%;
+  flex-flow: row;
 }
 
 /* barra lateral com os links para navegação */
@@ -19,7 +15,7 @@
 
 /* links da barra lateral */
 .sidemenu a {
-  background-color: #333;
+  background-color: #007bc7;
   color: white;
   padding: 14px 50px;
   text-decoration: none;
@@ -27,12 +23,15 @@
 }
 
 .sidemenu a:hover {
-  background-color: gray;
+  background-color: white;
+  color: #007bc7;
 }
 
 /* área principal onde serão mostradas as informações solicitadas na barra lateral */
 .main {
-  flex: 70%;
+  display: flex;
+  flex-flow: column;
+
   background-color: white;
   padding: 20px;
   margin: 20px;
@@ -47,7 +46,23 @@
   justify-content: space-between;
   width: 60%;
   padding: 20px;
-  border: 1px solid gray;
+  border: 1px solid lightgray;
+}
+
+.foo{
+  display: flex;
+  flex-flow: row;
+}
+
+.myAreaInfo div{
+  margin: 13px;
+  width: 150px;
+}
+
+#photo {
+  display: flex;
+  flex-flow: column;
+  border: 1px solid lightgray;
 }
 
 /* exibe a barra lateral em cima da área principal caso a tela seja menor que 700 pixels */

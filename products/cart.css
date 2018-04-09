@@ -9,6 +9,10 @@
 	flex-flow: row;
 }
 
+.cart-section{
+	flex: 75%;
+}
+
 .cart-table{
 	margin: 16px;
 }
@@ -63,9 +67,21 @@
     text-decoration: none;
     background-color: #007bc7;
     color: white;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
 
     margin: 4px;
     padding: 8px 16px;
 }
+.confirmation-btn:hover{
+    background-color: gray;
+    color: black;
+}
+
+.confirmation-section{
+	display: flex;
+	flex: 25%;
+	flex-flow: column;
+	justify-content: center;
+}
+

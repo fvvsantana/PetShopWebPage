@@ -130,5 +130,70 @@ li.dropdown{
     display: block;
 }
 
+
+/***************************/
+/* Services screen */
+
+.flex-container {
+	display: flex;
+	flex-direction: row;
+	margin: 10px;
+}
+
+.flex-container > *{
+	width: 100%;
+	max-width: 50%;
+	flex: 50%;
+}
+
+.image > img {
+	width: 100%;
+}
+
+.short-desc {
+	text-align: center;
+	align-self: center;
+}
+
+.titulo {
+	color: MidnightBlue;
+}
+
+.short-desc-text {
+	padding: 5%;
+}
+
+.agendar {
+	background-color: Green;
+	color: White;
+	padding: 15px 40px;
+	display: inline-block;
+	border-radius: 5px;
+}
+
+.agendar:hover {
+	background-color: #006800;
+}
+
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+	color: Black;
+}
+
+.desc {
+	background-color: Gainsboro;
+	padding: 10px;
+}
+
+.desc h4 {
+	margin: 7px 0px;
+}
+
+.desc p {
+	margin: 0px;
+	margin-bottom: 22px;
+}
+
 /***************************/
 

@@ -2,9 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/login.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Happy Pet</title>
+    <title>Login</title>
+</head>
+<style>
+
+</style>
 </head>
 <body>
 
@@ -47,8 +51,28 @@
     </nav>
   </header>
 
-  <h2>Página inicial</h2>
 
+<h2 class="tituloTela">Login de usuário</h2>
+
+<form>
+  <div class="container">
+  
+    <label for="usuario"><b>CPF</b></label><br>
+    <input type="text" placeholder="Usuário" name="usuario" required><br><br>
+	
+    <label for="senha"><b>Senha</b></label><br>
+    <input type="password" placeholder="Senha" name="senha" required><br>
+	
+	<label><input type="checkbox" name="lembrar"> Lembrar de mim</label><br>
+	
+    <button class="senha" type="submit">Login</button>
+        
+  </div>
+ </form>
+
+  <div class="container">
+    <a href="#">Esqueci minha senha</a>
+  </div>
 
 </body>
 </html>

@@ -2,9 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/myArea.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Happy Pet</title>
+    <title>Editar perfil</title>
+</head>
+<style>
+
+</style>
 </head>
 <body>
 
@@ -47,8 +52,46 @@
     </nav>
   </header>
 
-  <h2>Página inicial</h2>
-
+<div class="row">
+  <aside>
+    <div class="sidemenu">
+      <a href="myprofile.html">Meu perfil</a>
+      <a href="mypet.html">Meus pets</a>
+      <a href="#">Histórico de serviços</a>
+    </div>
+  </aside>
+  <section>
+    <div class="main">
+      <h1 style="color:blue">Meu perfil</h1>
+      <h3>Alterar informações pessoais</h3>
+      <div class="myAreaInfo">
+        <div>
+          <h4>E-mail:</h4>
+          <input type="email" name="email">
+        </div>
+        <div>
+          <h4>Telefone:</h4>
+          <input type="tel" name="telefone">
+        </div>
+        <div>
+          <h4>Telefone comercial:</h4>
+          <input type="tel" name="telefone">
+        </div>
+        <div>
+          <h4>Nova senha:</h4>
+          <input type="password" name="senha">
+        </div>
+        <div>
+          <h4>Confirme senha</h4>
+          <input type="password" name="senha">
+        </div>
+        <div>
+          <input type="submit" value="Enviar">
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 
 </body>
 </html>

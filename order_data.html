@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9">
+      <h2>Finalizar pedido</h2>
+      <div class="row justify-content-center" style="margin-left:0px; margin-right:0px">
+        <div class="well well-lg col-sm-5">
+            <h4>Dados pessoais</h4>
+            <p>Nome: xxxxxxx xxxxxx xxxxxx</p>
+            <p>email: xxxxxx@xxxx.com</p>
+            <p>Telefone: (xx) xxxxx-xxxx</p>
+            <p>CPF: xxx.xxx.xxx-xx</p>
+            <a onclick="changePersonalData()" class="btn btn-primary">Alterar informações</a>
+        </div>
+        <div class="well well-lg col-sm-5 col-sm-offset-2">
+            <h4>Endereço de entrega</h4>
+            <p>Rua: xxxxxxxx xxxxx xxxxxx</p>
+            <p>Numero: xxxx</p>
+            <p>Bairro: xxxxx xxxx</p>
+            <p>Cidade: xxxx xxxxxx xxxx</p>
+            <p>Estado: xx</p>
+            <a onclick="changeDeliverAdress()" class="btn btn-primary">Alterar endereço</a>
+        </div>
+      </div>
+      <div class="well row" style="margin-top:10px">
+        <div class="col-sm">
+          <h3>Pagamento</h3>
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a data-toggle="tab" href="#cartao">Cartão de crédito</a>
+            </li>
+            <li>
+              <a data-toggle="tab" href="#boleto">Boleto bancário</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div id="cartao" class="tab-pane fade in active">
+              <form>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="cardnumber" placeholder="Número do cartão">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="cardexpdate" placeholder="Validade do cartão">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="ownername" placeholder="Nome impresso no cartão">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="securitycode" placeholder="Código de segurança">
+                </div>
+              </form>
+            </div>
+            <div id="boleto" class="tab-pane fade"><br>
+              <p>Código de barras: xxxxx xxxxxx xxxxxx xxxxxx</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3" style="margin-top:50px">
+      <h4>Resumo do pedido</h4>
+      <p>bla bla bla</p>
+      <p>bla bla</p>
+      <p>bla bla</p>
+      <p>bla bla</p>
+      <p>bla bla</p>
+      <p>bla bla</p>
+      <p>bla bla</p>
+    </div>
+  </div>
+</div>

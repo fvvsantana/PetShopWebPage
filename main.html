@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Happy Pet</title>
+	
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/myArea.css">
+    <link rel="stylesheet" type="text/css" href="css/cart.css">
+    <link rel="stylesheet" href="css/products.css">
+    <link rel="stylesheet" href="css/services.css">
+    <link rel="stylesheet" href="css/service_view.css">
+    <link rel="stylesheet" href="css/service_schedule.css">
+	
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="PetShopJS.js"></script> 
+  </head>
+
+  <body>
+    <header id="header">
+      <div class="space">
+        <div class="logo">
+          <img src="image/logo.png" alt="Logo" width="100%"> 
+        </div >
+        <form class="search-product">
+          <input type="text" id="product-input" placeholder="O que você procura?">
+          <a class="navbarbtn" onclick="changePageProducts();">Buscar</a>
+        </form>
+        <div class="mystuff">
+          <a class="navbarbtn" onclick="changePageMyProfile(userSession);">Minha área</a>
+          <a class="navbarbtn" onclick="changePageMyCart();">Meu carrinho</a>
+        </div>
+      </div>
+      <nav>
+        <ul id="navbar">
+          <li class="dropdown">
+            <a onclick="changePageProducts();" class="dropbtn">Produtos</a>
+            <div class="dropdown-content">
+              <a onclick="changePageProducts();">Cães</a>
+              <a onclick="changePageProducts();">Gatos</a>
+              <a onclick="changePageProducts();">Pássaros</a>
+            </div>
+          </li>
+          <li class="dropdown">
+            <a onclick="changePageServices()" class="dropbtn">Serviços</a>
+            <div class="dropdown-content">
+              <a onclick="changePageServices()">Médicos</a>
+              <a onclick="changePageServices()">Estéticos</a>
+            </div>
+          </li>
+          <li><a class="navbarbtn" onclick="changePageAbout();">Quem somos</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div id="content">
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,22 @@
+<h2 class="tituloTela">Login de usuário</h2>
+
+<form>
+  <div class="container">
+  
+    <label for="usuario"><b>CPF</b></label><br>
+    <input type="text" id="user" name="cpf" required maxlength="11"><br><br>
+	
+    <label for="senha"><b>Senha</b></label><br>
+    <input type="password" id="password" placeholder="Senha" name="senha" required><br>
+	
+	<label><input type="checkbox" name="lembrar"> Lembrar de mim</label><br>
+	
+    <button class="senha" type="button" onclick="startLogin();">Login</button>
+        
+  </div>
+ </form>
+
+  <div class="container">
+    <button class="senha">Esqueci minha senha</button><br>
+	<button class="senha" onclick="changePageRegister();">Criar conta</button>
+  </div>

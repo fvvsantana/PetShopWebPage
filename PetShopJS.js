@@ -62,6 +62,10 @@
 			});
 		}
 		
+		function changeOrderConfirm() {
+			$("#content").load("order_data.html")
+		}
+		
 		//Inicio da organização do IndexedDB
 		let db;
 		
@@ -110,30 +114,40 @@
 			let loginID = $("#user").val();
 			let loginPass = $("#password").val();
 			
-			let objectStore = db.transaction(["users"]).objectStore("users");
-			let request = objectStore.openCursor(loginID);
-			request.onsuccess =  event => {
+			if(loginID == NULL || loginPass == NULL){
+					alert("Preencha todos os campos!");
+			}
+			else{
+				let objectStore = db.transaction(["users"]).objectStore("users");
+				let request = objectStore.openCursor(loginID);
+				request.onsuccess =  event => {
 				
-				let cursor = event.target.result;
-				if(cursor){
-					if(loginPass == cursor.value.password){
-						userLoggedIn = 1;
-						userSession.name = cursor.value.name;
-						userSession.cpf = cursor.value.cpf;
-						userSession.email = cursor.value.email;
-						userSession.address = cursor.value.address;
-						userSession.tel = cursor.value.tel;
-						userSession.profilePic = cursor.value.profilePic;
-						userSession.isAdmin = cursor.value.isAdmin;
-						changePageMyProfile(userSession);
-
+					let cursor = event.target.result;
+					if(cursor){
+						if(loginPass == cursor.value.password){
+							userLoggedIn = 1;
+							userSession.name = cursor.value.name;
+							userSession.cpf = cursor.value.cpf;
+							userSession.email = cursor.value.email;
+							userSession.address = cursor.value.address;
+							userSession.tel = cursor.value.tel;
+							userSession.profilePic = cursor.value.profilePic;
+							userSession.isAdmin = cursor.value.isAdmin;
+							changePageMyProfile(userSession);
 					}
 					else{
 						alert("ERROU");
 					}
-				}
+					}
 				else{
 					alert("ERROU CPF");
 				}
-			};
+				};
+			}
+		}
+		
+		function createAccount(){
+			
+			
+			
 		}

@@ -1,5 +1,4 @@
-	let userLoggedIn = 0;
-		
+	
 		function changePageMyProfile(userSession) {
 			if(userLoggedIn == 1){
 				$("#content").load("myprofile.html", function() {
@@ -69,17 +68,21 @@
 		//Inicio da organização do IndexedDB
 		let db;
 		
+		//Inicialmente não há um usuário logado
+		let userLoggedIn = 0;
+		
+		//Dados do usuário que estiver em uma sessão estarão aqui
 		let userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: 0};
 		
 		//Função para carregar alguns usuários de demonstração 
-		function loadUsers(){
+		function loadData(){
 		
 			const userData = [
-				{ cpf: "adm", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "adm", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: 1 },
+				{ cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: 1 },
 				{ cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: 0 }
 			];
 		
-			let request = indexedDB.open("users_db", 1);
+			let request = indexedDB.open("HappyPet_db", 1);
 			request.onupgradeneeded = function(event) {
 				db = event.target.result;
 
@@ -101,21 +104,22 @@
 
 				objectStore.transaction.oncomplete = function(event) {
 					// Store values in the newly created objectStore.
-					let userObjectStore = db.transaction("users", "readwrite").objectStore("users");
+					objectStore = db.transaction("users", "readwrite").objectStore("users");
 					for (let i in userData) {
-						userObjectStore.add(userData[i]);
+						objectStore.add(userData[i]);
 					}
 				};
 			};
 		}
-		loadUsers();	
+		loadData();	
 		
 		function startLogin() {
 			let loginID = $("#user").val();
 			let loginPass = $("#password").val();
 			
-			if(loginID == NULL || loginPass == NULL){
+			if($("#user").val() == "" || loginPass == ""){
 					alert("Preencha todos os campos!");
+					return;
 			}
 			else{
 				let objectStore = db.transaction(["users"]).objectStore("users");
@@ -135,19 +139,84 @@
 							userSession.isAdmin = cursor.value.isAdmin;
 							changePageMyProfile(userSession);
 					}
+						else{
+							alert("Senha incorreta");
+						}
+					}
 					else{
-						alert("ERROU");
+						alert("Não existe um usuário com esse CPF");
 					}
-					}
-				else{
-					alert("ERROU CPF");
-				}
 				};
 			}
 		}
 		
+		function startLogoff(){
+			userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: 0};
+			userLoggedIn = 0;
+			changePageMyProfile();
+		}
+		
 		function createAccount(){
 			
+			if($("#registerCPF").val().split(" ").join("") == "" || $("#registerName").val().split(" ").join("") == "" || $("#registerTel").val().split(" ").join("") == "" || $("#registerAddress").val().split(" ").join("") == "" || $("#registerEmail").val().split(" ").join("") == "" || $("#registerPassword").val().split(" ").join("") == "" || $("#registerConfirmPassword").val().split(" ").join("") == ""){
+					alert("Preencha todos os campos!");
+					return;
+			}
+			else{
+				let newUser = { cpf: $.trim($("#registerCPF").val()), name: $.trim($("#registerName").val()), tel: $.trim($("#registerTel").val()), address: $.trim($("#registerAddress").val()), email: $.trim($("#registerEmail").val()), password: $("#registerPassword").val(), profilePic: $("#registerProfilePic").val(), isAdmin: 0 };
 			
-			
+				if($("#registerConfirmPassword").val() == newUser.password){
+					let objectStore = db.transaction(["users"], "readwrite").objectStore("users");
+					objectStore.add(newUser);
+					
+					userLoggedIn = 1;
+					userSession.name = newUser.name;
+					userSession.cpf = newUser.cpf;
+					userSession.email = newUser.email;
+					userSession.address = newUser.address;
+					userSession.tel = newUser.tel;
+					userSession.profilePic = newUser.profilePic;
+					console.log(userSession.profilePic);					
+					userSession.isAdmin = newUser.isAdmin;
+					
+					changePageMyProfile(userSession);
+				}
+				else{
+					alert("Erro na confirmação de senha!");
+				}
+			}
+		}
+		
+		function editAccount(){
+
+			let objectStore = db.transaction(["users"], "readwrite").objectStore("users");
+			let request = objectStore.openCursor(userSession.cpf);
+			request.onsuccess =  event => {
+				
+				let cursor = event.target.result;
+				if($("#editEmail").val().split(" ").join("") != ""){
+					let requestEmail = objectStore.openCursor($("#editEmail").val());
+					request.onsuccess =  event => {
+						alert("Já existe um usuário cadastrado com esse email");
+						return;
+					}
+					cursor.value.email = $("#editEmail").val();
+					userSession.email = cursor.value.email;
+				}
+				if($("#editTel").val().split(" ").join("") != ""){
+					cursor.value.tel = $("#editTel").val();
+					userSession.tel = cursor.value.tel;
+				}
+				if($("#editPassword").val().split(" ").join("") != ""){
+					if($("#editPassword").val() == $("#editConfirmPassword").val()){
+						cursor.value.password = $("#editPassword").val();
+					}
+					else{
+						alert("Erro na confirmação de senha!");
+						return;
+					}
+				}
+				let requestUpdate = objectStore.put(cursor.value);
+				changePageMyProfile(userSession);
+			}
 		}

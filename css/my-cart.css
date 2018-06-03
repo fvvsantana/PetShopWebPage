@@ -1,7 +1,3 @@
-.cart-section{
-	flex: 75%;
-}
-
 .cart-table{
 	margin: 16px;
 }
@@ -68,9 +64,6 @@
 }
 
 .confirmation-section{
-	display: flex;
-	flex: 25%;
-	flex-flow: column;
 	justify-content: center;
 }
 

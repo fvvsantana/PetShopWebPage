@@ -1,35 +1,57 @@
- 
-	<form>
-		<div class="container">
-			<p><b>Preencha os campos abaixo para criar uma conta</b></p>
-			
-			<label for="nome"><b>Nome</b></label><br>
-				<input type="text" id="registerName" placeholder="Insira seu nome" name="nome" required><br><br>
-				
-			<label for="cpf"><b>CPF</b></label><br>
-				<input type="text" id="registerCPF" placeholder="Insira seu CPF" name="cpf" required maxlength="11"><br><br>
-
-			<label for="email"><b>Email</b></label><br>
-				<input type="email" id="registerEmail" placeholder="Insira seu email" name="email" required><br><br>
-			
-			<label for="telefone"><b>Telefone</b></label><br>
-				<input type="tel" id="registerTel" placeholder="Telefone para contato" name="telefone" required maxlength="11"><br><br>
-				
-			<label for="endereço"><b>Endereço</b></label><br>
-				<input type="text" id="registerAddress" placeholder="Insira seu endereço" name="endereço" required><br><br>
-
-			<label for="senha"><b>Senha</b></label><br>
-				<input type="password" id="registerPassword" placeholder="Crie uma senha" name="senha" required><br><br>
-
-			<label for="repetir-senha"><b>Confirmar Senha</b></label><br>
-				<input type="password" id="registerConfirmPassword" placeholder="Confirme sua senha" name="repetir-senha" required><br>
-			
-			<label for="profilepic"><p><b>Enviar Foto Para Identificação</b></p></label>	
-				<input type="file" id="registerProfilePic" accept=".png, .jpeg, .jpg"><br><br>
-			
-			<button class="senha" type="button" onclick="createAccount();">Criar Conta</button>
-			
-		</div>
-	</form>
+<form class="form-horizontal">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="name">Nome:</label>
+      <div class="col-sm-6">
+        <input class="form-control" type="text" id="registerName" placeholder="Insira seu nome" name="nome" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="cpf">CPF(somente números):</label>
+      <div class="col-sm-6">
+        <input class="form-control" type="text" id="registerCPF" placeholder="Insira seu CPF" name="cpf" required maxlength="11">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Email:</label>
+      <div class="col-sm-6">          
+        <input type="email" class="form-control" id="registerEmail" placeholder="Insira seu email" name="email" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="tel">Telefone:</label>
+      <div class="col-sm-6">          
+        <input type="tel" class="form-control" id="registerTel" placeholder="Telefone para contato" name="telefone" required maxlength="11">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="address">Endereço:</label>
+      <div class="col-sm-6">          
+        <input type="text" class="form-control" id="registerAddress" placeholder="Insira seu endereço" name="endereço" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="password">Senha:</label>
+      <div class="col-sm-6">          
+        <input type="password" class="form-control" id="registerPassword" placeholder="Crie uma senha" name="senha" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="passwordConfirm">Confirmar Senha:</label>
+      <div class="col-sm-6">          
+        <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirme sua senha" name="repetir-senha" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="profilepic">Enviar Foto de Identificação:</label>
+      <div class="col-sm-6">          
+        <input type="file" class="form-control" id="registerProfilePic" accept=".png, .jpeg, .jpg">
+      </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="button" class="btn btn-default" onclick="createAccount();">Criar Conta</button>
+      </div>
+    </div>
+</form>
 	
 	

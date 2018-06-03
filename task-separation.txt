@@ -1,0 +1,32 @@
+Mateus:
+	-Fazer as telas de
+		-gerenciar estoque
+		-gerenciar sessões
+		-gerenciar clientes
+		-gerenciar serviços
+		-gerenciar administradores
+
+
+Vinicius:
+	-Fazer as telas de
+		-menu lateral
+		-alterar produto e cadastrar produto (parecida com a de alterar produto)
+		-agendar sessão
+		-alterar sessão
+		-alterar cliente
+		-cadastrar novo serviço e alterar serviço (parecida com a de criar novo serviço)
+	
+
+César:
+	-Fazer todo o fluxo e armazenamento de dados, tanto do cliente quanto do administrador.
+
+
+Flavio:
+	-Tranformar as páginas em SPA
+	-Fazer as conexões e o controle de exibição das páginas
+	-Planejar e fazer as telas de
+		-confirmação de compra
+		-apresentação dos serviços
+		-mostrar produto
+		-alterar o cabeçalho da página para o adm e pro cliente
+

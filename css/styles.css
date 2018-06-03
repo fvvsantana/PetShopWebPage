@@ -81,6 +81,7 @@
     text-decoration: none;
     background-color: #007bc7;
     font-weight: bold;
+    border: none;
 }
 
 /* nav bar dropdown button */
@@ -92,6 +93,7 @@
     text-decoration: none;
     background-color: #007bc7;
     font-weight: bold;
+    border: none;
 }
 
 .navbarbtn:hover, .dropdown:hover .dropbtn, .dropdown-content a:hover{

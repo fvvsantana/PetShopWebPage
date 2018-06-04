@@ -5,7 +5,7 @@ let db;
 let userLoggedIn = 0;
 
 //Dados do usuário que estiver em uma sessão estarão aqui
-let userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: 0};
+let userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false};
 
 //abertura do banco de dados
 let request = indexedDB.open("HappyPet_db", 1);
@@ -35,8 +35,8 @@ function addUsers(objectStore){
     
     //dados dos usuários iniciais
     const userData = [
-        { cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: 1 },
-        { cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: 0 }
+        { cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: true },
+        { cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: false }
     ];
     
     //inserção dos usuários no banco de dados
@@ -139,7 +139,11 @@ $(function(){
           break;
 
         case "#my-profile":
-          changePageMyProfile();
+          loadPageMyProfile();
+          break;
+
+        case "#login":
+          content.load("login.html");
           break;
 
         case "#order-confirmation":
@@ -172,7 +176,19 @@ $(function(){
 
 });
 
-function changePageMyProfile() {
+function loginClick() {
+    if (userLoggedIn == 1) {
+        if (userSession.isAdmin)
+            changeHash('adm-area');
+        else
+            changeHash('my-profile');
+    } 
+    else {
+        changeHash('login');
+    }
+}
+
+function loadPageMyProfile() {
     if(userLoggedIn == 1){
         $("#content").load("my-profile.html", function() {
             $("#userName").text(userSession.name);
@@ -184,11 +200,11 @@ function changePageMyProfile() {
         });
     }
     else{
-        $("#content").load("login.html");
+        changeHash('login');
     }
 }
 
-function createPageMyPet() {
+function loadPageMyPet() {
     
     $(".main").html("");
     let userPets= [];
@@ -246,7 +262,10 @@ function startLogin() {
             let cursor = event.target.result;
             if(cursor){
                 if(loginPass == cursor.value.password){
+                    // set user as logged in 
                     userLoggedIn = 1;
+                    
+                    // get the user data
                     userSession.name = cursor.value.name;
                     userSession.cpf = cursor.value.cpf;
                     userSession.email = cursor.value.email;
@@ -254,7 +273,16 @@ function startLogin() {
                     userSession.tel = cursor.value.tel;
                     userSession.profilePic = cursor.value.profilePic;
                     userSession.isAdmin = cursor.value.isAdmin;
-                    changePageMyProfile();
+                    
+                    // update the header according to the user type
+                    if (userSession.isAdmin) {
+                        $("#loginButton").text("Área do Administrador");
+                        $("#cartButton").hide();
+                        changeHash('adm-area');
+                    } else {
+                        $("#loginButton").text("Minha Área");
+                        changeHash('my-profile');
+                    }
             }
                 else{
                     alert("Senha incorreta");
@@ -268,9 +296,16 @@ function startLogin() {
 }
 
 function startLogoff(){
-    userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: 0};
+    // reset buttons
+    $("#loginButton").text("Login");
+    $("#cartButton").show();
+    
+    // finish session variables
+    userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false};
     userLoggedIn = 0;
-    changePageMyProfile();
+    
+    // open login screen
+    loginClick();
 }
 
 function createAccount(){
@@ -280,7 +315,7 @@ function createAccount(){
             return;
     }
     else{
-        let newUser = { cpf: $.trim($("#registerCPF").val()), name: $.trim($("#registerName").val()), tel: $.trim($("#registerTel").val()), address: $.trim($("#registerAddress").val()), email: $.trim($("#registerEmail").val()), password: $("#registerPassword").val(), profilePic: $("#registerProfilePic").val(), isAdmin: 0 };
+        let newUser = { cpf: $.trim($("#registerCPF").val()), name: $.trim($("#registerName").val()), tel: $.trim($("#registerTel").val()), address: $.trim($("#registerAddress").val()), email: $.trim($("#registerEmail").val()), password: $("#registerPassword").val(), profilePic: $("#registerProfilePic").val(), isAdmin: false };
     
         if($("#registerConfirmPassword").val() == newUser.password){
             let objectStore = db.transaction(["users"], "readwrite").objectStore("users");

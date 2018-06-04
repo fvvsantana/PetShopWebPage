@@ -62,9 +62,119 @@ function addPets(objectStore){
     }
 }
 
-function changePageMyProfile(userSession) {
+//change hash
+function changeHash(newHash){
+    location.hash = newHash;
+}
+
+$(function(){
+
+    $(window).on('hashchange', function(){
+
+      let content = $("#content");
+
+      switch(location.hash){
+        case "":
+          content.load("home.html");
+          break;
+
+        case "#about":
+          content.load("about.html");
+          break;
+
+        case "#adm-admins":
+          $("#adm-content").load("adm/admins-not-ready.html");
+          break;
+
+        case "#adm-alter-client":
+          $("#adm-content").load("adm/alter-client.html");
+          break;
+
+        case "#adm-alter-product":
+          $("#adm-content").load("adm/alter-product.html");
+          break;
+
+        case "#adm-alter-service":
+          $("#adm-content").load("adm/alter-service.html");
+          break;
+
+        case "#adm-alter-session":
+          $("#adm-content").load("adm/alter-session.html");
+          break;
+
+        case "#adm-area":
+          content.load("adm/adm-area.html");
+          break;
+
+        case "#adm-clients":
+          $("#adm-content").load("adm/clients-not-ready.html");
+          break;
+
+        case "#adm-new-product":
+          $("#adm-content").load("adm/new-product.html");
+          break;
+
+        case "#adm-new-service":
+          $("#adm-content").load("adm/new-service.html");
+          break;
+
+        case "#adm-schedule-session":
+          $("#adm-content").load("adm/schedule-session.html");
+          break;
+
+        case "#adm-services":
+          $("#adm-content").load("adm/services-not-ready.html");
+          break;
+
+        case "#adm-sessions":
+          $("#adm-content").load("adm/sessions-not-ready.html");
+          break;
+
+        case "#adm-stock":
+          $("#adm-content").load("adm/stock-not-ready.html");
+          break;
+
+        case "#my-cart":
+          content.load("my-cart.html");
+          break;
+
+        case "#my-profile":
+          changePageMyProfile();
+          break;
+
+        case "#order-confirmation":
+          content.load("order-confirmation.html");
+          break;
+
+        case "#products":
+          content.load("products.html");
+          break;
+
+        case "#service-schedule":
+          content.load("service-schedule.html");
+          break;
+
+        case "#service-view":
+          content.load("service-view.html");
+          break;
+
+        case "#services":
+          content.load("services.html");
+          break;
+
+        default:
+          content.load("not-found.html");
+          break;
+      }
+    });
+
+    $(window).trigger('hashchange');
+
+});
+
+function changePageMyProfile() {
     if(userLoggedIn == 1){
-        $("#content").load("myprofile.html", function() {
+        $("#content").load("my-profile.html", function() {
             $("#userName").text(userSession.name);
             $("#userCPF").text(userSession.cpf);
             $("#userAddress").text(userSession.address);
@@ -74,61 +184,11 @@ function changePageMyProfile(userSession) {
         });
     }
     else{
-        $("#content").load("login.html", function() {
-        });				
+        $("#content").load("login.html");
     }
 }
 
-function changePageRegister() {
-    $("#content").load("register.html", function() {
-    });
-}
-
-function changePageMyCart() {
-    $("#content").load("cart.html", function() {
-    });
-}
-
-function changePageAbout() {
-    $("#content").load("about.html", function() {
-    });
-}
-
-function changePageProducts() {
-    $("#content").load("products.html", function() {
-    });
-}
-
-function changePageServices() {
-    $("#content").load("services.html", function() {
-    });
-}
-
-function changePageServiceView() {
-    $("#content").load("service_view.html", function() {
-    });
-}
-
-function changePageServiceSchedule() {
-    $("#content").load("service_schedule.html", function() {
-    });
-}
-
-function changePageMyProfileEdit() {
-    $(".main").load("myprofileedit.html", function() {
-    });
-}
-
-function changePageMyPet() {
-    $(".main").load("mypet.html", function() {
-    });
-}
-
-function changeOrderConfirm() {
-    $("#content").load("order_data.html")
-}
-
-function changePageMyPet() {
+function createPageMyPet() {
     
     $(".main").html("");
     let userPets= [];
@@ -175,8 +235,8 @@ function startLogin() {
     let loginPass = $("#password").val();
     
     if($("#user").val() == "" || loginPass == ""){
-            alert("Preencha todos os campos!");
-            return;
+        alert("Preencha todos os campos!");
+        return;
     }
     else{
         let objectStore = db.transaction(["users"]).objectStore("users");
@@ -194,7 +254,7 @@ function startLogin() {
                     userSession.tel = cursor.value.tel;
                     userSession.profilePic = cursor.value.profilePic;
                     userSession.isAdmin = cursor.value.isAdmin;
-                    changePageMyProfile(userSession);
+                    changePageMyProfile();
             }
                 else{
                     alert("Senha incorreta");
@@ -236,7 +296,7 @@ function createAccount(){
             console.log(userSession.profilePic);					
             userSession.isAdmin = newUser.isAdmin;
             
-            changePageMyProfile(userSession);
+            changePageMyProfile();
         }
         else{
             alert("Erro na confirmação de senha!");
@@ -274,6 +334,6 @@ function editAccount(){
             }
         }
         let requestUpdate = objectStore.put(cursor.value);
-        changePageMyProfile(userSession);
+        changePageMyProfile();
     }
 }

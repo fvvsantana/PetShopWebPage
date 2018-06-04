@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="PetShopJS.js"></script>
   </head>
 
   <body>
@@ -59,118 +60,6 @@
     <div id="content">
 
     </div>
-
-    <script>
-      //change hash
-      function changeHash(newHash){
-        location.hash = newHash;
-      }
-
-      $(function(){
-
-        $(window).on('hashchange', function(){
-
-          let content = $("#content");
-
-          switch(location.hash){
-            case "":
-              content.load("home.html");
-              break;
-
-            case "#about":
-              content.load("about.html");
-              break;
-
-            case "#adm-admins":
-              $("#adm-content").load("adm/admins-not-ready.html");
-              break;
-
-            case "#adm-alter-client":
-              $("#adm-content").load("adm/alter-client.html");
-              break;
-
-            case "#adm-alter-product":
-              $("#adm-content").load("adm/alter-product.html");
-              break;
-
-            case "#adm-alter-service":
-              $("#adm-content").load("adm/alter-service.html");
-              break;
-
-            case "#adm-alter-session":
-              $("#adm-content").load("adm/alter-session.html");
-              break;
-
-            case "#adm-area":
-              content.load("adm/adm-area.html");
-              break;
-
-            case "#adm-clients":
-              $("#adm-content").load("adm/clients-not-ready.html");
-              break;
-
-            case "#adm-new-product":
-              $("#adm-content").load("adm/new-product.html");
-              break;
-
-            case "#adm-new-service":
-              $("#adm-content").load("adm/new-service.html");
-              break;
-
-            case "#adm-schedule-session":
-              $("#adm-content").load("adm/schedule-session.html");
-              break;
-
-            case "#adm-services":
-              $("#adm-content").load("adm/services-not-ready.html");
-              break;
-
-            case "#adm-sessions":
-              $("#adm-content").load("adm/sessions-not-ready.html");
-              break;
-
-            case "#adm-stock":
-              $("#adm-content").load("adm/stock-not-ready.html");
-              break;
-
-            case "#my-cart":
-              content.load("my-cart.html");
-              break;
-
-            case "#my-profile":
-              content.load("my-profile.html");
-              break;
-
-            case "#order-confirmation":
-              content.load("order-confirmation.html");
-              break;
-
-            case "#products":
-              content.load("products.html");
-              break;
-
-            case "#service-schedule":
-              content.load("service-schedule.html");
-              break;
-
-            case "#service-view":
-              content.load("service-view.html");
-              break;
-
-            case "#services":
-              content.load("services.html");
-              break;
-
-            default:
-              content.load("not-found.html");
-              break;
-          }
-        });
-
-        $(window).trigger('hashchange');
-
-      });
-    </script>
-
+    
   </body>
 </html>

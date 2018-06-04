@@ -12,22 +12,20 @@ let request = indexedDB.open("HappyPet_db", 1);
 
 // leitura do banco (caso já exista)
 request.onsuccess = function(event) {
-    alert("nop");
     db = event.target.result;
 }
 
 // criação do banco (caso necessário)
 request.onupgradeneeded = function(event) {
-    alert("precisa");
     
     db = event.target.result;
 
     //criação da "tabela" de usuários
-    let userStore = db.createObjectStore(["users"], { keyPath: "cpf" });
+    let userStore = db.createObjectStore("users", { keyPath: "cpf" });
     addUsers(userStore);
     
     //criação da "tabela" de pets
-    let petStore = db.createObjectStore(["pets"], { autoIncrement : true });
+    let petStore = db.createObjectStore("pets", { autoIncrement : true });
     addPets(petStore);
 };
 

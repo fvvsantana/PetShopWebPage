@@ -2,7 +2,7 @@
 let db;
 
 //Inicialmente não há um usuário logado
-let userLoggedIn = 0;
+let userLoggedIn = false;
 
 //Dados do usuário que estiver em uma sessão estarão aqui
 let userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false};
@@ -177,7 +177,7 @@ $(function(){
 });
 
 function loginClick() {
-    if (userLoggedIn == 1) {
+    if (userLoggedIn) {
         if (userSession.isAdmin)
             changeHash('adm-area');
         else
@@ -189,7 +189,7 @@ function loginClick() {
 }
 
 function loadPageMyProfile() {
-    if(userLoggedIn == 1){
+    if(userLoggedIn){
         $("#content").load("my-profile.html", function() {
             $("#userName").text(userSession.name);
             $("#userCPF").text(userSession.cpf);
@@ -263,7 +263,7 @@ function startLogin() {
             if(cursor){
                 if(loginPass == cursor.value.password){
                     // set user as logged in 
-                    userLoggedIn = 1;
+                    userLoggedIn = true;
                     
                     // get the user data
                     userSession.name = cursor.value.name;
@@ -302,7 +302,7 @@ function startLogoff(){
     
     // finish session variables
     userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false};
-    userLoggedIn = 0;
+    userLoggedIn = false;
     
     // open login screen
     loginClick();
@@ -321,7 +321,7 @@ function createAccount(){
             let objectStore = db.transaction(["users"], "readwrite").objectStore("users");
             objectStore.add(newUser);
             
-            userLoggedIn = 1;
+            userLoggedIn = true;
             userSession.name = newUser.name;
             userSession.cpf = newUser.cpf;
             userSession.email = newUser.email;

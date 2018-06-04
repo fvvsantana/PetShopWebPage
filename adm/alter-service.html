@@ -1,37 +1,43 @@
-<h2 style="text-align:center; margin-top:10px">Alterar serviço</h2>
-<br>
-<center>
-  <div class="thumbnail" style="width:50%">
-    <img src="image/consulta.jpg" alt="foto do serviço"><br>
-    <button type="button" class="btn btn-primary">Alterar foto</button>
-  </div>
-</center>
-<form style="margin-bottom:40px">
-  <div class="form-group">
-    <label for="name">Nome:</label>
-    <input type="text" class="form-control" id="name">
-  </div>
-  <div class="row" style="margin:0px">
-    <div class="col-sm">
-      <div class="form-group">
-        <label for="id">ID:</label>
-        <input type="text" class="form-control" id="id">
+<div class="row" style="margin-top:40px">
+  <div class="col-sm-10 col-sm-offset-1">
+    <h2 style="color:#007bc7">Alterar serviço</h2>
+    <hr/>
+    <center>
+      <div class="thumbnail" style="width:30%">
+        <img src="image/consulta.jpg" alt="foto do serviço"><br>
+        <button type="button" class="btn btn-primary">Alterar foto</button>
       </div>
-    </div>
-    <div class="col-sm col-sm-offset-1">
+    </center>
+    <form style="margin-bottom:40px">
       <div class="form-group">
-        <label for="price">Preço:</label>
-        <input type="text" class="form-control" id="price">
+        <label for="name">Nome:</label>
+        <input type="text" class="form-control" id="name">
       </div>
-    </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="id">ID:</label>
+            <input type="text" class="form-control" id="id">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="price">Preço:</label>
+            <input type="text" class="form-control" id="price">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="sdescription">Descrição curta:</label>
+        <input type="text" class="form-control" id="sdescription">
+      </div>
+      <div class="form-group">
+        <label for="ldescription">Descrição longa:</label>
+        <textarea class="form-control" rows="7" id="ldescription"></textarea>
+      </div>
+      <button type="submit" class="btn btn-success btn-lg">Salvar</button> 
+    </form>
   </div>
-  <div class="form-group">
-    <label for="sdescription">Descrição curta:</label>
-    <input type="text" class="form-control" id="sdescription">
+  <div class="col-sm-1">
   </div>
-  <div class="form-group">
-    <label for="ldescription">Descrição longa:</label>
-    <textarea class="form-control" rows="7" id="ldescription"></textarea>
-  </div>
-  <button type="submit" class="btn btn-success btn-lg">Salvar</button> 
-</form>
+</div>

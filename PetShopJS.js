@@ -135,11 +135,13 @@ function changePageMyPet() {
     
     let petCanvas = $('<div/>').addClass('foo');
     petCanvas.append($('<div id="photo"><img id="petPic" src="" width="300" height="auto"></div>'));
-    petCanvas.append($('<div><h4>Nome:</h4><span id="petName"></span></div>'));
-    petCanvas.append($('<div><h4>Espécie:</h4><span id="petSpecies"></span></div>'));
-    petCanvas.append($('<div><h4>Idade:</h4><span id="petAge"></span></div>'));
-    petCanvas.append($('<div><h4>Sexo:</h4><span id="petGender"></span></div>'));
-    petCanvas.append($('<div><h4>Raça:</h4><span id="petBreed"></span></div>'));
+	
+    let petInfo = ($('<div/>').addClass('MyAreaInfo'));
+	petInfo.append($('<div><h4>Nome:</h4><span id="petName"></span></div>'));
+    petInfo.append($('<div><h4>Espécie:</h4><span id="petSpecies"></span></div>'));
+    petInfo.append($('<div><h4>Idade:</h4><span id="petAge"></span></div>'));
+    petInfo.append($('<div><h4>Sexo:</h4><span id="petGender"></span></div>'));
+    petInfo.append($('<div><h4>Raça:</h4><span id="petBreed"></span></div>'));
     
     let i =0;
     let objectStore = db.transaction(["pets"], "readonly").objectStore("pets").index("owner");
@@ -147,15 +149,20 @@ function changePageMyPet() {
         let cursor = event.target.result;
         if (cursor) {
             let newCanvas = petCanvas.clone();
+			dynamicId = cursor.key;
+			let newInfo = petInfo.clone();
             userPets.push(cursor.value);
+			console.log(dynamicId);
         
+			newInfo.attr('id', dynamicId);
             newCanvas.find("#petPic").attr('src', userPets[i].petPic);
-            newCanvas.find("#petName").text(userPets[i].name);
-            newCanvas.find("#petSpecies").text(userPets[i].species);
-            newCanvas.find("#petAge").text(userPets[i].age);
-            newCanvas.find("#petGender").text(userPets[i].gender);
-            newCanvas.find("#petBreed").text(userPets[i].breed);
+            newInfo.find("#petName").text(userPets[i].name);
+            newInfo.find("#petSpecies").text(userPets[i].species);
+            newInfo.find("#petAge").text(userPets[i].age);
+            newInfo.find("#petGender").text(userPets[i].gender);
+            newInfo.find("#petBreed").text(userPets[i].breed);
             $(".main").append(newCanvas);
+			$("#" + dynamicId).append(newInfo);
             i++;
             
             cursor.continue();

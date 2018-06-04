@@ -156,6 +156,7 @@ function changePageMyPet() {
             newCanvas.find("#petGender").text(userPets[i].gender);
             newCanvas.find("#petBreed").text(userPets[i].breed);
             $(".main").append(newCanvas);
+            i++;
             
             cursor.continue();
         }

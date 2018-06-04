@@ -1,0 +1,52 @@
+<div class="row">
+  <aside>
+    <div class="sidemenu">
+      <a onclick="changePageMyProfile(userSession);">Meu perfil</a>
+      <a onclick="changePageMyPet()">Meus pets</a>
+      <a onclick="startLogoff();">Fazer Logoff</a>
+    </div>
+  </aside>
+  <section>
+    <div class="main">
+      <h1 style="color:blue">Meu perfil</h1>
+      <h3>Informações pessoais</h3>
+      <div class="foo">
+        <div id="photo">
+          <img id="userPic" src="image/default.jpg" width="300" height="auto">
+		  <a href="#">Alterar foto</a>
+		  <a onclick="changePageMyProfileEdit()">Modificar informações</a>
+        </div>
+        <div class="myAreaInfo">
+          <div>
+            <h4>Nome completo:</h4>
+            <span id="userName"></span>
+          </div>
+          <div>
+            <h4>CPF:</h6>
+            <span id="userCPF"></span>
+          </div>
+          <div>
+            <h4>Endereço:</h4>
+            <span id="userAddress"></span>
+          </div> 
+          <!-- <div>
+            <h4>Sexo:</h4>
+            <span>Masculino</span>
+          </div> -->
+          <div>
+            <h4>Telefone:</h4>
+            <span id="userTel"></span>
+          </div>
+          <!-- <div>
+            <h4>Telefone comercial:</h4>
+            <span id="userTel">(19) 3874-2369</span>
+          </div> -->
+          <div>
+            <h4>E-mail:</h4>
+            <span id="userEmail"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

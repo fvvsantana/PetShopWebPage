@@ -26,6 +26,7 @@ request.onupgradeneeded = function(event) {
     
     //criação da "tabela" de pets
     let petStore = db.createObjectStore("pets", { autoIncrement : true });
+    petStore.createIndex("owner", "owner", { unique: false });
     addPets(petStore);
 };
 
@@ -141,25 +142,21 @@ function changePageMyPet() {
     petCanvas.append($('<div><h4>Raça:</h4><span id="petBreed"></span></div>'));
     
     let i =0;
-    let objectStore = db.transaction(["pets"], "readonly").objectStore("pets");
-    objectStore.openCursor().onsuccess = function(event) {
+    let objectStore = db.transaction(["pets"], "readonly").objectStore("pets").index("owner");
+    objectStore.openCursor(userSession.cpf).onsuccess = function(event) {
         let cursor = event.target.result;
         if (cursor) {
-            if(cursor.value.owner == userSession.cpf){
-                let newCanvas = petCanvas.clone();
-                console.log(cursor.value.name);
-                userPets.push(cursor.value);					
-                console.log(i);
+            let newCanvas = petCanvas.clone();
+            userPets.push(cursor.value);
+        
+            newCanvas.find("#petPic").attr('src', userPets[i].petPic);
+            newCanvas.find("#petName").text(userPets[i].name);
+            newCanvas.find("#petSpecies").text(userPets[i].species);
+            newCanvas.find("#petAge").text(userPets[i].age);
+            newCanvas.find("#petGender").text(userPets[i].gender);
+            newCanvas.find("#petBreed").text(userPets[i].breed);
+            $(".main").append(newCanvas);
             
-                newCanvas.find("#petPic").attr('src', userPets[i].petPic);
-                newCanvas.find("#petName").text(userPets[i].name);
-                newCanvas.find("#petSpecies").text(userPets[i].species);
-                newCanvas.find("#petAge").text(userPets[i].age);
-                newCanvas.find("#petGender").text(userPets[i].gender);
-                newCanvas.find("#petBreed").text(userPets[i].breed);
-                $(".main").append(newCanvas);
-                i++;
-            }
             cursor.continue();
         }
         

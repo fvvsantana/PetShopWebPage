@@ -2,10 +2,10 @@
 let db;
 
 //Inicialmente não há um usuário logado
-let userLoggedIn = false;
+let userLoggedIn = 0;
 
 //Dados do usuário que estiver em uma sessão estarão aqui
-let userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false};
+let userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: 0};
 
 //abertura do banco de dados
 let request = indexedDB.open("HappyPet_db", 1);
@@ -28,6 +28,10 @@ request.onupgradeneeded = function(event) {
     let petStore = db.createObjectStore("pets", { autoIncrement : true });
     petStore.createIndex("owner", "owner", { unique: false });
     addPets(petStore);
+	
+    //criação da "tabela" de produtos
+    let productsStore = db.createObjectStore("products", { autoIncrement : true });
+    addProducts(productsStore);
 };
 
 // adiciona usuários de exemplo
@@ -35,13 +39,12 @@ function addUsers(objectStore){
     
     //dados dos usuários iniciais
     const userData = [
-        { cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: true },
-        { cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: false }
+        { cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: 1 },
+        { cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: 0 }
     ];
     
     //inserção dos usuários no banco de dados
     for (let i in userData) {
-        console.log("adicionando");
         objectStore.add(userData[i]);
     }
 }
@@ -59,6 +62,57 @@ function addPets(objectStore){
     //inserção dos pets no banco de dados
     for (let i in petsData) {
         objectStore.add(petsData[i]);
+    }
+}
+
+// adiciona produtos de exemplo
+function addProducts(objectStore){
+    
+    //dados dos usuários iniciais
+    const stockData = [
+        { name: "Ração Royal Canin Maxi - Cães Adultos - 15kg", quantity: "200", price: "209.99", animal: "Cachorro", category: "Alimentos", picture: "https://cdn-petz-imgs.stoom.com.br/fotos/1515444639412.jpg", description:`- Indicado para cães adultos de grande porte;
+- Oferece todos os nutrientes que seu cão de grande porte precisa para uma vida longa e saudável;
+- Especialmente formulada para favorecer a saúde dos ossos e articulações também preserva a tonicidade muscular graças a um aporte adequado de proteínas;
+- Assegura uma ótima digestão e atende até mesmo os paladares mais exigentes;
+- Disponível em embalagem de 15kg.` }, 
+        { name: "Ração Royal Canin Golden Retriever - Cães Adultos - 12kg", quantity: "100", price: "204.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1515429480749.jpg",description:`- Indicado para cães
+- Ajuda na manutenção ideal do peso do seu pet
+- Contribui para o funcionamento da musculatura cardíaca
+- Auxilia na eliminação dos efeitos do envelhecimento celular
+- Disponível em embalagem de 12kg` },
+		{ name: "Royal Canin Renal Veterinary Diet Cães - 10kg", quantity: "10", price: "289.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458082860525.jpg", description:`- Indicada para cães adultos;
+- Recomendado para cães com insuficiência renal crônica;
+- Ajuda a eliminar e prevenir a formação de radicais livres;
+- Equilibra o sistema digestivo,` },
+		{ name: "Ração Royal Canin Veterinary Hypoallergenic - Gatos Adultos - 1,5kg", quantity: "150", price: "104.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1507918511559.jpg", description:`- Indicada para gatos adultos e alérgicos;
+- Proteínas hidrolisadas que tornam o alimento altamente digestivo e com baixo potencial alergênico;
+- Complexo patenteado que ajuda a reforçar a barreira cutânea;
+- Enriquecido com EPA/DHA;` },
+		{ name: "Ração Royal Canin Premium Cat Vitalidade para Gatos Adultos - 10kg", quantity: "180", price: "134.94", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264968346.jpg", description:`- Indicada para gatos adultos;
+- Alimentação completa e balanceada;
+- Sabor irresistível para seu gatinho;
+- Favorece a saúde do trato urinário;` },
+		{ name: "Ração Royal Canin Premium Cat Beleza da Pelagem para Gatos Adultos - 10kg", quantity: "50", price: "134.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264680318.jpg", description:`- Indicada para gatos adultos;
+- Formula altamente palatável;
+- Promove a saúde do trato urinário;
+- Enriquecida com ômegas 3 e 6 proporcionando beleza da pelagem;` },
+		{ name: "Brinquedo Chalesco Para Cães Pelúcia Cachorro Luxo Rosa e Azul", quantity: "20", price: "34.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458848516726.jpg", description:`- Indicado para cães;
+- Divertido e criativo;
+- Ajuda a combater o estresse do seu pet;
+- Possui textura macia de pelúcia.` },
+		{ name: "Brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido", quantity: "30", price: "19.19", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458848516726.jpg", description:`Você sabia que cães que permanecem longos períodos sem seus donos, sem uma atividade física, sem estímulos, podem se tornar animais deprimidos? Por isso a Chalesco criou o brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido, que além de apresentar formato criativo e divertido, possui textura macia de pelúcia. ` },
+		{ name: "Brinquedo de Pelúcia Chalesco Crocodilo", quantity: "40", price: "20.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992186939.jpg", description:`- Indicado para cães;
+- Divertido e criativo;
+- Ajuda a combater o estresse do seu pet;
+- Possui textura macia de pelúcia.` },
+		
+		
+
+    ];
+    
+    //inserção dos usuários no banco de dados
+    for (let i in stockData) {
+        objectStore.add(stockData[i]);
     }
 }
 
@@ -139,11 +193,7 @@ $(function(){
           break;
 
         case "#my-profile":
-          loadPageMyProfile();
-          break;
-
-        case "#login":
-          content.load("login.html");
+          changePageMyProfile();
           break;
 
         case "#order-confirmation":
@@ -176,20 +226,8 @@ $(function(){
 
 });
 
-function loginClick() {
-    if (userLoggedIn) {
-        if (userSession.isAdmin)
-            changeHash('adm-area');
-        else
-            changeHash('my-profile');
-    } 
-    else {
-        changeHash('login');
-    }
-}
-
-function loadPageMyProfile() {
-    if(userLoggedIn){
+function changePageMyProfile() {
+    if(userLoggedIn == 1){
         $("#content").load("my-profile.html", function() {
             $("#userName").text(userSession.name);
             $("#userCPF").text(userSession.cpf);
@@ -200,11 +238,11 @@ function loadPageMyProfile() {
         });
     }
     else{
-        changeHash('login');
+        $("#content").load("login.html");
     }
 }
 
-function loadPageMyPet() {
+function createPageMyPet() {
     
     $(".main").html("");
     let userPets= [];
@@ -262,10 +300,7 @@ function startLogin() {
             let cursor = event.target.result;
             if(cursor){
                 if(loginPass == cursor.value.password){
-                    // set user as logged in 
-                    userLoggedIn = true;
-                    
-                    // get the user data
+                    userLoggedIn = 1;
                     userSession.name = cursor.value.name;
                     userSession.cpf = cursor.value.cpf;
                     userSession.email = cursor.value.email;
@@ -273,16 +308,7 @@ function startLogin() {
                     userSession.tel = cursor.value.tel;
                     userSession.profilePic = cursor.value.profilePic;
                     userSession.isAdmin = cursor.value.isAdmin;
-                    
-                    // update the header according to the user type
-                    if (userSession.isAdmin) {
-                        $("#loginButton").text("Área do Administrador");
-                        $("#cartButton").hide();
-                        changeHash('adm-area');
-                    } else {
-                        $("#loginButton").text("Minha Área");
-                        changeHash('my-profile');
-                    }
+                    changePageMyProfile();
             }
                 else{
                     alert("Senha incorreta");
@@ -296,16 +322,9 @@ function startLogin() {
 }
 
 function startLogoff(){
-    // reset buttons
-    $("#loginButton").text("Login");
-    $("#cartButton").show();
-    
-    // finish session variables
-    userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false};
-    userLoggedIn = false;
-    
-    // open login screen
-    loginClick();
+    userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: 0};
+    userLoggedIn = 0;
+    changePageMyProfile();
 }
 
 function createAccount(){
@@ -315,13 +334,13 @@ function createAccount(){
             return;
     }
     else{
-        let newUser = { cpf: $.trim($("#registerCPF").val()), name: $.trim($("#registerName").val()), tel: $.trim($("#registerTel").val()), address: $.trim($("#registerAddress").val()), email: $.trim($("#registerEmail").val()), password: $("#registerPassword").val(), profilePic: $("#registerProfilePic").val(), isAdmin: false };
+        let newUser = { cpf: $.trim($("#registerCPF").val()), name: $.trim($("#registerName").val()), tel: $.trim($("#registerTel").val()), address: $.trim($("#registerAddress").val()), email: $.trim($("#registerEmail").val()), password: $("#registerPassword").val(), profilePic: $("#registerProfilePic").val(), isAdmin: 0 };
     
         if($("#registerConfirmPassword").val() == newUser.password){
             let objectStore = db.transaction(["users"], "readwrite").objectStore("users");
             objectStore.add(newUser);
             
-            userLoggedIn = true;
+            userLoggedIn = 1;
             userSession.name = newUser.name;
             userSession.cpf = newUser.cpf;
             userSession.email = newUser.email;

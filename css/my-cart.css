@@ -60,6 +60,7 @@
 }
 .confirmation-btn:hover{
     background-color: gray;
+    text-decoration: none;
     color: black;
 }
 

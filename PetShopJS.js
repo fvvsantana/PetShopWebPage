@@ -104,10 +104,16 @@ function addProducts(objectStore){
 		{ name: "Brinquedo de Pelúcia Chalesco Crocodilo", quantity: "40", price: "20.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992186939.jpg", description:`- Indicado para cães;
 - Divertido e criativo;
 - Ajuda a combater o estresse do seu pet;
-- Possui textura macia de pelúcia.` }
+- Possui textura macia de pelúcia.` },
+		{ name: "Arranhador 4 Estações Para Gatos Cone Sisal com Penas", quantity: "20", price: "209.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/20037081000050-1.jpg", description:`O Arranhador 4 Estações Para Gatos Cone Sisal com Penas foi desenvolvido para proporcionar atividades físicas, evitando o stress preservando seus móveis. Um lugar adequado para arranhar, dormir e brincar. Tem um design bonito que pode situar-se em qualquer lugar da sua casa. Para evitar que o seu gato estrague móveis, paredes ou sofás, tenha a certeza de lhe proporcionar um lugar adequado para arranhar, assim poderá esticar-se, espreguiçar-se e afiar as suas unhas. Tamanho: 80cm. ` },
+		{ name: "Brinquedo Chalesco Kit com 2 Ratinhos de Corda", quantity: "100", price: "20.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992630932.jpg", description:`- Indicado para gatos;
+- Provoque seu gatinho para brincar com estes ratinhos que são pura diversão;
+- Feitos de tecido de algodão, são ideais para seu melhor amigo que precisa diariamente de uma boa dose de entretenimento.` },
+		{ name: "Brinquedo Jambo Gatos Joaninha Amarelo e Preto Vibratória", quantity: "50", price: "19.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1455921490800.jpg", description:`Presentear seu gatinho é uma forma divertida de descontrair o seu animal de estimação e evitar que eles mordam os móveis da sua casa. O Brinquedo Jambo Pet Gatos Joaninha Amarelo e Preto Vibratória é feito em poliéster e é perfeito para seu gatinho gastar as energias, pois vem com um dispositivo que vibra, deixando seu pet instigado durante longos períodos de tempo. ` }
+		
     ];
     
-    //inserção dos produtos no banco de dados
+    //inserção dos usuários no banco de dados
     for (let i in stockData) {
         objectStore.add(stockData[i]);
     }

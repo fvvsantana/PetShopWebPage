@@ -83,7 +83,7 @@ $(function(){
           break;
 
         case "#adm-admins":
-          $("#adm-content").load("adm/admins-not-ready.html");
+          $("#adm-content").load("adm/admins.html");
           break;
 
         case "#adm-alter-client":
@@ -107,7 +107,7 @@ $(function(){
           break;
 
         case "#adm-clients":
-          $("#adm-content").load("adm/clients-not-ready.html");
+          $("#adm-content").load("adm/users.html");
           break;
 
         case "#adm-new-product":
@@ -131,7 +131,7 @@ $(function(){
           break;
 
         case "#adm-stock":
-          $("#adm-content").load("adm/stock-not-ready.html");
+          $("#adm-content").load("adm/stock.html");
           break;
 
         case "#my-cart":

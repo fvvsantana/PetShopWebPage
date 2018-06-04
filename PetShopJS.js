@@ -159,16 +159,7 @@ function changePageMyPet() {
             
             cursor.continue();
         }
-        
-
-    
     }
-        
-        
-        for(i = 0; i < userPets.length; i++){
-
-            }	
-
 }
 
 function startLogin() {

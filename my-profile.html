@@ -1,9 +1,9 @@
 <div class="row">
   <aside>
     <div class="sidemenu">
-      <a onclick="changePageMyProfile();">Meu perfil</a>
+      <a onclick="changePageMyProfile(userSession);">Meu perfil</a>
       <a onclick="changePageMyPet()">Meus pets</a>
-      <a href="#">Histórico de serviços</a>
+      <a onclick="startLogoff();">Fazer Logoff</a>
     </div>
   </aside>
   <section>
@@ -19,46 +19,26 @@
         <div class="myAreaInfo">
           <div>
             <h4>Nome completo:</h4>
-            <span>José Augusto da Silva</span>
+            <span id="userName"></span>
           </div>
           <div>
             <h4>CPF:</h6>
-            <span>589.712.658-65</span>
+            <span id="userCPF"></span>
           </div>
           <div>
-            <h4>Data de nascimento:</h4>
-            <span>24/10/1990</span>
-          </div>
-          <div>
-            <h4>Sexo:</h4>
-            <span>Masculino</span>
+            <h4>Endereço:</h4>
+            <span id="userAddress"></span>
           </div>
           <div>
             <h4>Telefone:</h4>
-            <span>(19) 3589-4723</span>
+            <span id="userTel"></span>
           </div>
           <div>
-            <h4>Telefone comercial:</h4>
-            <span>(19) 3874-2369</span>
-          </div>
-          <div>
-            <h4>E-mail</h4>
-            <span>joseasilva@gmail.com</span>
+            <h4>E-mail:</h4>
+            <span id="userEmail"></span>
           </div>
         </div>
       </div>
     </div>
   </section>
 </div>
-
-<script>
-
-	function changePageMyProfileEdit() {
-    $(".main").load("myprofileedit.html")
-  }
-	
-	function changePageMyPet() {
-    $(".main").load("mypet.html")
-  }
-
-</script>

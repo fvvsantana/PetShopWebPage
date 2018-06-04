@@ -142,13 +142,13 @@ function changePageMyPet() {
     petCanvas.append($('<div><h4>Sexo:</h4><span id="petGender"></span></div>'));
     petCanvas.append($('<div><h4>Raça:</h4><span id="petBreed"></span></div>'));
     
-    let newCanvas = petCanvas.clone();
     let i =0;
     let objectStore = db.transaction(["pets"], "readonly").objectStore("pets");
     objectStore.openCursor().onsuccess = function(event) {
         let cursor = event.target.result;
         if (cursor) {
             if(cursor.value.owner == userSession.cpf){
+                let newCanvas = petCanvas.clone();
                 console.log(cursor.value.name);
                 userPets.push(cursor.value);					
                 console.log(i);
@@ -161,8 +161,8 @@ function changePageMyPet() {
                 newCanvas.find("#petBreed").text(userPets[i].breed);
                 $(".main").append(newCanvas);
                 i++;
-                cursor.continue();
             }
+            cursor.continue();
         }
         
 

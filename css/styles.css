@@ -85,6 +85,7 @@
     border: none;
     font-size: 16px;
     line-height: normal;
+    border-radius: 5px;
 }
 
 /* nav bar dropdown button */

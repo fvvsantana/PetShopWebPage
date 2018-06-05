@@ -1,41 +1,41 @@
 <div class="row" style="margin-top:20px; margin-bottom:30px">
-  <div class="col-sm-10 col-sm-offset-1">
+  <div id="petList" class="col-sm-10 col-sm-offset-1">
     <h2 style="color:#007bc7">Meus pets</h2>
     <div id="indiv-pet">
       <hr/>
       <center>
-        <div class="thumbnail" style="width:30%">
-          <img id="petPic" src="image/default.jpg" alt="foto do pet" width="300" height="auto"><br>
+        <div class="thumbnail" style="margin-bottom:10px">
+          <img id="petPic" src="image/default.jpg" alt="foto do pet" width="300" height="auto" style="max-width: 50%; margin-bottom: 10px;">
           <button type="button" class="btn btn-primary">Alterar foto</button>
         </div>
       </center>
       <div class="row">
-        <div class="col-sm-4 well">
+        <div class="col-sm-4 well" style="margin-bottom:0">
           <h4>Nome:</h4>
           <span id="petName"></span>
         </div>
-        <div class="col-sm-4 well">
+        <div class="col-sm-4 well" style="margin-bottom:0">
           <h4>Espécie:</h4>
-          <span id="petSpecie"></span>
+          <span id="petSpecies"></span>
         </div>
-        <div class="col-sm-4 well">
+        <div class="col-sm-4 well" style="margin-bottom:0">
           <h4>Idade:</h6>
           <span id="petAge"></span>
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-6 well">
+        <div class="col-sm-6 well" style="margin-bottom:0">
           <h4>Sexo:</h4>
-          <span id="petSex"></span>
+          <span id="petGender"></span>
         </div>
-        <div class="col-sm-6 well">
+        <div class="col-sm-6 well" style="margin-bottom:0">
           <h4>Raça:</h4>
           <span id="petBreed"></span>
         </div>
       </div>
-      <div class="row" style="margin-top:10px">
+      <center style="margin-top:10px">
         <button type="button" class="btn btn-primary" onclick="changePageMyPetEdit()">Modificar informações</button>
-      </div>
+      </center>
     </div>
   </div>
   <div class="col-sm-1">

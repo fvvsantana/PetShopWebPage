@@ -211,6 +211,14 @@ $(function(){
         case "#my-area":
           loadPageMyArea();
           break;
+          
+        case "#my-profile":
+          loadPageMyProfile();
+          break;
+          
+        case "#my-pets":
+          loadPageMyPet();
+          break;
 		
 		case "#my-profile-edit":
           $("#my-area-content").load("my-profile-edit.html");
@@ -320,12 +328,7 @@ function loginClick() {
 function loadPageMyArea() {
     if(userLoggedIn){
         $("#content").load("my-area.html", function() {
-            $("#userName").text(userSession.name);
-            $("#userCPF").text(userSession.cpf);
-            $("#userAddress").text(userSession.address);
-            $("#userEmail").text(userSession.email);
-            $("#userTel").text(userSession.tel);
-            $("#userPic").attr('src', userSession.profilePic);
+            loadPageMyProfile();
         });
     }
     else{
@@ -333,46 +336,39 @@ function loadPageMyArea() {
     }
 }
 
+function loadPageMyProfile() {
+    $("#my-area-content").load("my-profile.html", function() {
+        $("#userName").text(userSession.name);
+        $("#userCPF").text(userSession.cpf);
+        $("#userAddress").text(userSession.address);
+        $("#userEmail").text(userSession.email);
+        $("#userTel").text(userSession.tel);
+        $("#userPic").attr('src', userSession.profilePic);
+    });
+}
+
 function loadPageMyPet() {
-    
-    $(".main").html("");
-    let userPets= [];
-    
-    let petCanvas = $('<div/>').addClass('foo');
-    petCanvas.append($('<div id="photo"><img id="petPic" src="" width="300" height="auto"></div>'));
-	
-    let petInfo = ($('<div/>').addClass('MyAreaInfo'));
-	petInfo.append($('<div><h4><b>Nome:</b> <span id="petName"></span></h4></div>'));
-    petInfo.append($('<div><h4><b>Espécie:</b> <span id="petSpecies"></span></h4></div>'));
-    petInfo.append($('<div><h4><b>Idade:</b> <span id="petAge"></span></h4></div>'));
-    petInfo.append($('<div><h4><b>Sexo:</b> <span id="petGender"></span></h4></div>'));
-    petInfo.append($('<div><h4><b>Raça:</b> <span id="petBreed"></span></h4></div>'));
-    
-    let i =0;
-    let objectStore = db.transaction(["pets"], "readonly").objectStore("pets").index("owner");
-    objectStore.openCursor(userSession.cpf).onsuccess = function(event) {
-        let cursor = event.target.result;
-        if (cursor) {
-            let newCanvas = petCanvas.clone();
-			dynamicId = cursor.value.name;
-			let newInfo = petInfo.clone();
-            userPets.push(cursor.value);
-			console.log(dynamicId);
+    $("#my-area-content").load("my-pet.html", function() {
+        let model = $("#indiv-pet").clone();
+        $("#indiv-pet").remove();
         
-			newCanvas.attr('id', dynamicId);
-            newCanvas.find("#petPic").attr('src', userPets[i].petPic);
-            newInfo.find("#petName").text(userPets[i].name);
-            newInfo.find("#petSpecies").text(userPets[i].species);
-            newInfo.find("#petAge").text(userPets[i].age);
-            newInfo.find("#petGender").text(userPets[i].gender);
-            newInfo.find("#petBreed").text(userPets[i].breed);
-            $(".main").append(newCanvas);
-			$("#" + dynamicId).append(newInfo);
-            i++;
-            
-            cursor.continue();
+        let objectStore = db.transaction("pets", "readonly").objectStore("pets").index("owner");
+        objectStore.openCursor(userSession.cpf).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                let newElement = model.clone();        
+                newElement.find("#petPic").attr('src', cursor.value.petPic);
+                newElement.find("#petName").text(cursor.value.name);
+                newElement.find("#petSpecies").text(cursor.value.species);
+                newElement.find("#petAge").text(cursor.value.age);
+                newElement.find("#petGender").text(cursor.value.gender);
+                newElement.find("#petBreed").text(cursor.value.breed);
+                $("#petList").append(newElement);
+                
+                cursor.continue();
+            }
         }
-    }
+    });
 }
 
 function startLogin() {

@@ -124,6 +124,7 @@ function changeHash(newHash){
     location.hash = newHash;
 }
 
+//change hash listener
 $(function(){
 
     $(window).on('hashchange', function(){
@@ -209,6 +210,10 @@ $(function(){
 
         case "#products":
           content.load("products.html");
+          break;
+
+        case "#product-view":
+          content.load("product-view.html");
           break;
 
         case "#service-schedule":

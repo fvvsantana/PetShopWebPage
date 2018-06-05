@@ -34,6 +34,9 @@ request.onupgradeneeded = function(event) {
     productsStore.createIndex("animal", "animal", {unique: false});
     productsStore.createIndex("animal-category", ["animal", "category"], {unique: false});
     addProducts(productsStore);
+    
+    // criação da "tabela" do carrinho
+    let cartStore = db.createObjectStore("cart", { keyPath: "key" });
 };
 
 //change hash
@@ -65,6 +68,10 @@ $(function(){
       switch(location.hash){
         case "":
           content.load("home.html");
+          break;
+          
+        case "#cartao":
+        case "#boleto":
           break;
 
         case "#about":
@@ -133,7 +140,7 @@ $(function(){
           break;
 
         case "#my-cart":
-          content.load("my-cart.html");
+          loadPageCart();
           break;
 
         case "#my-area":
@@ -161,7 +168,7 @@ $(function(){
           break;
 
         case "#order-confirmation":
-          content.load("order-confirmation.html");
+          loadPageConfirmation();
           break;
 
         case "#register":
@@ -193,6 +200,16 @@ $(function(){
     $(window).trigger('hashchange');
 
 });
+
+function loadPageConfirmation() {
+    if (!userLoggedIn) {
+        alert("Por favor, faça login para continuar.");
+        changeHash('login');
+    } else {
+        $("#content").load("order-confirmation.html");
+    }
+    
+}
 
 function loadPageEditProfile() {
     $("#my-area-content").load("my-profile-edit.html", function() {
@@ -280,6 +297,127 @@ function savePet(petKey) {
     }
 }
 
+function loadPageCart() {
+    $("#content").load("my-cart.html", function() {
+        // open the table
+        let objectStore = db.transaction("cart", "readonly").objectStore("cart");
+        
+        // check if there are any items
+        let countRequest = objectStore.count();
+        countRequest.onsuccess = function() {
+            if(countRequest.result == 0) {
+                $("#emptyCart").show();
+                $("section").hide();
+            } else {
+                // get the model item
+                let model = $("#item").clone();
+                $("#item").remove();
+                
+                // sum the item values
+                let total = 0;
+                
+                objectStore.openCursor().onsuccess = function(event) {
+                    let cursor = event.target.result;
+                    if (cursor) {
+                        let newItem = model.clone();
+                        newItem.find("#itemImage img").attr('src', cursor.value.picture);
+                        newItem.find("#itemImage").attr('href', "javascript:changeHash('product-view-" + cursor.value.key + "')");
+                        newItem.find("#itemName").text(cursor.value.name);
+                        newItem.find("#itemName").attr('href', "javascript:changeHash('product-view-" + cursor.value.key + "')");
+                        newItem.find("#itemPrice").text("R$ " + cursor.value.price);
+                        newItem.find("#itemQuantity").val(cursor.value.quantity);
+                        newItem.find("#itemQuantity").attr('id', 'itemQuantity-' + cursor.value.key);
+                        newItem.find("#itemUpdate").attr('onclick', "updateItemQuantity('" + cursor.value.key + "')");
+                        newItem.find("#itemRemove").attr('onclick', "removeItem('" + cursor.value.key + "')");
+                        $("#itemList").append(newItem);
+                        
+                        total += (parseFloat(cursor.value.price) * parseInt(cursor.value.quantity));
+                        cursor.continue();
+                    } 
+                    else {
+                        $("#total1").text('R$ ' + total.toFixed(2));
+                        $("#total2").text('R$ ' + (total+10).toFixed(2));
+                    }
+                }
+            }
+        }
+    });
+}
+
+function removeItem(productKey) {
+    let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
+    let request = objectStore.delete(parseInt(productKey));
+    request.onerror = function(event) {
+        alert("Erro ao remover produto");
+    };
+    request.onsuccess = function(event) {
+        loadPageCart();
+    }
+}
+
+function updateItemQuantity(productKey) {
+    let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
+    objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
+        let cursor = event.target.result;
+        if (cursor) {
+            let item = cursor.value;
+            item.quantity = $('#itemQuantity-' + productKey).val();
+            
+            let request = cursor.update(item);
+            request.onerror = function(event) {
+                alert("Erro ao atualizar produto");
+            };
+            request.onsuccess = function(event) {
+                loadPageCart();
+            }
+        } else {
+            alert("Erro ao atualizar produto");
+        }
+    }
+}
+
+function addCart(productKey) {
+    // abre a tabela para escrita
+    let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
+    objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
+        let cursor = event.target.result;
+        // se encontrar, significa que o produto já estava no carrinho
+        if (cursor) {
+            let item = cursor.value;
+            item.quantity++;
+            
+            let request = cursor.update(item);
+            request.onerror = function(event) {
+                alert("Erro ao adicionar produto");
+            };
+            request.onsuccess = function(event) {
+                changeHash("my-cart");
+            }
+        }
+        else {
+            // precisa encontrar os dados do produto
+            let productStore = db.transaction("products", "readonly").objectStore("products");
+            productStore.get(parseInt(productKey)).onsuccess = function(event) {
+                let product = event.target.result;
+                let newItem = {
+                    key: parseInt(productKey),
+                    picture: product.picture,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                };
+                let request = db.transaction("cart", "readwrite").objectStore("cart").add(newItem);
+                request.onerror = function(event) {
+                    alert("Erro ao adicionar produto");
+                };
+                request.onsuccess = function(event) {
+                    changeHash("my-cart");
+                }
+            }
+        }
+    }
+}
+
 function loadPageProductView (productKey) {
     $("#content").load("product-view.html", function() {
         let objectStore = db.transaction("products", "readonly").objectStore("products");
@@ -290,6 +428,7 @@ function loadPageProductView (productKey) {
                 $("#productName strong").text(cursor.value.name);
                 $("#productPrice").text("R$ " + cursor.value.price);
                 $("#productDesc").text(cursor.value.description);
+                $("#productCart").attr('onclick', "addCart('" + productKey + "')");
             } else {
                 $("#productName strong").text("Produto não encontrado");
                 $("#productPrice").text("R$ ??");

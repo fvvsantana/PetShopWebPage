@@ -238,7 +238,7 @@ $(function(){
           break;
 		
 		case "#my-profile-edit":
-          $("#my-area-content").load("my-profile-edit.html");
+          loadPageEditProfile();
           break;
 
         case "#login":
@@ -278,6 +278,16 @@ $(function(){
     $(window).trigger('hashchange');
 
 });
+
+function loadPageEditProfile() {
+    $("#my-area-content").load("my-profile-edit.html", function() {
+        $("#registerName").val(userSession.name);
+        $("#registerCPF").val(userSession.cpf);
+        $("#registerEmail").val(userSession.email);
+        $("#registerTel").val(userSession.tel);
+        $("#registerAddress").val(userSession.address);
+    });
+}
 
 function loadPageEditPet (petKey) {
     $("#my-area-content").load("pet-edit.html", function() {
@@ -547,20 +557,33 @@ function startLogoff(){
     loginClick();
 }
 
-function createAccount(){
+function saveAccount(){
     
     if($("#registerCPF").val().split(" ").join("") == "" || $("#registerName").val().split(" ").join("") == "" || $("#registerTel").val().split(" ").join("") == "" || $("#registerAddress").val().split(" ").join("") == "" || $("#registerEmail").val().split(" ").join("") == "" || $("#registerPassword").val().split(" ").join("") == "" || $("#registerConfirmPassword").val().split(" ").join("") == ""){
             alert("Preencha todos os campos!");
-            return;
     }
     else{
+        
         let newUser = { cpf: $.trim($("#registerCPF").val()), name: $.trim($("#registerName").val()), tel: $.trim($("#registerTel").val()), address: $.trim($("#registerAddress").val()), email: $.trim($("#registerEmail").val()), password: $("#registerPassword").val(), profilePic: $("#registerProfilePic").val(), isAdmin: false };
+        if (userLoggedIn) {
+            userSession.name = newUser.name;
+            userSession.email = newUser.email;
+            userSession.address = newUser.address;
+            userSession.tel = newUser.tel;
+            newUser.profilePic = userSession.profilePic;
+        } else {
+            newUser.profilePic = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png";
+        }
     
         if($("#registerConfirmPassword").val() == newUser.password){
-			let objectStore = db.transaction(["users"],"readwrite").objectStore("users");
-            objectStore.add(newUser);
-            
-            changeHash('my-area');
+			let objectStore = db.transaction("users","readwrite").objectStore("users");
+            let request = objectStore.put(newUser);
+            request.onerror = function(event) {
+                alert("Erro ao salvar a conta");
+            };
+            request.onsuccess = function(event) {
+                changeHash("my-area");
+            }
         }
         else{
             alert("Erro na confirmação de senha!");
@@ -570,7 +593,7 @@ function createAccount(){
 
 function editAccount(){
 
-    let objectStore = db.transaction(["users"], "readwrite").objectStore("users");
+    let objectStore = db.transaction("users", "readwrite").objectStore("users");
     let request = objectStore.openCursor(userSession.cpf);
     request.onsuccess =  event => {
         

@@ -1,18 +1,3 @@
-
-#page{
-	display: flex;
-	flex-flow: column;
-}
-
-.row{
-	display: flex;
-	flex-flow: row;
-}
-
-.cart-section{
-	flex: 75%;
-}
-
 .cart-table{
 	margin: 16px;
 }
@@ -75,13 +60,11 @@
 }
 .confirmation-btn:hover{
     background-color: gray;
+    text-decoration: none;
     color: black;
 }
 
 .confirmation-section{
-	display: flex;
-	flex: 25%;
-	flex-flow: column;
 	justify-content: center;
 }
 

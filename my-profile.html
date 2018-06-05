@@ -1,64 +1,41 @@
-<div class="row">
-  <aside>
-    <div class="sidemenu">
-      <a onclick="changePageMyProfile();">Meu perfil</a>
-      <a onclick="changePageMyPet()">Meus pets</a>
-      <a href="#">Histórico de serviços</a>
-    </div>
-  </aside>
-  <section>
-    <div class="main">
-      <h1 style="color:blue">Meu perfil</h1>
-      <h3>Informações pessoais</h3>
-      <div class="foo">
-        <div id="photo">
-          <img src="image/default.jpg" width="300" height="auto">
-		  <a href="#">Alterar foto</a>
-		  <a onclick="changePageMyProfileEdit()">Modificar informações</a>
-        </div>
-        <div class="myAreaInfo">
-          <div>
-            <h4>Nome completo:</h4>
-            <span>José Augusto da Silva</span>
-          </div>
-          <div>
-            <h4>CPF:</h6>
-            <span>589.712.658-65</span>
-          </div>
-          <div>
-            <h4>Data de nascimento:</h4>
-            <span>24/10/1990</span>
-          </div>
-          <div>
-            <h4>Sexo:</h4>
-            <span>Masculino</span>
-          </div>
-          <div>
-            <h4>Telefone:</h4>
-            <span>(19) 3589-4723</span>
-          </div>
-          <div>
-            <h4>Telefone comercial:</h4>
-            <span>(19) 3874-2369</span>
-          </div>
-          <div>
-            <h4>E-mail</h4>
-            <span>joseasilva@gmail.com</span>
-          </div>
-        </div>
+<div class="row" style="margin-top:40px">
+  <div class="col-sm-10 col-sm-offset-1">
+    <h2 style="color:#007bc7">Meu perfil</h2>
+    <hr/>
+    <center>
+      <div class="thumbnail" style="width:30%">
+        <img id="userPic" src="image/default.jpg" alt="foto do usuário" width="300" height="auto"><br>
+        <button type="button" class="btn btn-primary">Alterar foto</button>
+      </div>
+    </center>
+    <div class="row">
+      <div class="col-sm-5 well">
+        <h4>Nome completo:</h4>
+        <span id="userName"></span>
+      </div>
+      <div class="col-sm-7 well">
+        <h4>Endereço:</h4>
+        <span id="userAddress"></span>
       </div>
     </div>
-  </section>
+    <div class="row">
+      <div class="col-sm-4 well">
+        <h4>CPF:</h6>
+        <span id="userCPF"></span>
+      </div>
+      <div class="col-sm-4 well">
+        <h4>Telefone:</h4>
+        <span id="userTel"></span>
+      </div>
+      <div class="col-sm-4 well">
+        <h4>E-mail:</h4>
+        <span id="userEmail"></span>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button type="button" class="btn btn-primary" onclick="changePageMyProfileEdit()">Modificar informações</button>
+    </div>
+  </div>
+  <div class="col-sm-1">
+  </div>
 </div>
-
-<script>
-
-	function changePageMyProfileEdit() {
-    $(".main").load("myprofileedit.html")
-  }
-	
-	function changePageMyPet() {
-    $(".main").load("mypet.html")
-  }
-
-</script>

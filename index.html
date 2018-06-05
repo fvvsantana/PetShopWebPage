@@ -4,30 +4,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Happy Pet</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" type="text/css" href="css/my-area.css">
-    <link rel="stylesheet" type="text/css" href="css/cart.css">
-    <link rel="stylesheet" href="css/products.css">
     <link rel="stylesheet" href="css/services.css">
     <link rel="stylesheet" href="css/service-view.css">
     <link rel="stylesheet" href="css/service-schedule.css">
+    <link rel="stylesheet" type="text/css" href="css/my-cart.css">
+    <link rel="stylesheet" href="css/products.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="pet-shop.js"></script>
   </head>
 
   <body>
     <header id="header">
-      <div class="space">
-        <div class="logo">
-          <img onclick="changeHash('');" src="image/logo.png" alt="Logo" width="100%"> 
+      <div id="header-space">
+        <div class="logo" >
+          <a href="javascript:changeHash('');" >
+            <img src="image/logo.png" alt="Logo" width="100%"> 
+          </a>
         </div >
         <form class="search-product">
           <input type="text" id="product-input" placeholder="O que você procura?">
           <button class="navbarbtn" onclick="changeHash('search');">Buscar</button>
         </form>
         <div class="mystuff">
-          <button class="navbarbtn" onclick="changeHash('my-profile');">Minha área</button>
-          <button class="navbarbtn" onclick="changeHash('my-cart');">Meu carrinho</button>
+          <button id="loginButton" class="navbarbtn" onclick="loginClick();">Login</button>
+          <button id="cartButton" class="navbarbtn" onclick="changeHash('my-cart');">Meu carrinho</button>
         </div>
       </div>
       <nav>
@@ -55,66 +58,6 @@
     <div id="content">
 
     </div>
-
-    <script>
-      //change hash
-      function changeHash(newHash){
-        location.hash = newHash;
-      }
-
-      $(function(){
-
-        $(window).on('hashchange', function(){
-
-          let content = $("#content");
-
-          switch (location.hash) {
-            case "":
-              content.load("home.html");
-              break;
-
-            case "#about":
-              content.load("about.html");
-              break;
-
-            case "#my-cart":
-              content.load("my-cart.html");
-              break;
-
-            case "#my-profile":
-              content.load("my-profile.html");
-              break;
-
-            case "#order-data":
-              content.load("order-data.html");
-              break;
-
-            case "#products":
-              content.load("products.html");
-              break;
-
-            case "#service-schedule":
-              content.load("service-schedule.html");
-              break;
-
-            case "#service-view":
-              content.load("service-view.html");
-              break;
-
-            case "#services":
-              content.load("services.html");
-              break;
-
-            default:
-              content.load("not-found.html");
-              break;
-          }
-        });
-
-        $(window).trigger('hashchange');
-
-      });
-    </script>
-
+    
   </body>
 </html>

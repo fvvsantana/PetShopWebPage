@@ -152,7 +152,9 @@ $(function(){
 			content.load("new-product.html");
 
         case "#adm-admins":
-          $("#adm-content").load("adm/admins.html");
+          $("#adm-content").load("adm/admins.html").ready(function(){
+				showAdmins();
+		  });
           break;
 
         case "#adm-alter-client":
@@ -200,8 +202,9 @@ $(function(){
           break;
 
         case "#adm-stock":
-          $("#adm-content").load("adm/stock.html");
-		  showStock();
+          $("#adm-content").load("adm/stock.html").ready(function(){
+			showStock();
+		  });
           break;
 
         case "#my-cart":
@@ -234,6 +237,10 @@ $(function(){
 
         case "#register":
           content.load("register.html");
+          break;
+
+        case "#register-admin":
+          $("#adm-content").load("register-admin.html");
           break;
 
         case "#product-view":
@@ -528,7 +535,7 @@ function addProduct(){
 	
 	if($.isNumeric($.trim($("#price").val()))){
 		
-		let newProduct = { name: $.trim($("#name").val()) , quantity: $("#qtd").val(), price: $.trim($("#price").val()), animal: $("#animal").val(), category: $("#category").val(), description: $.trim($("#description").val()), picture: $("#picture").val()};
+		let newProduct = { name: $.trim($("#name").val()) , quantity: $("#qtd").val(), price: $.trim($("#price").val()), animal: $("#animal").val(), category: $("#category").val(), description: $.trim($("#description").val()), picture: "https://cdn.shopify.com/s/files/1/0364/6117/products/DSC0001_25a81afb-f969-4cb9-b760-b3dc038f0885_large.JPG?v=1464631702"};
 		
 		
 		let objectStore = db.transaction(["products"], "readwrite").objectStore("products");
@@ -539,6 +546,111 @@ function addProduct(){
 		alert("O preço deve ser um número!");
 	}
 	
+}
+
+function showAdmins() {
+	
+	$("#adminsTable").html("");
+	
+	let adminInfo = $('<tr/>');
+	adminInfo.append($('<td class="adminsCPF"></td>'));
+	adminInfo.append($('<td class="adminsName"></td>'));
+	adminInfo.append($('<td class="adminsEmail"></td>'));
+	adminInfo.append($('<td class="adminsTel"></td>'));
+	adminInfo.append($('<td class="adminsAddress"></td>'));
+	adminInfo.append($('<td><button type="button" class="btn btn-default" onclick="changeHash("adm-alter-admin")">Alterar</button></td>'));
+	adminInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
+	
+	let objectStore = db.transaction(["users"], "readonly").objectStore("users");
+    objectStore.openCursor().onsuccess = function(event) {
+        let cursor = event.target.result;
+        if (cursor) {
+			
+			if(cursor.value.isAdmin == true){
+				
+				if(cursor.value.cpf != "admin"){
+				
+					let newInfo = adminInfo.clone();
+					dynamicId = cursor.value.cpf;
+        
+					newInfo.attr('id', dynamicId);
+					newInfo.find('.adminsCPF').text(cursor.value.cpf);
+					newInfo.find('.adminsName').text(cursor.value.name);
+					newInfo.find('.adminsEmail').text(cursor.value.email);
+					newInfo.find('.adminsTel').text(cursor.value.tel);
+					newInfo.find('.adminsAddress').text(cursor.value.address);
+					newInfo.find('.btn btn-default').attr('onclick', 'deleteAdmin(dynamicId)');
+			
+					$("#adminsTable").append(newInfo);
+				
+				}
+				
+			}
+		
+			cursor.continue();
+		}
+	}
+}
+
+function addAdmin(){
+	
+    if($("#registerCPF").val().split(" ").join("") == "" || $("#registerName").val().split(" ").join("") == "" || $("#registerTel").val().split(" ").join("") == "" || $("#registerAddress").val().split(" ").join("") == "" || $("#registerEmail").val().split(" ").join("") == "" || $("#registerPassword").val().split(" ").join("") == "" || $("#registerConfirmPassword").val().split(" ").join("") == ""){
+            alert("Preencha todos os campos!");
+            return;
+    }
+    else{
+        let newUser = { cpf: $.trim($("#registerCPF").val()), name: $.trim($("#registerName").val()), tel: $.trim($("#registerTel").val()), address: $.trim($("#registerAddress").val()), email: $.trim($("#registerEmail").val()), password: $("#registerPassword").val(), profilePic: $("#registerProfilePic").val(), isAdmin: true };
+    
+        if($("#registerConfirmPassword").val() == newUser.password){
+			let objectStore = db.transaction(["users"],"readwrite").objectStore("users");
+            objectStore.add(newUser);
+            
+            changeHash('adm-area');
+        }
+        else{
+            alert("Erro na confirmação de senha!");
+        }
+    }
+	
+}
+
+function showCustomers() {
+	
+	$("#customersTable").html("");
+	
+	let customerInfo = $('<tr/>');
+	curstomerInfo.append($('<td class="usersCPF"></td>'));
+	curstomerInfo.append($('<td class="usersName"></td>'));
+	curstomerInfo.append($('<td class="usersEmail"></td>'));
+	curstomerInfo.append($('<td class="usersTel"></td>'));
+	curstomerInfo.append($('<td class="usersAddress"></td>'));
+	curstomerInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
+	
+	let objectStore = db.transaction(["users"], "readonly").objectStore("users");
+    objectStore.openCursor().onsuccess = function(event) {
+        let cursor = event.target.result;
+        if (cursor) {
+			
+			if(cursor.value.isAdmin == false){
+				
+				let newInfo = adminInfo.clone();
+				dynamicId = cursor.value.cpf;
+        
+				newInfo.attr('id', dynamicId);
+				newInfo.find('.usersCPF').text(cursor.value.cpf);
+				newInfo.find('.usersName').text(cursor.value.name);
+				newInfo.find('.usersEmail').text(cursor.value.email);
+				newInfo.find('.usersTel').text(cursor.value.tel);
+				newInfo.find('.usersAddress').text(cursor.value.address);
+				newInfo.find('.btn btn-default').attr('onClick', 'deleteAdmin(dynamicId)');
+			
+					$("#adminsTable").append(newInfo);
+					
+			}
+		
+			cursor.continue();
+		}
+	}
 }
 
 function modifyProduct(){

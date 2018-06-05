@@ -7,6 +7,7 @@
 	border-bottom: #e6e7e8 1px solid;
 	color: #515151;
 	font-size: 20px;
+	text-align: center;
 }
 
 
@@ -25,46 +26,19 @@
 	color: #515151;
 }
 
-.cart-table .btn{
-    display: inline-block;
-    text-decoration: none;
-    background-color: #007bc7;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-
-    margin: 4px;
-    padding: 4px 8px;
-}
-
-.cart-table .btn:hover{
-    background-color: gray;
-    color: black;
-}
-
-.cart-table #amount-input{
+.cart-table .quantity{
 	width: 40px;
-	text-align: right;
+	text-align: center;
 }
 
-.confirmation-btn{
-    display: inline-block;
-    text-decoration: none;
-    background-color: #007bc7;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-
-    margin: 4px;
-    padding: 8px 16px;
-}
-.confirmation-btn:hover{
-    background-color: gray;
-    text-decoration: none;
-    color: black;
+.confirmation-section {
+    text-align: right;
+    margin-bottom: 15px;
+    margin-right: 10px;
 }
 
-.confirmation-section{
-	justify-content: center;
+.confirmation-section table{
+	margin-right: 0px;
+    margin-left: auto;
 }
 

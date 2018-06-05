@@ -34,92 +34,10 @@ request.onupgradeneeded = function(event) {
     productsStore.createIndex("animal", "animal", {unique: false});
     productsStore.createIndex("animal-category", ["animal", "category"], {unique: false});
     addProducts(productsStore);
+    
+    // criação da "tabela" do carrinho
+    let cartStore = db.createObjectStore("cart", { keyPath: "key" });
 };
-
-// adiciona usuários de exemplo
-function addUsers(objectStore){
-    
-    //dados dos usuários iniciais
-    const userData = [
-        { cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: true },
-        { cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: false }
-    ];
-    
-    //inserção dos usuários no banco de dados
-    for (let i in userData) {
-        objectStore.add(userData[i]);
-    }
-}
-
-// adiciona pets de exemplo
-function addPets(objectStore){
-    
-    //dados dos pets iniciais
-    const petsData = [
-        { owner: "321", name: "Rex", species: "Cachorro", age: 5, gender: "Masculino", breed:"Golden Retriever" , petPic:"http://portaldodog.com.br/cachorros/wp-content/uploads/2015/05/golden-retriever-8-375x500.jpg"},
-        { owner: "321", name: "Melinda", species: "Gato", age: 2, gender: "Feminino", breed:"Siamês" , petPic:"http://cdn2-www.cattime.com/assets/uploads/gallery/siamese-cats-and-kittens-pictures/siamese-cat-kitten-picture-5.jpg"},
-        { owner: "admin", name: "Lassie", species: "Cachorro", age: 3, gender: "Feminino", breed:"Husky Siberiano" , petPic:"https://upload.wikimedia.org/wikipedia/commons/a/a3/Black-Magic-Big-Boy.jpg"}
-    ];
-        
-    //inserção dos pets no banco de dados
-    for (let i in petsData) {
-        objectStore.add(petsData[i]);
-    }
-}
-
-// adiciona produtos de exemplo
-function addProducts(objectStore){
-    
-    //dados dos usuários iniciais
-    const stockData = [
-        { name: "Ração Royal Canin Maxi - Cães Adultos - 15kg", quantity: 200, price: "209.99", animal: "Cachorro", category: "Alimentos", picture: "https://cdn-petz-imgs.stoom.com.br/fotos/1515444639412.jpg", description:`- Indicado para cães adultos de grande porte;
-- Oferece todos os nutrientes que seu cão de grande porte precisa para uma vida longa e saudável;
-- Especialmente formulada para favorecer a saúde dos ossos e articulações também preserva a tonicidade muscular graças a um aporte adequado de proteínas;
-- Assegura uma ótima digestão e atende até mesmo os paladares mais exigentes;
-- Disponível em embalagem de 15kg.` }, 
-        { name: "Ração Royal Canin Golden Retriever - Cães Adultos - 12kg", quantity: 100, price: "204.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1515429480749.jpg",description:`- Indicado para cães
-- Ajuda na manutenção ideal do peso do seu pet
-- Contribui para o funcionamento da musculatura cardíaca
-- Auxilia na eliminação dos efeitos do envelhecimento celular
-- Disponível em embalagem de 12kg` },
-		{ name: "Royal Canin Renal Veterinary Diet Cães - 10kg", quantity: 10, price: "289.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458082860525.jpg", description:`- Indicada para cães adultos;
-- Recomendado para cães com insuficiência renal crônica;
-- Ajuda a eliminar e prevenir a formação de radicais livres;
-- Equilibra o sistema digestivo,` },
-		{ name: "Ração Royal Canin Veterinary Hypoallergenic - Gatos Adultos - 1,5kg", quantity: 150, price: "104.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1507918511559.jpg", description:`- Indicada para gatos adultos e alérgicos;
-- Proteínas hidrolisadas que tornam o alimento altamente digestivo e com baixo potencial alergênico;
-- Complexo patenteado que ajuda a reforçar a barreira cutânea;
-- Enriquecido com EPA/DHA;` },
-		{ name: "Ração Royal Canin Premium Cat Vitalidade para Gatos Adultos - 10kg", quantity: 180, price: "134.94", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264968346.jpg", description:`- Indicada para gatos adultos;
-- Alimentação completa e balanceada;
-- Sabor irresistível para seu gatinho;
-- Favorece a saúde do trato urinário;` },
-		{ name: "Ração Royal Canin Premium Cat Beleza da Pelagem para Gatos Adultos - 10kg", quantity: 50, price: "134.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264680318.jpg", description:`- Indicada para gatos adultos;
-- Formula altamente palatável;
-- Promove a saúde do trato urinário;
-- Enriquecida com ômegas 3 e 6 proporcionando beleza da pelagem;` },
-		{ name: "Brinquedo Chalesco Para Cães Pelúcia Cachorro Luxo Rosa e Azul", quantity: 20, price: "34.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458848516726.jpg", description:`- Indicado para cães;
-- Divertido e criativo;
-- Ajuda a combater o estresse do seu pet;
-- Possui textura macia de pelúcia.` },
-		{ name: "Brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido", quantity: "30", price: "19.19", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/10037080001297-1.jpg", description:`Você sabia que cães que permanecem longos períodos sem seus donos, sem uma atividade física, sem estímulos, podem se tornar animais deprimidos? Por isso a Chalesco criou o brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido, que além de apresentar formato criativo e divertido, possui textura macia de pelúcia. ` },
-		{ name: "Brinquedo de Pelúcia Chalesco Crocodilo", quantity: "40", price: "20.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992186939.jpg", description:`- Indicado para cães;
-- Divertido e criativo;
-- Ajuda a combater o estresse do seu pet;
-- Possui textura macia de pelúcia.` },
-		{ name: "Arranhador 4 Estações Para Gatos Cone Sisal com Penas", quantity: 20, price: "209.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/20037081000050-1.jpg", description:`O Arranhador 4 Estações Para Gatos Cone Sisal com Penas foi desenvolvido para proporcionar atividades físicas, evitando o stress preservando seus móveis. Um lugar adequado para arranhar, dormir e brincar. Tem um design bonito que pode situar-se em qualquer lugar da sua casa. Para evitar que o seu gato estrague móveis, paredes ou sofás, tenha a certeza de lhe proporcionar um lugar adequado para arranhar, assim poderá esticar-se, espreguiçar-se e afiar as suas unhas. Tamanho: 80cm. ` },
-		{ name: "Brinquedo Chalesco Kit com 2 Ratinhos de Corda", quantity: 100, price: "20.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992630932.jpg", description:`- Indicado para gatos;
-- Provoque seu gatinho para brincar com estes ratinhos que são pura diversão;
-- Feitos de tecido de algodão, são ideais para seu melhor amigo que precisa diariamente de uma boa dose de entretenimento.` },
-		{ name: "Brinquedo Jambo Gatos Joaninha Amarelo e Preto Vibratória", quantity: 50, price: "19.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1455921490800.jpg", description:`Presentear seu gatinho é uma forma divertida de descontrair o seu animal de estimação e evitar que eles mordam os móveis da sua casa. O Brinquedo Jambo Pet Gatos Joaninha Amarelo e Preto Vibratória é feito em poliéster e é perfeito para seu gatinho gastar as energias, pois vem com um dispositivo que vibra, deixando seu pet instigado durante longos períodos de tempo. ` }
-		
-    ];
-    
-    //inserção dos produtos no banco de dados
-    for (let i in stockData) {
-        objectStore.add(stockData[i]);
-    }
-}
 
 //change hash
 function changeHash(newHash){
@@ -133,7 +51,15 @@ $(function(){
         
       // check if it is a product category
       if (location.hash.startsWith("#products")) {
-          loadProducts(location.hash);
+          loadPageProducts(location.hash);
+          return;
+      }
+      if (location.hash.startsWith("#product-view")) {
+          loadPageProductView(location.hash.split('-')[2]);
+          return;
+      }
+      if (location.hash.startsWith("#pet-edit")) {
+          loadPageEditPet(location.hash.split('-')[2]);
           return;
       }
 
@@ -142,6 +68,10 @@ $(function(){
       switch(location.hash){
         case "":
           content.load("home.html");
+          break;
+          
+        case "#cartao":
+        case "#boleto":
           break;
 
         case "#about":
@@ -178,7 +108,9 @@ $(function(){
           break;
 
         case "#adm-clients":
-          $("#adm-content").load("adm/users.html");
+          $("#adm-content").load("adm/users.html").ready(function(){
+				showCustomers();
+		  });
           break;
 
         case "#adm-new-product":
@@ -208,7 +140,7 @@ $(function(){
           break;
 
         case "#my-cart":
-          content.load("my-cart.html");
+          loadPageCart();
           break;
 
         case "#my-area":
@@ -222,9 +154,13 @@ $(function(){
         case "#my-pets":
           loadPageMyPet();
           break;
+          
+        case "#add-pet":
+          $("#my-area-content").load("new-pet.html");
+          break;
 		
 		case "#my-profile-edit":
-          $("#my-area-content").load("my-profile-edit.html");
+          loadPageEditProfile();
           break;
 
         case "#login":
@@ -232,7 +168,7 @@ $(function(){
           break;
 
         case "#order-confirmation":
-          content.load("order-confirmation.html");
+          loadPageConfirmation();
           break;
 
         case "#register":
@@ -241,10 +177,6 @@ $(function(){
 
         case "#register-admin":
           $("#adm-content").load("register-admin.html");
-          break;
-
-        case "#product-view":
-          content.load("product-view.html");
           break;
 
         case "#service-schedule":
@@ -269,12 +201,248 @@ $(function(){
 
 });
 
+function loadPageConfirmation() {
+    if (!userLoggedIn) {
+        alert("Por favor, faça login para continuar.");
+        changeHash('login');
+    } else {
+        $("#content").load("order-confirmation.html");
+    }
+    
+}
+
+function loadPageEditProfile() {
+    $("#my-area-content").load("my-profile-edit.html", function() {
+        $("#registerName").val(userSession.name);
+        $("#registerCPF").val(userSession.cpf);
+        $("#registerEmail").val(userSession.email);
+        $("#registerTel").val(userSession.tel);
+        $("#registerAddress").val(userSession.address);
+    });
+}
+
+function loadPageEditPet (petKey) {
+    $("#my-area-content").load("pet-edit.html", function() {
+        let objectStore = db.transaction("pets", "readonly").objectStore("pets");
+        objectStore.openCursor(parseInt(petKey)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                $("#name").val(cursor.value.name);
+                $("#age").val(cursor.value.age);
+                $("#species").val(cursor.value.species);
+                $("#gender").val(cursor.value.gender);
+                $("#breed").val(cursor.value.breed);
+                $("#save").attr('onClick', "savePet(" + petKey + ");");
+            }
+        }
+    });
+}
+
+function removePet(petKey) {
+    if (confirm("Você tem certeza que quer remover este pet?")) {
+        let objectStore = db.transaction("pets", "readwrite").objectStore("pets");
+        let request = objectStore.delete(parseInt(petKey));
+        request.onerror = function(event) {
+            alert("Erro ao remover pet");
+        };
+        request.onsuccess = function(event) {
+            loadPageMyPet();
+        }
+    }
+}
+
+function savePet(petKey) {
+    // abre a tabela para escrita
+    let objectStore = db.transaction("pets", "readwrite").objectStore("pets");
+    
+    // chave igual a zero significa que é um novo pet
+    if (petKey == 0) {
+        let newPet = { 
+            owner: userSession.cpf, 
+            name: $("#name").val(), 
+            species: $("#species").val(), 
+            age: $("#age").val(), 
+            gender: $("#gender").val(), 
+            breed: $("#breed").val(), 
+            petPic:"https://i.ytimg.com/vi/z4Ysnd2bBJA/maxresdefault.jpg"};
+        if (newPet.species == "Gato")
+            newPet.petPic = "http://tabooh.info/wp-content/uploads/drawing-of-cats-cat-drawing-images-insssrenterprisesco-drawings-of-cats-bik-drawing.jpg";
+        
+        request = objectStore.add(newPet);
+        request.onerror = function(event) {
+            alert("Erro ao adicionar pet");
+        };
+        request.onsuccess = function(event) {
+            changeHash("my-pets");
+        }
+    }
+    // se a chave não é zero, está editando um pet existente
+    else {
+        objectStore.get(parseInt(petKey)).onsuccess = function(event) {
+            let pet = event.target.result;
+            pet.name = $("#name").val();
+            pet.age = $("#age").val();
+            pet.species = $("#species").val();
+            pet.gender = $("#gender").val();
+            pet.breed = $("#breed").val();
+            
+            let requestUpdate = objectStore.put(pet, petKey);
+            requestUpdate.onerror = function(event) {
+                alert("Erro ao atualizar pet");
+            };
+            requestUpdate.onsuccess = function(event) {
+                changeHash("my-pets");
+            }
+        }
+    }
+}
+
+function loadPageCart() {
+    $("#content").load("my-cart.html", function() {
+        // open the table
+        let objectStore = db.transaction("cart", "readonly").objectStore("cart");
+        
+        // check if there are any items
+        let countRequest = objectStore.count();
+        countRequest.onsuccess = function() {
+            if(countRequest.result == 0) {
+                $("#emptyCart").show();
+                $("section").hide();
+            } else {
+                // get the model item
+                let model = $("#item").clone();
+                $("#item").remove();
+                
+                // sum the item values
+                let total = 0;
+                
+                objectStore.openCursor().onsuccess = function(event) {
+                    let cursor = event.target.result;
+                    if (cursor) {
+                        let newItem = model.clone();
+                        newItem.find("#itemImage img").attr('src', cursor.value.picture);
+                        newItem.find("#itemImage").attr('href', "javascript:changeHash('product-view-" + cursor.value.key + "')");
+                        newItem.find("#itemName").text(cursor.value.name);
+                        newItem.find("#itemName").attr('href', "javascript:changeHash('product-view-" + cursor.value.key + "')");
+                        newItem.find("#itemPrice").text("R$ " + cursor.value.price);
+                        newItem.find("#itemQuantity").val(cursor.value.quantity);
+                        newItem.find("#itemQuantity").attr('id', 'itemQuantity-' + cursor.value.key);
+                        newItem.find("#itemUpdate").attr('onclick', "updateItemQuantity('" + cursor.value.key + "')");
+                        newItem.find("#itemRemove").attr('onclick', "removeItem('" + cursor.value.key + "')");
+                        $("#itemList").append(newItem);
+                        
+                        total += (parseFloat(cursor.value.price) * parseInt(cursor.value.quantity));
+                        cursor.continue();
+                    } 
+                    else {
+                        $("#total1").text('R$ ' + total.toFixed(2));
+                        $("#total2").text('R$ ' + (total+10).toFixed(2));
+                    }
+                }
+            }
+        }
+    });
+}
+
+function removeItem(productKey) {
+    let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
+    let request = objectStore.delete(parseInt(productKey));
+    request.onerror = function(event) {
+        alert("Erro ao remover produto");
+    };
+    request.onsuccess = function(event) {
+        loadPageCart();
+    }
+}
+
+function updateItemQuantity(productKey) {
+    let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
+    objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
+        let cursor = event.target.result;
+        if (cursor) {
+            let item = cursor.value;
+            item.quantity = $('#itemQuantity-' + productKey).val();
+            
+            let request = cursor.update(item);
+            request.onerror = function(event) {
+                alert("Erro ao atualizar produto");
+            };
+            request.onsuccess = function(event) {
+                loadPageCart();
+            }
+        } else {
+            alert("Erro ao atualizar produto");
+        }
+    }
+}
+
+function addCart(productKey) {
+    // abre a tabela para escrita
+    let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
+    objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
+        let cursor = event.target.result;
+        // se encontrar, significa que o produto já estava no carrinho
+        if (cursor) {
+            let item = cursor.value;
+            item.quantity++;
+            
+            let request = cursor.update(item);
+            request.onerror = function(event) {
+                alert("Erro ao adicionar produto");
+            };
+            request.onsuccess = function(event) {
+                changeHash("my-cart");
+            }
+        }
+        else {
+            // precisa encontrar os dados do produto
+            let productStore = db.transaction("products", "readonly").objectStore("products");
+            productStore.get(parseInt(productKey)).onsuccess = function(event) {
+                let product = event.target.result;
+                let newItem = {
+                    key: parseInt(productKey),
+                    picture: product.picture,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                };
+                let request = db.transaction("cart", "readwrite").objectStore("cart").add(newItem);
+                request.onerror = function(event) {
+                    alert("Erro ao adicionar produto");
+                };
+                request.onsuccess = function(event) {
+                    changeHash("my-cart");
+                }
+            }
+        }
+    }
+}
+
+function loadPageProductView (productKey) {
+    $("#content").load("product-view.html", function() {
+        let objectStore = db.transaction("products", "readonly").objectStore("products");
+        objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                $("#productImage").attr('src', cursor.value.picture);
+                $("#productName strong").text(cursor.value.name);
+                $("#productPrice").text("R$ " + cursor.value.price);
+                $("#productDesc").text(cursor.value.description);
+                $("#productCart").attr('onclick', "addCart('" + productKey + "')");
+            } else {
+                $("#productName strong").text("Produto não encontrado");
+                $("#productPrice").text("R$ ??");
+            }
+        } 
+    });
+}
+
 // capitalize the first letter of a string
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function loadProducts(hash) {
+function loadPageProducts(hash) {
     // get the animal and category information
     let data = hash.split("-");
     
@@ -313,6 +481,7 @@ function loadProducts(hash) {
                 newElement.find("#productImage").attr('src', product.picture);
                 newElement.find("#productTitle").text(product.name);
                 newElement.find("#productPrice").text("R$ " + product.price);
+                newElement.find("a").attr('href', "javascript:changeHash('product-view-" + cursor.primaryKey + "')");
                 $("#products-section > .row").append(newElement);
                 cursor.continue();
             }
@@ -370,6 +539,8 @@ function loadPageMyPet() {
                 newElement.find("#petAge").text(cursor.value.age);
                 newElement.find("#petGender").text(cursor.value.gender);
                 newElement.find("#petBreed").text(cursor.value.breed);
+                newElement.find("#petEdit").attr('onClick', "changeHash('pet-edit-" + cursor.primaryKey + "')");
+                newElement.find("#petRemove").attr('onClick', "removePet(" + cursor.primaryKey + ")");
                 $("#petList").append(newElement);
                 
                 cursor.continue();
@@ -440,20 +611,33 @@ function startLogoff(){
     loginClick();
 }
 
-function createAccount(){
+function saveAccount(){
     
     if($("#registerCPF").val().split(" ").join("") == "" || $("#registerName").val().split(" ").join("") == "" || $("#registerTel").val().split(" ").join("") == "" || $("#registerAddress").val().split(" ").join("") == "" || $("#registerEmail").val().split(" ").join("") == "" || $("#registerPassword").val().split(" ").join("") == "" || $("#registerConfirmPassword").val().split(" ").join("") == ""){
             alert("Preencha todos os campos!");
-            return;
     }
     else{
+        
         let newUser = { cpf: $.trim($("#registerCPF").val()), name: $.trim($("#registerName").val()), tel: $.trim($("#registerTel").val()), address: $.trim($("#registerAddress").val()), email: $.trim($("#registerEmail").val()), password: $("#registerPassword").val(), profilePic: $("#registerProfilePic").val(), isAdmin: false };
+        if (userLoggedIn) {
+            userSession.name = newUser.name;
+            userSession.email = newUser.email;
+            userSession.address = newUser.address;
+            userSession.tel = newUser.tel;
+            newUser.profilePic = userSession.profilePic;
+        } else {
+            newUser.profilePic = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png";
+        }
     
         if($("#registerConfirmPassword").val() == newUser.password){
-			let objectStore = db.transaction(["users"],"readwrite").objectStore("users");
-            objectStore.add(newUser);
-            
-            changeHash('my-area');
+			let objectStore = db.transaction("users","readwrite").objectStore("users");
+            let request = objectStore.put(newUser);
+            request.onerror = function(event) {
+                alert("Erro ao salvar a conta");
+            };
+            request.onsuccess = function(event) {
+                changeHash("my-area");
+            }
         }
         else{
             alert("Erro na confirmação de senha!");
@@ -463,7 +647,7 @@ function createAccount(){
 
 function editAccount(){
 
-    let objectStore = db.transaction(["users"], "readwrite").objectStore("users");
+    let objectStore = db.transaction("users", "readwrite").objectStore("users");
     let request = objectStore.openCursor(userSession.cpf);
     request.onsuccess =  event => {
         
@@ -619,12 +803,12 @@ function showCustomers() {
 	$("#customersTable").html("");
 	
 	let customerInfo = $('<tr/>');
-	curstomerInfo.append($('<td class="usersCPF"></td>'));
-	curstomerInfo.append($('<td class="usersName"></td>'));
-	curstomerInfo.append($('<td class="usersEmail"></td>'));
-	curstomerInfo.append($('<td class="usersTel"></td>'));
-	curstomerInfo.append($('<td class="usersAddress"></td>'));
-	curstomerInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
+	customerInfo.append($('<td class="usersCPF"></td>'));
+	customerInfo.append($('<td class="usersName"></td>'));
+	customerInfo.append($('<td class="usersEmail"></td>'));
+	customerInfo.append($('<td class="usersTel"></td>'));
+	customerInfo.append($('<td class="usersAddress"></td>'));
+	customerInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
 	
 	let objectStore = db.transaction(["users"], "readonly").objectStore("users");
     objectStore.openCursor().onsuccess = function(event) {
@@ -633,7 +817,7 @@ function showCustomers() {
 			
 			if(cursor.value.isAdmin == false){
 				
-				let newInfo = adminInfo.clone();
+				let newInfo = customerInfo.clone();
 				dynamicId = cursor.value.cpf;
         
 				newInfo.attr('id', dynamicId);
@@ -642,9 +826,9 @@ function showCustomers() {
 				newInfo.find('.usersEmail').text(cursor.value.email);
 				newInfo.find('.usersTel').text(cursor.value.tel);
 				newInfo.find('.usersAddress').text(cursor.value.address);
-				newInfo.find('.btn btn-default').attr('onClick', 'deleteAdmin(dynamicId)');
+				newInfo.find('.btn btn-default').attr('onClick', 'deleteUser(dynamicId)');
 			
-					$("#adminsTable").append(newInfo);
+				$("#usersTable").append(newInfo);
 					
 			}
 		
@@ -655,4 +839,90 @@ function showCustomers() {
 
 function modifyProduct(){
 	
+}
+
+/* FUNÇÕES PARA ADIÇÃO DE EXEMPLOS NO BANCO: */
+
+// adiciona usuários de exemplo
+function addUsers(objectStore){
+    
+    //dados dos usuários iniciais
+    const userData = [
+        { cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: true },
+        { cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: false }
+    ];
+    
+    //inserção dos usuários no banco de dados
+    for (let i in userData) {
+        objectStore.add(userData[i]);
+    }
+}
+
+// adiciona pets de exemplo
+function addPets(objectStore){
+    
+    //dados dos pets iniciais
+    const petsData = [
+        { owner: "321", name: "Rex", species: "Cachorro", age: 5, gender: "Masculino", breed:"Golden Retriever" , petPic:"http://portaldodog.com.br/cachorros/wp-content/uploads/2015/05/golden-retriever-8-375x500.jpg"},
+        { owner: "321", name: "Melinda", species: "Gato", age: 2, gender: "Feminino", breed:"Siamês" , petPic:"http://cdn2-www.cattime.com/assets/uploads/gallery/siamese-cats-and-kittens-pictures/siamese-cat-kitten-picture-5.jpg"},
+        { owner: "admin", name: "Lassie", species: "Cachorro", age: 3, gender: "Feminino", breed:"Husky Siberiano" , petPic:"https://upload.wikimedia.org/wikipedia/commons/a/a3/Black-Magic-Big-Boy.jpg"}
+    ];
+        
+    //inserção dos pets no banco de dados
+    for (let i in petsData) {
+        objectStore.add(petsData[i]);
+    }
+}
+
+// adiciona produtos de exemplo
+function addProducts(objectStore){
+    
+    const stockData = [
+        { name: "Ração Royal Canin Maxi - Cães Adultos - 15kg", quantity: 200, price: "209.99", animal: "Cachorro", category: "Alimentos", picture: "https://cdn-petz-imgs.stoom.com.br/fotos/1515444639412.jpg", description:`- Indicado para cães adultos de grande porte;
+- Oferece todos os nutrientes que seu cão de grande porte precisa para uma vida longa e saudável;
+- Especialmente formulada para favorecer a saúde dos ossos e articulações também preserva a tonicidade muscular graças a um aporte adequado de proteínas;
+- Assegura uma ótima digestão e atende até mesmo os paladares mais exigentes;
+- Disponível em embalagem de 15kg.` }, 
+        { name: "Ração Royal Canin Golden Retriever - Cães Adultos - 12kg", quantity: 100, price: "204.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1515429480749.jpg",description:`- Indicado para cães
+- Ajuda na manutenção ideal do peso do seu pet
+- Contribui para o funcionamento da musculatura cardíaca
+- Auxilia na eliminação dos efeitos do envelhecimento celular
+- Disponível em embalagem de 12kg` },
+		{ name: "Royal Canin Renal Veterinary Diet Cães - 10kg", quantity: 10, price: "289.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458082860525.jpg", description:`- Indicada para cães adultos;
+- Recomendado para cães com insuficiência renal crônica;
+- Ajuda a eliminar e prevenir a formação de radicais livres;
+- Equilibra o sistema digestivo,` },
+		{ name: "Ração Royal Canin Veterinary Hypoallergenic - Gatos Adultos - 1,5kg", quantity: 150, price: "104.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1507918511559.jpg", description:`- Indicada para gatos adultos e alérgicos;
+- Proteínas hidrolisadas que tornam o alimento altamente digestivo e com baixo potencial alergênico;
+- Complexo patenteado que ajuda a reforçar a barreira cutânea;
+- Enriquecido com EPA/DHA;` },
+		{ name: "Ração Royal Canin Premium Cat Vitalidade para Gatos Adultos - 10kg", quantity: 180, price: "134.94", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264968346.jpg", description:`- Indicada para gatos adultos;
+- Alimentação completa e balanceada;
+- Sabor irresistível para seu gatinho;
+- Favorece a saúde do trato urinário;` },
+		{ name: "Ração Royal Canin Premium Cat Beleza da Pelagem para Gatos Adultos - 10kg", quantity: 50, price: "134.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264680318.jpg", description:`- Indicada para gatos adultos;
+- Formula altamente palatável;
+- Promove a saúde do trato urinário;
+- Enriquecida com ômegas 3 e 6 proporcionando beleza da pelagem;` },
+		{ name: "Brinquedo Chalesco Para Cães Pelúcia Cachorro Luxo Rosa e Azul", quantity: 20, price: "34.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458848516726.jpg", description:`- Indicado para cães;
+- Divertido e criativo;
+- Ajuda a combater o estresse do seu pet;
+- Possui textura macia de pelúcia.` },
+		{ name: "Brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido", quantity: "30", price: "19.19", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/10037080001297-1.jpg", description:`Você sabia que cães que permanecem longos períodos sem seus donos, sem uma atividade física, sem estímulos, podem se tornar animais deprimidos? Por isso a Chalesco criou o brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido, que além de apresentar formato criativo e divertido, possui textura macia de pelúcia. ` },
+		{ name: "Brinquedo de Pelúcia Chalesco Crocodilo", quantity: "40", price: "20.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992186939.jpg", description:`- Indicado para cães;
+- Divertido e criativo;
+- Ajuda a combater o estresse do seu pet;
+- Possui textura macia de pelúcia.` },
+		{ name: "Arranhador 4 Estações Para Gatos Cone Sisal com Penas", quantity: 20, price: "209.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/20037081000050-1.jpg", description:`O Arranhador 4 Estações Para Gatos Cone Sisal com Penas foi desenvolvido para proporcionar atividades físicas, evitando o stress preservando seus móveis. Um lugar adequado para arranhar, dormir e brincar. Tem um design bonito que pode situar-se em qualquer lugar da sua casa. Para evitar que o seu gato estrague móveis, paredes ou sofás, tenha a certeza de lhe proporcionar um lugar adequado para arranhar, assim poderá esticar-se, espreguiçar-se e afiar as suas unhas. Tamanho: 80cm. ` },
+		{ name: "Brinquedo Chalesco Kit com 2 Ratinhos de Corda", quantity: 100, price: "20.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992630932.jpg", description:`- Indicado para gatos;
+- Provoque seu gatinho para brincar com estes ratinhos que são pura diversão;
+- Feitos de tecido de algodão, são ideais para seu melhor amigo que precisa diariamente de uma boa dose de entretenimento.` },
+		{ name: "Brinquedo Jambo Gatos Joaninha Amarelo e Preto Vibratória", quantity: 50, price: "19.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1455921490800.jpg", description:`Presentear seu gatinho é uma forma divertida de descontrair o seu animal de estimação e evitar que eles mordam os móveis da sua casa. O Brinquedo Jambo Pet Gatos Joaninha Amarelo e Preto Vibratória é feito em poliéster e é perfeito para seu gatinho gastar as energias, pois vem com um dispositivo que vibra, deixando seu pet instigado durante longos períodos de tempo. ` }
+		
+    ];
+    
+    //inserção dos produtos no banco de dados
+    for (let i in stockData) {
+        objectStore.add(stockData[i]);
+    }
 }

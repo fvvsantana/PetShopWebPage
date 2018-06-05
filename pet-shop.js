@@ -39,7 +39,7 @@ request.onupgradeneeded = function(event) {
     let cartStore = db.createObjectStore("cart", { keyPath: "key" });
 };
 
-//change hash
+//function to change hash
 function changeHash(newHash){
     location.hash = newHash;
 }
@@ -206,7 +206,28 @@ function loadPageConfirmation() {
         alert("Por favor, faça login para continuar.");
         changeHash('login');
     } else {
-        $("#content").load("order-confirmation.html");
+        $("#content").load("order-confirmation.html", function() {
+            $("#nome").text("Nome: " + userSession.name);
+            $("#email").text("E-mail: " + userSession.email);
+            $("#telefone").text("Telefone: " + userSession.tel);
+            $("#cpf").text("CPF: " + userSession.cpf);
+            $("#endereco").text(userSession.address);
+            // sum the item values
+            let total = 0;
+            
+            let objectStore = db.transaction("cart", "readonly").objectStore("cart");
+            objectStore.openCursor().onsuccess = function(event) {
+                let cursor = event.target.result;
+                if (cursor) {
+                    total += (parseFloat(cursor.value.price) * parseInt(cursor.value.quantity));
+                    cursor.continue();
+                } 
+                else {
+                    $("#total1").text('R$ ' + total.toFixed(2));
+                    $("#total2").text('R$ ' + (total+10).toFixed(2));
+                }
+            }
+        });
     }
     
 }
@@ -219,6 +240,44 @@ function loadPageEditProfile() {
         $("#registerTel").val(userSession.tel);
         $("#registerAddress").val(userSession.address);
     });
+}
+
+function changePersonalData() {
+    $("#content").load("my-area.html", function() {
+        changeHash("my-profile-edit");
+    });
+}
+
+function changeDeliverAdress() {
+    alert("Funcionalidade não implementada");
+}
+
+function finishOrder() {
+    if($("#number").val().split(" ").join("") == "" || $("#name").val().split(" ").join("") == "" || $("#date").val().split(" ").join("") == "" || $("#code").val().split(" ").join("") == "") {
+        alert("Favor preencher todos os campos.");
+        return;
+    } else {
+        let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
+        objectStore.openCursor().onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                db.transaction("products", "readwrite").objectStore("products").openCursor(cursor.value.key).onsuccess = function(event) {
+                    let cursor2 = event.target.result;
+                    if (cursor2) {
+                        let prod = cursor2.value;
+                        prod.quantity -= cursor.value.quantity;
+                        cursor2.update(prod);
+                    }
+                };
+                cursor.delete();
+                cursor.continue();
+            } 
+            else {
+                alert("Pedido realizado com sucesso!");
+                changeHash("my-cart");
+            }
+        }
+    }
 }
 
 function loadPageEditPet (petKey) {
@@ -520,6 +579,8 @@ function loadPageMyProfile() {
         $("#userEmail").text(userSession.email);
         $("#userTel").text(userSession.tel);
         $("#userPic").attr('src', userSession.profilePic);
+        
+        
     });
 }
 
@@ -779,7 +840,7 @@ function showAdmins() {
 function addAdmin(){
 	
     if($("#registerCPF").val().split(" ").join("") == "" || $("#registerName").val().split(" ").join("") == "" || $("#registerTel").val().split(" ").join("") == "" || $("#registerAddress").val().split(" ").join("") == "" || $("#registerEmail").val().split(" ").join("") == "" || $("#registerPassword").val().split(" ").join("") == "" || $("#registerConfirmPassword").val().split(" ").join("") == ""){
-            alert("Preencha todos os campos!");
+            alert("Favor preencher todos os campos.");
             return;
     }
     else{

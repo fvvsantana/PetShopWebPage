@@ -6,19 +6,15 @@
       <div class="row justify-content-center" style="margin-left:0px; margin-right:0px">
         <div class="well well-lg col-sm-5">
           <h4>Dados pessoais</h4>
-          <p>Nome: xxxxxxx xxxxxx xxxxxx</p>
-          <p>email: xxxxxx@xxxx.com</p>
-          <p>Telefone: (xx) xxxxx-xxxx</p>
-          <p>CPF: xxx.xxx.xxx-xx</p>
+          <p id="nome">Nome: xxxxxxx xxxxxx xxxxxx</p>
+          <p id="email">Email: xxxxxx@xxxx.com</p>
+          <p id="telefone">Telefone: (xx) xxxxx-xxxx</p>
+          <p id="cpf">CPF: xxx.xxx.xxx-xx</p>
           <a onclick="changePersonalData()" class="btn btn-primary">Alterar informações</a>
         </div>
         <div class="well well-lg col-sm-offset-1 col-sm-5 col-sm-offset-1">
           <h4>Endereço de entrega</h4>
-          <p>Rua: xxxxxxxx xxxxx xxxxxx</p>
-          <p>Numero: xxxx</p>
-          <p>Bairro: xxxxx xxxx</p>
-          <p>Cidade: xxxx xxxxxx xxxx</p>
-          <p>Estado: xx</p>
+          <p id="endereco">Rua: xxxxxxxx xxxxx xxxxxx</p>
           <a onclick="changeDeliverAdress()" class="btn btn-primary">Alterar endereço</a>
         </div>
       </div>
@@ -37,16 +33,16 @@
             <div id="cartao" class="tab-pane fade in active">
               <form>
                 <div class="form-group" style="margin-top: 15px">
-                  <input type="text" class="form-control" name="cardnumber" placeholder="Número do cartão">
+                  <input id="number" type="text" class="form-control" name="cardnumber" placeholder="Número do cartão">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="cardexpdate" placeholder="Validade do cartão">
+                  <input id="date" type="text" class="form-control" name="cardexpdate" placeholder="Validade do cartão">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="ownername" placeholder="Nome impresso no cartão">
+                  <input id="name" type="text" class="form-control" name="ownername" placeholder="Nome impresso no cartão">
                 </div>
                 <div class="form-group" style="margin-bottom:0">
-                  <input type="text" class="form-control" name="securitycode" placeholder="Código de segurança">
+                  <input id="code" type="text" class="form-control" name="securitycode" placeholder="Código de segurança">
                 </div>
               </form>
             </div>
@@ -60,14 +56,21 @@
     <div class="col-sm-3" style="margin-top:6px">
       <h3 style="color: #007bc7;">Resumo do pedido</h3>
       <hr/>
-      <p>bla bla bla</p>
-      <p>bla bla</p>
-      <p>bla bla</p>
-      <p>bla bla</p>
-      <p>bla bla</p>
-      <p>bla bla</p>
-      <p>bla bla</p>
+      <table class="cart-table">
+        <tr>
+          <th>Subtotal</th>
+          <td><h4 id="total1">R$ 209,99</h4></td>
+        </tr>
+        <tr>
+          <th>Frete</th>
+          <td><h4>R$ 10,00</h4></td>
+        </tr>
+        <tr>
+          <th>Total</th>
+          <td><h4 id="total2">R$ 209,99</h4></td>
+        </tr>
+      </table>
     </div>
   </div>
-  <a onclick="changeDeliverAdress()" class="btn btn-primary" style="margin-bottom:15px">Finalizar pedido</a>
+  <a onclick="finishOrder()" class="btn btn-primary" style="margin-bottom:15px">Finalizar pedido</a>
 </div>

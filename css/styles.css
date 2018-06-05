@@ -141,6 +141,17 @@ li.dropdown{
     display: block;
 }
 
+.btn-red {
+    color: #fff;
+    background-color: #e60000;
+    border-color: #a20101;
+}
+
+.btn-red:hover {
+    color: #fff;
+    background-color: #a20101;
+    border-color: #a20101;
+}
 
 /*
 #content{

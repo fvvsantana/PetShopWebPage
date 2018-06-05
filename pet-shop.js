@@ -140,6 +140,10 @@ $(function(){
           loadPageProductView(location.hash.split('-')[2]);
           return;
       }
+      if (location.hash.startsWith("#pet-edit")) {
+          loadPageEditPet(location.hash.split('-')[2]);
+          return;
+      }
 
       let content = $("#content");
 
@@ -228,6 +232,10 @@ $(function(){
         case "#my-pets":
           loadPageMyPet();
           break;
+          
+        case "#add-pet":
+          $("#my-area-content").load("new-pet.html");
+          break;
 		
 		case "#my-profile-edit":
           $("#my-area-content").load("my-profile-edit.html");
@@ -270,6 +278,82 @@ $(function(){
     $(window).trigger('hashchange');
 
 });
+
+function loadPageEditPet (petKey) {
+    $("#my-area-content").load("pet-edit.html", function() {
+        let objectStore = db.transaction("pets", "readonly").objectStore("pets");
+        objectStore.openCursor(parseInt(petKey)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                $("#name").val(cursor.value.name);
+                $("#age").val(cursor.value.age);
+                $("#species").val(cursor.value.species);
+                $("#gender").val(cursor.value.gender);
+                $("#breed").val(cursor.value.breed);
+                $("#save").attr('onClick', "savePet(" + petKey + ");");
+            }
+        }
+    });
+}
+
+function removePet(petKey) {
+    if (confirm("Você tem certeza que quer remover este pet?")) {
+        let objectStore = db.transaction("pets", "readwrite").objectStore("pets");
+        let request = objectStore.delete(parseInt(petKey));
+        request.onerror = function(event) {
+            alert("Erro ao remover pet");
+        };
+        request.onsuccess = function(event) {
+            loadPageMyPet();
+        }
+    }
+}
+
+function savePet(petKey) {
+    // abre a tabela para escrita
+    let objectStore = db.transaction("pets", "readwrite").objectStore("pets");
+    
+    // chave igual a zero significa que é um novo pet
+    if (petKey == 0) {
+        let newPet = { 
+            owner: userSession.cpf, 
+            name: $("#name").val(), 
+            species: $("#species").val(), 
+            age: $("#age").val(), 
+            gender: $("#gender").val(), 
+            breed: $("#breed").val(), 
+            petPic:"https://i.ytimg.com/vi/z4Ysnd2bBJA/maxresdefault.jpg"};
+        if (newPet.species == "Gato")
+            newPet.petPic = "http://tabooh.info/wp-content/uploads/drawing-of-cats-cat-drawing-images-insssrenterprisesco-drawings-of-cats-bik-drawing.jpg";
+        
+        request = objectStore.add(newPet);
+        request.onerror = function(event) {
+            alert("Erro ao adicionar pet");
+        };
+        request.onsuccess = function(event) {
+            changeHash("my-pets");
+        }
+    }
+    // se a chave não é zero, está editando um pet existente
+    else {
+        objectStore.get(parseInt(petKey)).onsuccess = function(event) {
+            let pet = event.target.result;
+            pet.name = $("#name").val();
+            pet.age = $("#age").val();
+            pet.species = $("#species").val();
+            pet.gender = $("#gender").val();
+            pet.breed = $("#breed").val();
+            
+            let requestUpdate = objectStore.put(pet, petKey);
+            requestUpdate.onerror = function(event) {
+                alert("Erro ao atualizar pet");
+            };
+            requestUpdate.onsuccess = function(event) {
+                changeHash("my-pets");
+            }
+        }
+    }
+}
 
 function loadPageProductView (productKey) {
     $("#content").load("product-view.html", function() {
@@ -391,6 +475,8 @@ function loadPageMyPet() {
                 newElement.find("#petAge").text(cursor.value.age);
                 newElement.find("#petGender").text(cursor.value.gender);
                 newElement.find("#petBreed").text(cursor.value.breed);
+                newElement.find("#petEdit").attr('onClick', "changeHash('pet-edit-" + cursor.primaryKey + "')");
+                newElement.find("#petRemove").attr('onClick', "removePet(" + cursor.primaryKey + ")");
                 $("#petList").append(newElement);
                 
                 cursor.continue();

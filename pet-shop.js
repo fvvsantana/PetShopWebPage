@@ -195,8 +195,8 @@ $(function(){
           content.load("my-cart.html");
           break;
 
-        case "#my-profile":
-          loadPageMyProfile();
+        case "#my-area":
+          loadPageMyArea();
           break;
 
         case "#login":
@@ -238,16 +238,16 @@ function loginClick() {
         if (userSession.isAdmin)
             changeHash('adm-area');
         else
-            changeHash('my-profile');
+            changeHash('my-area');
     } 
     else {
         changeHash('login');
     }
 }
 
-function loadPageMyProfile() {
+function loadPageMyArea() {
     if(userLoggedIn){
-        $("#content").load("my-profile.html", function() {
+        $("#content").load("my-area.html", function() {
             $("#userName").text(userSession.name);
             $("#userCPF").text(userSession.cpf);
             $("#userAddress").text(userSession.address);
@@ -338,7 +338,7 @@ function startLogin() {
                         changeHash('adm-area');
                     } else {
                         $("#loginButton").text("Minha Área");
-                        changeHash('my-profile');
+                        changeHash('my-area');
                     }
             }
                 else{

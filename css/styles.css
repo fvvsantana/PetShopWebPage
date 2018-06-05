@@ -121,6 +121,7 @@ li.dropdown{
 }
 
 .dropdown-content button{
+    width: 100%;
     color: black;
     border: none;
     padding: 12px 16px;
@@ -128,13 +129,13 @@ li.dropdown{
     display: block;
     text-align: left;
     font-size: 16px;
+    background-color: #eeeeee;
 }
-/*
-.dropdown-content a:hover {
+
+.dropdown-content button:hover {
     background-color: white;
 
 }
-*/
 
 .dropdown:hover .dropdown-content{
     display: block;

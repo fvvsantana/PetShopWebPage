@@ -1,5 +1,6 @@
 <div class="container">
   <h2 style="color:#007bc7">Produtos</h2>
+  <button type="button" class="btn btn-default" onclick="changeHash('adm-new-product');">Cadastrar novo produto</button>
   <div class="table-responsive" style="margin-top:40px">          
   <table class="table">
     <thead>
@@ -9,21 +10,10 @@
         <th>Preço unitário</th>
         <th>Animal</th>
         <th>Categoria</th>
-		<th>Adicionar ao estoque</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td id="stockName">Ração Royal Canin Maxi - Cães Adultos - 15kg</td>
-        <td id="stockQuantity">50</td>
-        <td id="stockPrice">209,99</td>
-        <td id="stockAnimal">Cachorro</td>
-        <td id="stockCategory">Comida</td>
-		<td><input type="number" name="Adicionar itens" min="0" max="1000"><button type="button" class="btn btn-default" style="margin-left:5px">Adicionar</button></td>
-		<td><button type="button" class="btn btn-default" onclick="changeHash('adm-alter-product')">Alterar</button></td>
-		<td><button type="button" class="btn btn-default">Deletar</button></td>
-		
-      </tr>
+    <tbody id="stockTable">
+	
     </tbody>
   </table>
   

@@ -178,7 +178,9 @@ $(function(){
           break;
 
         case "#adm-clients":
-          $("#adm-content").load("adm/users.html");
+          $("#adm-content").load("adm/users.html").ready(function(){
+				showCustomers();
+		  });
           break;
 
         case "#adm-new-product":
@@ -619,12 +621,12 @@ function showCustomers() {
 	$("#customersTable").html("");
 	
 	let customerInfo = $('<tr/>');
-	curstomerInfo.append($('<td class="usersCPF"></td>'));
-	curstomerInfo.append($('<td class="usersName"></td>'));
-	curstomerInfo.append($('<td class="usersEmail"></td>'));
-	curstomerInfo.append($('<td class="usersTel"></td>'));
-	curstomerInfo.append($('<td class="usersAddress"></td>'));
-	curstomerInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
+	customerInfo.append($('<td class="usersCPF"></td>'));
+	customerInfo.append($('<td class="usersName"></td>'));
+	customerInfo.append($('<td class="usersEmail"></td>'));
+	customerInfo.append($('<td class="usersTel"></td>'));
+	customerInfo.append($('<td class="usersAddress"></td>'));
+	customerInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
 	
 	let objectStore = db.transaction(["users"], "readonly").objectStore("users");
     objectStore.openCursor().onsuccess = function(event) {
@@ -633,7 +635,7 @@ function showCustomers() {
 			
 			if(cursor.value.isAdmin == false){
 				
-				let newInfo = adminInfo.clone();
+				let newInfo = customerInfo.clone();
 				dynamicId = cursor.value.cpf;
         
 				newInfo.attr('id', dynamicId);
@@ -642,9 +644,9 @@ function showCustomers() {
 				newInfo.find('.usersEmail').text(cursor.value.email);
 				newInfo.find('.usersTel').text(cursor.value.tel);
 				newInfo.find('.usersAddress').text(cursor.value.address);
-				newInfo.find('.btn btn-default').attr('onClick', 'deleteAdmin(dynamicId)');
+				newInfo.find('.btn btn-default').attr('onClick', 'deleteUser(dynamicId)');
 			
-					$("#adminsTable").append(newInfo);
+				$("#usersTable").append(newInfo);
 					
 			}
 		

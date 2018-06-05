@@ -36,91 +36,6 @@ request.onupgradeneeded = function(event) {
     addProducts(productsStore);
 };
 
-// adiciona usuários de exemplo
-function addUsers(objectStore){
-    
-    //dados dos usuários iniciais
-    const userData = [
-        { cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: true },
-        { cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: false }
-    ];
-    
-    //inserção dos usuários no banco de dados
-    for (let i in userData) {
-        objectStore.add(userData[i]);
-    }
-}
-
-// adiciona pets de exemplo
-function addPets(objectStore){
-    
-    //dados dos pets iniciais
-    const petsData = [
-        { owner: "321", name: "Rex", species: "Cachorro", age: 5, gender: "Masculino", breed:"Golden Retriever" , petPic:"http://portaldodog.com.br/cachorros/wp-content/uploads/2015/05/golden-retriever-8-375x500.jpg"},
-        { owner: "321", name: "Melinda", species: "Gato", age: 2, gender: "Feminino", breed:"Siamês" , petPic:"http://cdn2-www.cattime.com/assets/uploads/gallery/siamese-cats-and-kittens-pictures/siamese-cat-kitten-picture-5.jpg"},
-        { owner: "admin", name: "Lassie", species: "Cachorro", age: 3, gender: "Feminino", breed:"Husky Siberiano" , petPic:"https://upload.wikimedia.org/wikipedia/commons/a/a3/Black-Magic-Big-Boy.jpg"}
-    ];
-        
-    //inserção dos pets no banco de dados
-    for (let i in petsData) {
-        objectStore.add(petsData[i]);
-    }
-}
-
-// adiciona produtos de exemplo
-function addProducts(objectStore){
-    
-    //dados dos usuários iniciais
-    const stockData = [
-        { name: "Ração Royal Canin Maxi - Cães Adultos - 15kg", quantity: 200, price: "209.99", animal: "Cachorro", category: "Alimentos", picture: "https://cdn-petz-imgs.stoom.com.br/fotos/1515444639412.jpg", description:`- Indicado para cães adultos de grande porte;
-- Oferece todos os nutrientes que seu cão de grande porte precisa para uma vida longa e saudável;
-- Especialmente formulada para favorecer a saúde dos ossos e articulações também preserva a tonicidade muscular graças a um aporte adequado de proteínas;
-- Assegura uma ótima digestão e atende até mesmo os paladares mais exigentes;
-- Disponível em embalagem de 15kg.` }, 
-        { name: "Ração Royal Canin Golden Retriever - Cães Adultos - 12kg", quantity: 100, price: "204.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1515429480749.jpg",description:`- Indicado para cães
-- Ajuda na manutenção ideal do peso do seu pet
-- Contribui para o funcionamento da musculatura cardíaca
-- Auxilia na eliminação dos efeitos do envelhecimento celular
-- Disponível em embalagem de 12kg` },
-		{ name: "Royal Canin Renal Veterinary Diet Cães - 10kg", quantity: 10, price: "289.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458082860525.jpg", description:`- Indicada para cães adultos;
-- Recomendado para cães com insuficiência renal crônica;
-- Ajuda a eliminar e prevenir a formação de radicais livres;
-- Equilibra o sistema digestivo,` },
-		{ name: "Ração Royal Canin Veterinary Hypoallergenic - Gatos Adultos - 1,5kg", quantity: 150, price: "104.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1507918511559.jpg", description:`- Indicada para gatos adultos e alérgicos;
-- Proteínas hidrolisadas que tornam o alimento altamente digestivo e com baixo potencial alergênico;
-- Complexo patenteado que ajuda a reforçar a barreira cutânea;
-- Enriquecido com EPA/DHA;` },
-		{ name: "Ração Royal Canin Premium Cat Vitalidade para Gatos Adultos - 10kg", quantity: 180, price: "134.94", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264968346.jpg", description:`- Indicada para gatos adultos;
-- Alimentação completa e balanceada;
-- Sabor irresistível para seu gatinho;
-- Favorece a saúde do trato urinário;` },
-		{ name: "Ração Royal Canin Premium Cat Beleza da Pelagem para Gatos Adultos - 10kg", quantity: 50, price: "134.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264680318.jpg", description:`- Indicada para gatos adultos;
-- Formula altamente palatável;
-- Promove a saúde do trato urinário;
-- Enriquecida com ômegas 3 e 6 proporcionando beleza da pelagem;` },
-		{ name: "Brinquedo Chalesco Para Cães Pelúcia Cachorro Luxo Rosa e Azul", quantity: 20, price: "34.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458848516726.jpg", description:`- Indicado para cães;
-- Divertido e criativo;
-- Ajuda a combater o estresse do seu pet;
-- Possui textura macia de pelúcia.` },
-		{ name: "Brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido", quantity: "30", price: "19.19", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/10037080001297-1.jpg", description:`Você sabia que cães que permanecem longos períodos sem seus donos, sem uma atividade física, sem estímulos, podem se tornar animais deprimidos? Por isso a Chalesco criou o brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido, que além de apresentar formato criativo e divertido, possui textura macia de pelúcia. ` },
-		{ name: "Brinquedo de Pelúcia Chalesco Crocodilo", quantity: "40", price: "20.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992186939.jpg", description:`- Indicado para cães;
-- Divertido e criativo;
-- Ajuda a combater o estresse do seu pet;
-- Possui textura macia de pelúcia.` },
-		{ name: "Arranhador 4 Estações Para Gatos Cone Sisal com Penas", quantity: 20, price: "209.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/20037081000050-1.jpg", description:`O Arranhador 4 Estações Para Gatos Cone Sisal com Penas foi desenvolvido para proporcionar atividades físicas, evitando o stress preservando seus móveis. Um lugar adequado para arranhar, dormir e brincar. Tem um design bonito que pode situar-se em qualquer lugar da sua casa. Para evitar que o seu gato estrague móveis, paredes ou sofás, tenha a certeza de lhe proporcionar um lugar adequado para arranhar, assim poderá esticar-se, espreguiçar-se e afiar as suas unhas. Tamanho: 80cm. ` },
-		{ name: "Brinquedo Chalesco Kit com 2 Ratinhos de Corda", quantity: 100, price: "20.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992630932.jpg", description:`- Indicado para gatos;
-- Provoque seu gatinho para brincar com estes ratinhos que são pura diversão;
-- Feitos de tecido de algodão, são ideais para seu melhor amigo que precisa diariamente de uma boa dose de entretenimento.` },
-		{ name: "Brinquedo Jambo Gatos Joaninha Amarelo e Preto Vibratória", quantity: 50, price: "19.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1455921490800.jpg", description:`Presentear seu gatinho é uma forma divertida de descontrair o seu animal de estimação e evitar que eles mordam os móveis da sua casa. O Brinquedo Jambo Pet Gatos Joaninha Amarelo e Preto Vibratória é feito em poliéster e é perfeito para seu gatinho gastar as energias, pois vem com um dispositivo que vibra, deixando seu pet instigado durante longos períodos de tempo. ` }
-		
-    ];
-    
-    //inserção dos produtos no banco de dados
-    for (let i in stockData) {
-        objectStore.add(stockData[i]);
-    }
-}
-
 //change hash
 function changeHash(newHash){
     location.hash = newHash;
@@ -785,4 +700,90 @@ function showCustomers() {
 
 function modifyProduct(){
 	
+}
+
+/* FUNÇÕES PARA ADIÇÃO DE EXEMPLOS NO BANCO: */
+
+// adiciona usuários de exemplo
+function addUsers(objectStore){
+    
+    //dados dos usuários iniciais
+    const userData = [
+        { cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: true },
+        { cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: false }
+    ];
+    
+    //inserção dos usuários no banco de dados
+    for (let i in userData) {
+        objectStore.add(userData[i]);
+    }
+}
+
+// adiciona pets de exemplo
+function addPets(objectStore){
+    
+    //dados dos pets iniciais
+    const petsData = [
+        { owner: "321", name: "Rex", species: "Cachorro", age: 5, gender: "Masculino", breed:"Golden Retriever" , petPic:"http://portaldodog.com.br/cachorros/wp-content/uploads/2015/05/golden-retriever-8-375x500.jpg"},
+        { owner: "321", name: "Melinda", species: "Gato", age: 2, gender: "Feminino", breed:"Siamês" , petPic:"http://cdn2-www.cattime.com/assets/uploads/gallery/siamese-cats-and-kittens-pictures/siamese-cat-kitten-picture-5.jpg"},
+        { owner: "admin", name: "Lassie", species: "Cachorro", age: 3, gender: "Feminino", breed:"Husky Siberiano" , petPic:"https://upload.wikimedia.org/wikipedia/commons/a/a3/Black-Magic-Big-Boy.jpg"}
+    ];
+        
+    //inserção dos pets no banco de dados
+    for (let i in petsData) {
+        objectStore.add(petsData[i]);
+    }
+}
+
+// adiciona produtos de exemplo
+function addProducts(objectStore){
+    
+    const stockData = [
+        { name: "Ração Royal Canin Maxi - Cães Adultos - 15kg", quantity: 200, price: "209.99", animal: "Cachorro", category: "Alimentos", picture: "https://cdn-petz-imgs.stoom.com.br/fotos/1515444639412.jpg", description:`- Indicado para cães adultos de grande porte;
+- Oferece todos os nutrientes que seu cão de grande porte precisa para uma vida longa e saudável;
+- Especialmente formulada para favorecer a saúde dos ossos e articulações também preserva a tonicidade muscular graças a um aporte adequado de proteínas;
+- Assegura uma ótima digestão e atende até mesmo os paladares mais exigentes;
+- Disponível em embalagem de 15kg.` }, 
+        { name: "Ração Royal Canin Golden Retriever - Cães Adultos - 12kg", quantity: 100, price: "204.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1515429480749.jpg",description:`- Indicado para cães
+- Ajuda na manutenção ideal do peso do seu pet
+- Contribui para o funcionamento da musculatura cardíaca
+- Auxilia na eliminação dos efeitos do envelhecimento celular
+- Disponível em embalagem de 12kg` },
+		{ name: "Royal Canin Renal Veterinary Diet Cães - 10kg", quantity: 10, price: "289.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458082860525.jpg", description:`- Indicada para cães adultos;
+- Recomendado para cães com insuficiência renal crônica;
+- Ajuda a eliminar e prevenir a formação de radicais livres;
+- Equilibra o sistema digestivo,` },
+		{ name: "Ração Royal Canin Veterinary Hypoallergenic - Gatos Adultos - 1,5kg", quantity: 150, price: "104.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1507918511559.jpg", description:`- Indicada para gatos adultos e alérgicos;
+- Proteínas hidrolisadas que tornam o alimento altamente digestivo e com baixo potencial alergênico;
+- Complexo patenteado que ajuda a reforçar a barreira cutânea;
+- Enriquecido com EPA/DHA;` },
+		{ name: "Ração Royal Canin Premium Cat Vitalidade para Gatos Adultos - 10kg", quantity: 180, price: "134.94", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264968346.jpg", description:`- Indicada para gatos adultos;
+- Alimentação completa e balanceada;
+- Sabor irresistível para seu gatinho;
+- Favorece a saúde do trato urinário;` },
+		{ name: "Ração Royal Canin Premium Cat Beleza da Pelagem para Gatos Adultos - 10kg", quantity: 50, price: "134.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264680318.jpg", description:`- Indicada para gatos adultos;
+- Formula altamente palatável;
+- Promove a saúde do trato urinário;
+- Enriquecida com ômegas 3 e 6 proporcionando beleza da pelagem;` },
+		{ name: "Brinquedo Chalesco Para Cães Pelúcia Cachorro Luxo Rosa e Azul", quantity: 20, price: "34.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458848516726.jpg", description:`- Indicado para cães;
+- Divertido e criativo;
+- Ajuda a combater o estresse do seu pet;
+- Possui textura macia de pelúcia.` },
+		{ name: "Brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido", quantity: "30", price: "19.19", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/10037080001297-1.jpg", description:`Você sabia que cães que permanecem longos períodos sem seus donos, sem uma atividade física, sem estímulos, podem se tornar animais deprimidos? Por isso a Chalesco criou o brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido, que além de apresentar formato criativo e divertido, possui textura macia de pelúcia. ` },
+		{ name: "Brinquedo de Pelúcia Chalesco Crocodilo", quantity: "40", price: "20.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992186939.jpg", description:`- Indicado para cães;
+- Divertido e criativo;
+- Ajuda a combater o estresse do seu pet;
+- Possui textura macia de pelúcia.` },
+		{ name: "Arranhador 4 Estações Para Gatos Cone Sisal com Penas", quantity: 20, price: "209.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/20037081000050-1.jpg", description:`O Arranhador 4 Estações Para Gatos Cone Sisal com Penas foi desenvolvido para proporcionar atividades físicas, evitando o stress preservando seus móveis. Um lugar adequado para arranhar, dormir e brincar. Tem um design bonito que pode situar-se em qualquer lugar da sua casa. Para evitar que o seu gato estrague móveis, paredes ou sofás, tenha a certeza de lhe proporcionar um lugar adequado para arranhar, assim poderá esticar-se, espreguiçar-se e afiar as suas unhas. Tamanho: 80cm. ` },
+		{ name: "Brinquedo Chalesco Kit com 2 Ratinhos de Corda", quantity: 100, price: "20.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992630932.jpg", description:`- Indicado para gatos;
+- Provoque seu gatinho para brincar com estes ratinhos que são pura diversão;
+- Feitos de tecido de algodão, são ideais para seu melhor amigo que precisa diariamente de uma boa dose de entretenimento.` },
+		{ name: "Brinquedo Jambo Gatos Joaninha Amarelo e Preto Vibratória", quantity: 50, price: "19.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1455921490800.jpg", description:`Presentear seu gatinho é uma forma divertida de descontrair o seu animal de estimação e evitar que eles mordam os móveis da sua casa. O Brinquedo Jambo Pet Gatos Joaninha Amarelo e Preto Vibratória é feito em poliéster e é perfeito para seu gatinho gastar as energias, pois vem com um dispositivo que vibra, deixando seu pet instigado durante longos períodos de tempo. ` }
+		
+    ];
+    
+    //inserção dos produtos no banco de dados
+    for (let i in stockData) {
+        objectStore.add(stockData[i]);
+    }
 }

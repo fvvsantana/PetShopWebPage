@@ -189,6 +189,7 @@ $(function(){
 
         case "#adm-stock":
           $("#adm-content").load("adm/stock.html");
+		  showStock();
           break;
 
         case "#my-cart":
@@ -428,4 +429,39 @@ function editAccount(){
         let requestUpdate = objectStore.put(cursor.value);
         changePageMyProfile();
     }
+}
+
+function showStock() {
+	
+	$("#stockTable").html("");
+	
+	let productInfo = $('<tr/>');
+	productInfo.append($('<td class="productName"></td>'));
+	productInfo.append($('<td class="productQuantity"></td>'));
+	productInfo.append($('<td class="productPrice"></td>'));
+	productInfo.append($('<td class="productAnimal"></td>'));
+	productInfo.append($('<td class="productCategory"></td>'));
+	productInfo.append($('<td><button type="button" class="btn btn-default" onclick="changeHash("adm-alter-product")">Alterar</button></td>'));
+	productInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
+	
+	let objectStore = db.transaction(["products"], "readonly").objectStore("products");
+    objectStore.openCursor().onsuccess = function(event) {
+        let cursor = event.target.result;
+        if (cursor) {
+            let newInfo = productInfo.clone();
+			dynamicId = cursor.key;
+			console.log(dynamicId);
+        
+			newInfo.attr('id', dynamicId);
+			newInfo.find('.productName').text(cursor.value.name);
+			newInfo.find('.productQuantity').text(cursor.value.quantity);
+			newInfo.find('.productPrice').text('R$ ' + cursor.value.price);
+			newInfo.find('.productAnimal').text(cursor.value.animal);
+			newInfo.find('.productCategory').text(cursor.value.category);
+			
+			$("#stockTable").append(newInfo);
+		
+			cursor.continue();
+		}
+	}
 }

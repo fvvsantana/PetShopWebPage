@@ -2,17 +2,7 @@
   <div class="col-sm-10 col-sm-offset-1">
     <h2 style="color:#007bc7">Novo produto</h2>
     <hr/>
-    <center>
-      <div class="thumbnail" style="width:30%">
-        <img src="image/adm/no-image.jpeg" alt="foto do produto"><br>
-        <button type="button" class="btn btn-primary">Incluir foto</button>
-      </div>
-    </center>
     <form style="margin-bottom:40px">
-      <div class="form-group">
-        <label for="id">ID:</label>
-        <input type="text" class="form-control" id="id">
-      </div>
       <div class="form-group">
         <label for="name">Nome:</label>
         <input type="text" class="form-control" id="name">
@@ -21,21 +11,47 @@
         <div class="col-sm-6">
           <div class="form-group">
             <label for="qtd">Quantidade:</label>
-            <input type="number" min="1" class="form-control" id="qtd">
+            <input type="number" min="0" value="0" class="form-control" id="qtd">
           </div>
         </div>
         <div class="col-sm-6">
           <div class="form-group">
-            <label for="price">Preço:</label>
+            <label for="price">Preço(utilize ponto para indicar centavos):</label>
             <input type="text" class="form-control" id="price">
           </div>
         </div>
       </div>
+	  <div class="row">
+        <div class="col-sm-6">
+			<div class="form-group">
+				<label for="sel1">Animal:</label>
+				<select class="form-control" id="animal">
+					<option value="Cachorro">Cachorro</option>
+					<option value="Gato">Gato</option>
+				</select>
+			</div>
+		</div>
+        <div class="col-sm-6">
+			<div class="form-group">
+				<label for="sel1">Categoria:</label>
+				<select class="form-control" id="category">
+					<option value="Alimentos" selected>Alimentos</option>
+					<option value="Brinquedos">Brinquedos</option>
+				</select>
+			</div>
+		</div>
+	  </div>
       <div class="form-group">
         <label for="description">Descrição:</label>
         <textarea class="form-control" rows="7" id="description"></textarea>
       </div>
-      <button type="submit" class="btn btn-success btn-lg">Salvar</button> 
+	  <div class="form-group">
+		<label class="control-label col-sm-2" for="productPic">Foto do produto:</label>
+		<div class="col-sm-6">          
+			<input type="file" class="form-control" id="picture" accept=".png, .jpeg, .jpg">
+		</div>
+      </div>
+      <button type="button" class="btn btn-success btn-lg" onclick="addProduct()">Salvar</button> 
     </form>
   </div>
   <div class="col-sm-1">

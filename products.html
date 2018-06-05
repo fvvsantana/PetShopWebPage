@@ -5,28 +5,28 @@
       <h3 class="title">CATEGORIAS</h3>
       <hr/>
       <ul class="animals-list">
-        <li><h4 class="animal-name"><a href="#">Cachorro</a></h4></li>
+        <li><h4 class="animal-name"><a href="javascript:changeHash('products-cachorro')">Cachorro</a></h4></li>
         <ul class="categories-list">
-          <li><a href="#">Alimentos</a></li>
-          <li><a href="#">Brinquedos</a></li>
+          <li><a href="javascript:changeHash('products-cachorro-alimentos')">Alimentos</a></li>
+          <li><a href="javascript:changeHash('products-cachorro-brinquedos')">Brinquedos</a></li>
         </ul> 
-        <li><h4 class="animal-name"><a href="#">Gato</a></h4></li>
+        <li><h4 class="animal-name"><a href="javascript:changeHash('products-gato')">Gato</a></h4></li>
         <ul class="categories-list">
-          <li><a href="#">Alimentos</a></li>
-          <li><a href="#">Brinquedos</a></li>
+          <li><a href="javascript:changeHash('products-gato-alimentos')">Alimentos</a></li>
+          <li><a href="javascript:changeHash('products-gato-brinquedos')">Brinquedos</a></li>
         </ul>
       </ul> 
     </div>
 
     <div class="col-sm-10" id="products-section">
-      <h1 class="title">Produtos para cães</h1>
+      <h1 id="title" class="title">Produtos para cães</h1>
       <hr/>
       <div class="row">
         
         <div class="product-cell col-sm-2">
-          <a href="javascript:changeHash('product-view')"><img src="image/products/product01.jpg" alt="product" width="100%"/></a>
-          <a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-          <h3>R$ 209,99</h3>
+          <a href="javascript:changeHash('product-view')"><img id="productImage" src="image/products/product01.jpg" alt="product" width="100%"/></a>
+          <a id="productTitle" href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
+          <h3 id="productPrice">R$ 209,99</h3>
         </div>
 
       </div>     

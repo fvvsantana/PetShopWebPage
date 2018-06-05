@@ -31,6 +31,8 @@ request.onupgradeneeded = function(event) {
 	
     //criação da "tabela" de produtos
     let productsStore = db.createObjectStore("products", { autoIncrement : true });
+    productsStore.createIndex("animal", "animal", {unique: false});
+    productsStore.createIndex("animal-category", ["animal", "category"], {unique: false});
     addProducts(productsStore);
 };
 
@@ -100,8 +102,8 @@ function addProducts(objectStore){
 - Divertido e criativo;
 - Ajuda a combater o estresse do seu pet;
 - Possui textura macia de pelúcia.` },
-		{ name: "Brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido", quantity: 30, price: "19.19", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458848516726.jpg", description:`Você sabia que cães que permanecem longos períodos sem seus donos, sem uma atividade física, sem estímulos, podem se tornar animais deprimidos? Por isso a Chalesco criou o brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido, que além de apresentar formato criativo e divertido, possui textura macia de pelúcia. ` },
-		{ name: "Brinquedo de Pelúcia Chalesco Crocodilo", quantity: 40, price: "20.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992186939.jpg", description:`- Indicado para cães;
+		{ name: "Brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido", quantity: "30", price: "19.19", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/10037080001297-1.jpg", description:`Você sabia que cães que permanecem longos períodos sem seus donos, sem uma atividade física, sem estímulos, podem se tornar animais deprimidos? Por isso a Chalesco criou o brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido, que além de apresentar formato criativo e divertido, possui textura macia de pelúcia. ` },
+		{ name: "Brinquedo de Pelúcia Chalesco Crocodilo", quantity: "40", price: "20.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992186939.jpg", description:`- Indicado para cães;
 - Divertido e criativo;
 - Ajuda a combater o estresse do seu pet;
 - Possui textura macia de pelúcia.` },
@@ -128,6 +130,12 @@ function changeHash(newHash){
 $(function(){
 
     $(window).on('hashchange', function(){
+        
+      // check if it is a product category
+      if (location.hash.startsWith("#products")) {
+          loadProducts(location.hash);
+          return;
+      }
 
       let content = $("#content");
 
@@ -216,10 +224,6 @@ $(function(){
           content.load("order-confirmation.html");
           break;
 
-        case "#products":
-          content.load("products.html");
-          break;
-		  
         case "#register":
           content.load("register.html");
           break;
@@ -249,6 +253,57 @@ $(function(){
     $(window).trigger('hashchange');
 
 });
+
+// capitalize the first letter of a string
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function loadProducts(hash) {
+    // get the animal and category information
+    let data = hash.split("-");
+    
+    // load the products html
+    $("#content").load("products.html", function() {
+        
+        //create a product model to copy later
+        let model = $(".product-cell").clone();
+        $(".product-cell").remove();
+        
+        // open the objectStore
+        let objectStore = db.transaction("products").objectStore("products");
+        let request;
+        
+        // show all products
+        if (data.length == 1) {
+            $("#title").text("Todos os produtos");
+            request = objectStore.openCursor();
+        }
+        // show products for only one animal
+        else if (data.length == 2) {
+            $("#title").text("Produtos para " + data[1] + "s");
+            request = objectStore.index("animal").openCursor(capitalizeFirstLetter(data[1]));
+        }
+        // show products for only one animal and one category
+        else {
+            $("#title").text(capitalizeFirstLetter(data[2]) + " para " + data[1] + "s");
+            request = objectStore.index("animal-category").openCursor([capitalizeFirstLetter(data[1]),capitalizeFirstLetter(data[2])]);
+        }
+        
+        request.onsuccess =  event => {
+            let cursor = event.target.result;
+            if(cursor){
+                let product = cursor.value;
+                let newElement = model.clone();
+                newElement.find("#productImage").attr('src', product.picture);
+                newElement.find("#productTitle").text(product.name);
+                newElement.find("#productPrice").text("R$ " + product.price);
+                $("#products-section > .row").append(newElement);
+                cursor.continue();
+            }
+        }
+    });
+}
 
 function loginClick() {
     if (userLoggedIn) {

@@ -133,7 +133,11 @@ $(function(){
         
       // check if it is a product category
       if (location.hash.startsWith("#products")) {
-          loadProducts(location.hash);
+          loadPageProducts(location.hash);
+          return;
+      }
+      if (location.hash.startsWith("#product-view")) {
+          loadPageProductView(location.hash.split('-')[2]);
           return;
       }
 
@@ -245,10 +249,6 @@ $(function(){
           $("#adm-content").load("register-admin.html");
           break;
 
-        case "#product-view":
-          content.load("product-view.html");
-          break;
-
         case "#service-schedule":
           content.load("service-schedule.html");
           break;
@@ -271,12 +271,30 @@ $(function(){
 
 });
 
+function loadPageProductView (productKey) {
+    $("#content").load("product-view.html", function() {
+        let objectStore = db.transaction("products", "readonly").objectStore("products");
+        objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                $("#productImage").attr('src', cursor.value.picture);
+                $("#productName strong").text(cursor.value.name);
+                $("#productPrice").text("R$ " + cursor.value.price);
+                $("#productDesc").text(cursor.value.description);
+            } else {
+                $("#productName strong").text("Produto não encontrado");
+                $("#productPrice").text("R$ ??");
+            }
+        } 
+    });
+}
+
 // capitalize the first letter of a string
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function loadProducts(hash) {
+function loadPageProducts(hash) {
     // get the animal and category information
     let data = hash.split("-");
     
@@ -315,6 +333,7 @@ function loadProducts(hash) {
                 newElement.find("#productImage").attr('src', product.picture);
                 newElement.find("#productTitle").text(product.name);
                 newElement.find("#productPrice").text("R$ " + product.price);
+                newElement.find("a").attr('href', "javascript:changeHash('product-view-" + cursor.primaryKey + "')");
                 $("#products-section > .row").append(newElement);
                 cursor.continue();
             }

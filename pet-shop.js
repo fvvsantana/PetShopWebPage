@@ -202,6 +202,10 @@ $(function(){
         case "#my-area":
           loadPageMyArea();
           break;
+		
+		case "#my-profile-edit":
+          $("#my-area-content").load("my-profile-edit.html");
+          break;
 
         case "#login":
           content.load("login.html");
@@ -213,6 +217,10 @@ $(function(){
 
         case "#products":
           content.load("products.html");
+          break;
+		  
+        case "#register":
+          content.load("register.html");
           break;
 
         case "#service-schedule":
@@ -382,7 +390,7 @@ function createAccount(){
 			let objectStore = db.transaction(["users"],"readwrite").objectStore("users");
             objectStore.add(newUser);
             
-            changePageMyProfile();
+            changeHash('my-area');
         }
         else{
             alert("Erro na confirmação de senha!");
@@ -398,11 +406,7 @@ function editAccount(){
         
         let cursor = event.target.result;
         if($("#editEmail").val().split(" ").join("") != ""){
-            let requestEmail = objectStore.openCursor($("#editEmail").val());
-            request.onsuccess =  event => {
-                alert("Já existe um usuário cadastrado com esse email");
-                return;
-            }
+
             cursor.value.email = $("#editEmail").val();
             userSession.email = cursor.value.email;
         }
@@ -421,7 +425,7 @@ function editAccount(){
         }
 		let objectStore = db.transaction(["users"], "readwrite").objectStore("users");
         let requestUpdate = objectStore.put(cursor.value);
-        changePageMyProfile();
+        changeHash('my-area');
     }
 }
 
@@ -478,5 +482,9 @@ function addProduct(){
 	else{
 		alert("O preço deve ser um número!");
 	}
+	
+}
+
+function modifyProduct(){
 	
 }

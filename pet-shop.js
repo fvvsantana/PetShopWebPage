@@ -154,6 +154,10 @@ $(function(){
         case "#my-pets":
           loadPageMyPet();
           break;
+
+        case "#my-orders":
+          loadPageMyOrder();
+          break;
           
         case "#add-pet":
           $("#my-area-content").load("new-pet.html");
@@ -608,6 +612,10 @@ function loadPageMyPet() {
             }
         }
     });
+}
+
+function loadPageMyOrder() {
+    $("#my-area-content").load("my-orders.html");
 }
 
 function startLogin() {

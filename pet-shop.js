@@ -62,6 +62,10 @@ $(function(){
           loadPageEditPet(location.hash.split('-')[2]);
           return;
       }
+	  if (location.hash.startsWith("#product-edit")) {
+          modifyProduct(location.hash.split('-')[2]);
+          return;
+      }
 
       let content = $("#content");
 
@@ -108,9 +112,7 @@ $(function(){
           break;
 
         case "#adm-clients":
-          $("#adm-content").load("adm/users.html").ready(function(){
-				showCustomers();
-		  });
+			showCustomers();
           break;
 
         case "#adm-new-product":
@@ -134,9 +136,7 @@ $(function(){
           break;
 
         case "#adm-stock":
-          $("#adm-content").load("adm/stock.html").ready(function(){
 			showStock();
-		  });
           break;
 
         case "#my-cart":
@@ -747,7 +747,7 @@ function editAccount(){
 
 function showStock() {
 	
-	$("#stockTable").html("");
+	$("#adm-content").load("adm/stock.html").ready(function() {
 	
 	let productInfo = $('<tr/>');
 	productInfo.append($('<td class="productName"></td>'));
@@ -755,29 +755,101 @@ function showStock() {
 	productInfo.append($('<td class="productPrice"></td>'));
 	productInfo.append($('<td class="productAnimal"></td>'));
 	productInfo.append($('<td class="productCategory"></td>'));
-	productInfo.append($('<td><button type="button" class="btn btn-default" onclick="changeHash("adm-alter-product")">Alterar</button></td>'));
-	productInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
+	productInfo.append($('<td><button type="button" id="productEdit" class="btn btn-default">Alterar</button></td>'));
+	productInfo.append($('<td><button type="button" id="productRemove" class="btn btn-default">Deletar</button></td>'));
 	
 	let objectStore = db.transaction(["products"], "readonly").objectStore("products");
     objectStore.openCursor().onsuccess = function(event) {
         let cursor = event.target.result;
         if (cursor) {
             let newInfo = productInfo.clone();
-			dynamicId = cursor.key;
-        
-			newInfo.attr('id', dynamicId);
+
 			newInfo.find('.productName').text(cursor.value.name);
 			newInfo.find('.productQuantity').text(cursor.value.quantity);
 			newInfo.find('.productPrice').text('R$ ' + cursor.value.price);
 			newInfo.find('.productAnimal').text(cursor.value.animal);
 			newInfo.find('.productCategory').text(cursor.value.category);
+			newInfo.find("#productEdit").attr('onClick', "changeHash('product-edit-" + cursor.primaryKey + "')");
+            newInfo.find("#productRemove").attr('onClick', "removeProduct(" + cursor.primaryKey + ")");
 			
 			$("#stockTable").append(newInfo);
 		
 			cursor.continue();
 		}
 	}
+	});
 }
+
+function removeProduct(productKey) {
+    if (confirm("Você tem certeza que quer remover este produto?")) {
+        let objectStore = db.transaction("products", "readwrite").objectStore("products");
+        let request = objectStore.delete(parseInt(productKey));
+        request.onerror = function(event) {
+            alert("Erro ao remover produto");
+        };
+        request.onsuccess = function(event) {
+            showStock();
+        }
+    }
+}
+
+function modifyProduct (productKey) {
+    $("#adm-content").load("adm/alter-product.html", function() {
+        let objectStore = db.transaction("products", "readonly").objectStore("products");
+        objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                $("#name").val(cursor.value.name);
+                $("#qtd").val(cursor.value.quantity);
+                $("#price").val(cursor.value.price);
+                $("#description").val(cursor.value.description);
+				$("#picture").attr('src', cursor.value.picture);
+                $("#save").attr('onClick', "saveProduct(" + productKey + ");");
+            }
+        }
+    });
+}
+
+function saveProduct(productKey) {
+    // abre a tabela para escrita
+    let objectStore = db.transaction("products", "readwrite").objectStore("products");
+    
+    // chave igual a zero significa que é um novo produto
+    if (productKey == 0) {
+        let newProduct = {  
+            name: $("#name").val(), 
+            quantity: $("#qtd").val(), 
+            price: $("#price").val(), 
+            description: $("#description").val()};
+        
+        request = objectStore.add(newProduct);
+        request.onerror = function(event) {
+            alert("Erro ao adicionar produto");
+        };
+        request.onsuccess = function(event) {
+            changeHash("adm-area");
+        }
+    }
+    // se a chave não é zero, está editando um produto existente
+    else {
+		objectStore.get(parseInt(productKey)).onsuccess = function(event) {
+			let product = event.target.result;
+			product.name = $("#name").val();
+			product.quantity = $("#qtd").val();
+			product.price = $("#price").val();
+			product.description = $("#description").val();
+            
+			let requestUpdate = objectStore.put(product, productKey);
+			requestUpdate.onerror = function(event) {
+				alert("Erro ao atualizar produto");
+			};
+			requestUpdate.onsuccess = function(event) {
+				changeHash("adm-area");
+			}
+		}
+	}
+}
+
 
 function addProduct(){
 	
@@ -793,6 +865,7 @@ function addProduct(){
 		
 		let objectStore = db.transaction(["products"], "readwrite").objectStore("products");
         objectStore.add(newProduct);
+		changeHash("adm-area");
 		
 	}
 	else{
@@ -811,8 +884,7 @@ function showAdmins() {
 	adminInfo.append($('<td class="adminsEmail"></td>'));
 	adminInfo.append($('<td class="adminsTel"></td>'));
 	adminInfo.append($('<td class="adminsAddress"></td>'));
-	adminInfo.append($('<td><button type="button" class="btn btn-default" onclick="changeHash("adm-alter-admin")">Alterar</button></td>'));
-	adminInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
+	adminInfo.append($('<td><button type="button" id="adminRemove" class="btn btn-default">Deletar</button></td>'));
 	
 	let objectStore = db.transaction(["users"], "readonly").objectStore("users");
     objectStore.openCursor().onsuccess = function(event) {
@@ -824,15 +896,13 @@ function showAdmins() {
 				if(cursor.value.cpf != "admin"){
 				
 					let newInfo = adminInfo.clone();
-					dynamicId = cursor.value.cpf;
-        
-					newInfo.attr('id', dynamicId);
+
 					newInfo.find('.adminsCPF').text(cursor.value.cpf);
 					newInfo.find('.adminsName').text(cursor.value.name);
 					newInfo.find('.adminsEmail').text(cursor.value.email);
 					newInfo.find('.adminsTel').text(cursor.value.tel);
 					newInfo.find('.adminsAddress').text(cursor.value.address);
-					newInfo.find('.btn btn-default').attr('onclick', 'deleteAdmin(dynamicId)');
+					newInfo.find("#adminRemove").attr('onClick', "removeAdmin(" + cursor.primaryKey + ")");
 			
 					$("#adminsTable").append(newInfo);
 				
@@ -843,6 +913,20 @@ function showAdmins() {
 			cursor.continue();
 		}
 	}
+}
+
+function removeAdmin(adminKey) {
+    if (confirm("Você tem certeza que quer remover este administrador?")) {
+		adminKey = adminKey.toString();
+        let objectStore = db.transaction("users", "readwrite").objectStore("users");
+        let request = objectStore.delete(adminKey);
+        request.onerror = function(event) {
+            alert("Erro ao remover administrador");
+        };
+        request.onsuccess = function(event) {
+            showAdmins();
+        }
+    }
 }
 
 function addAdmin(){
@@ -869,7 +953,7 @@ function addAdmin(){
 
 function showCustomers() {
 	
-	$("#customersTable").html("");
+  $("#adm-content").load("adm/users.html").ready(function(){
 	
 	let customerInfo = $('<tr/>');
 	customerInfo.append($('<td class="usersCPF"></td>'));
@@ -877,7 +961,7 @@ function showCustomers() {
 	customerInfo.append($('<td class="usersEmail"></td>'));
 	customerInfo.append($('<td class="usersTel"></td>'));
 	customerInfo.append($('<td class="usersAddress"></td>'));
-	customerInfo.append($('<td><button type="button" class="btn btn-default">Deletar</button></td>'));
+	customerInfo.append($('<td><button type="button" id="userRemove" class="btn btn-default">Deletar</button></td>'));
 	
 	let objectStore = db.transaction(["users"], "readonly").objectStore("users");
     objectStore.openCursor().onsuccess = function(event) {
@@ -887,15 +971,13 @@ function showCustomers() {
 			if(cursor.value.isAdmin == false){
 				
 				let newInfo = customerInfo.clone();
-				dynamicId = cursor.value.cpf;
         
-				newInfo.attr('id', dynamicId);
 				newInfo.find('.usersCPF').text(cursor.value.cpf);
 				newInfo.find('.usersName').text(cursor.value.name);
 				newInfo.find('.usersEmail').text(cursor.value.email);
 				newInfo.find('.usersTel').text(cursor.value.tel);
 				newInfo.find('.usersAddress').text(cursor.value.address);
-				newInfo.find('.btn btn-default').attr('onClick', 'deleteUser(dynamicId)');
+				newInfo.find("#userRemove").attr('onClick', "removeUser(" + cursor.primaryKey + ")");
 			
 				$("#usersTable").append(newInfo);
 					
@@ -904,10 +986,32 @@ function showCustomers() {
 			cursor.continue();
 		}
 	}
+  });
 }
 
-function modifyProduct(){
-	
+function removeUser(userKey) {
+    if (confirm("Você tem certeza que quer remover este cliente?")) {
+		userKey = userKey.toString();
+		
+        let objectStore = db.transaction("users", "readwrite").objectStore("users");
+        let request = objectStore.delete(userKey);
+        request.onerror = function(event) {
+            alert("Erro ao remover cliente");
+        };
+        request.onsuccess = function(event) {
+			let petsStore = db.transaction("pets", "readwrite").objectStore("pets").index("owner");
+			let petsDelete = petsStore.openKeyCursor(userKey);       
+			petsDelete.onsucess = function(){
+				let cursor = petsDelete.result;
+				if(cursor){
+					petsStore.delete(cursor.key);
+					cursor.continue;
+				}
+				
+			}
+			showCustomers();
+		}
+    }
 }
 
 /* FUNÇÕES PARA ADIÇÃO DE EXEMPLOS NO BANCO: */

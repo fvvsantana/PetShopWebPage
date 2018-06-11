@@ -583,8 +583,6 @@ function loadPageMyProfile() {
         $("#userEmail").text(userSession.email);
         $("#userTel").text(userSession.tel);
         $("#userPic").attr('src', userSession.profilePic);
-        
-        
     });
 }
 
@@ -749,34 +747,34 @@ function showStock() {
 	
 	$("#adm-content").load("adm/stock.html").ready(function() {
 	
-	let productInfo = $('<tr/>');
-	productInfo.append($('<td class="productName"></td>'));
-	productInfo.append($('<td class="productQuantity"></td>'));
-	productInfo.append($('<td class="productPrice"></td>'));
-	productInfo.append($('<td class="productAnimal"></td>'));
-	productInfo.append($('<td class="productCategory"></td>'));
-	productInfo.append($('<td><button type="button" id="productEdit" class="btn btn-default">Alterar</button></td>'));
-	productInfo.append($('<td><button type="button" id="productRemove" class="btn btn-default">Deletar</button></td>'));
-	
-	let objectStore = db.transaction(["products"], "readonly").objectStore("products");
-    objectStore.openCursor().onsuccess = function(event) {
-        let cursor = event.target.result;
-        if (cursor) {
-            let newInfo = productInfo.clone();
+        let productInfo = $('<tr/>');
+        productInfo.append($('<td class="productName"></td>'));
+        productInfo.append($('<td class="productQuantity"></td>'));
+        productInfo.append($('<td class="productPrice"></td>'));
+        productInfo.append($('<td class="productAnimal"></td>'));
+        productInfo.append($('<td class="productCategory"></td>'));
+        productInfo.append($('<td><button type="button" id="productEdit" class="btn btn-default">Alterar</button></td>'));
+        productInfo.append($('<td><button type="button" id="productRemove" class="btn btn-default">Deletar</button></td>'));
+        
+        let objectStore = db.transaction(["products"], "readonly").objectStore("products");
+        objectStore.openCursor().onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                let newInfo = productInfo.clone();
 
-			newInfo.find('.productName').text(cursor.value.name);
-			newInfo.find('.productQuantity').text(cursor.value.quantity);
-			newInfo.find('.productPrice').text('R$ ' + cursor.value.price);
-			newInfo.find('.productAnimal').text(cursor.value.animal);
-			newInfo.find('.productCategory').text(cursor.value.category);
-			newInfo.find("#productEdit").attr('onClick', "changeHash('product-edit-" + cursor.primaryKey + "')");
-            newInfo.find("#productRemove").attr('onClick', "removeProduct(" + cursor.primaryKey + ")");
-			
-			$("#stockTable").append(newInfo);
-		
-			cursor.continue();
-		}
-	}
+                newInfo.find('.productName').text(cursor.value.name);
+                newInfo.find('.productQuantity').text(cursor.value.quantity);
+                newInfo.find('.productPrice').text('R$ ' + cursor.value.price);
+                newInfo.find('.productAnimal').text(cursor.value.animal);
+                newInfo.find('.productCategory').text(cursor.value.category);
+                newInfo.find("#productEdit").attr('onClick', "changeHash('product-edit-" + cursor.primaryKey + "')");
+                newInfo.find("#productRemove").attr('onClick', "removeProduct(" + cursor.primaryKey + ")");
+                
+                $("#stockTable").append(newInfo);
+            
+                cursor.continue();
+            }
+        }
 	});
 }
 
@@ -925,7 +923,7 @@ function removeAdmin(adminKey) {
         };
         request.onsuccess = function(event) {
             showAdmins();
-        }
+        };
     }
 }
 
@@ -963,8 +961,8 @@ function showCustomers() {
 	customerInfo.append($('<td class="usersAddress"></td>'));
 	customerInfo.append($('<td><button type="button" id="userRemove" class="btn btn-default">Deletar</button></td>'));
 	
-	let objectStore = db.transaction(["users"], "readonly").objectStore("users");
-    objectStore.openCursor().onsuccess = function(event) {
+	let transaction = db.transaction("users", "readonly").objectStore("users").openCursor();
+    transaction.onsuccess = function(event) {
         let cursor = event.target.result;
         if (cursor) {
 			
@@ -985,7 +983,11 @@ function showCustomers() {
 		
 			cursor.continue();
 		}
-	}
+	};
+    transaction.onerror = function(event) {
+        alert("Erro ao carregar clientes")
+    }
+    
   });
 }
 

@@ -583,8 +583,6 @@ function loadPageMyProfile() {
         $("#userEmail").text(userSession.email);
         $("#userTel").text(userSession.tel);
         $("#userPic").attr('src', userSession.profilePic);
-        
-        
     });
 }
 

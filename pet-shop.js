@@ -745,7 +745,7 @@ function editAccount(){
 
 function showStock() {
 	
-	$("#adm-content").load("adm/stock.html").ready(function() {
+	$("#adm-content").load("adm/stock.html", function() {
 	
         let productInfo = $('<tr/>');
         productInfo.append($('<td class="productName"></td>'));

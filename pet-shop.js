@@ -468,22 +468,31 @@ function removeItem(productKey) {
 }
 
 function updateItemQuantity(productKey) {
-    let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
-    objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
-        let cursor = event.target.result;
-        if (cursor) {
-            let item = cursor.value;
-            item.quantity = $('#itemQuantity-' + productKey).val();
-            
-            let request = cursor.update(item);
-            request.onerror = function(event) {
+    let quantity = parseInt($('#itemQuantity-' + productKey).val());
+    if (quantity < 0) {
+        alert("A quantidade não pode ser menor que zero!");
+    } 
+    else if (quantity == 0) {
+        removeItem(productKey);
+    }
+    else {
+        let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
+        objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                let item = cursor.value;
+                item.quantity = parseInt($('#itemQuantity-' + productKey).val());
+                
+                let request = cursor.update(item);
+                request.onerror = function(event) {
+                    alert("Erro ao atualizar produto");
+                };
+                request.onsuccess = function(event) {
+                    loadPageCart();
+                }
+            } else {
                 alert("Erro ao atualizar produto");
-            };
-            request.onsuccess = function(event) {
-                loadPageCart();
             }
-        } else {
-            alert("Erro ao atualizar produto");
         }
     }
 }

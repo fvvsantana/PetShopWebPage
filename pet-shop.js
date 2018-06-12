@@ -25,18 +25,22 @@ request.onupgradeneeded = function(event) {
     addUsers(userStore);
     
     //criação da "tabela" de pets
-    let petStore = db.createObjectStore("pets", { autoIncrement : true });
+    let petStore = db.createObjectStore("pets", { autoIncrement: true });
     petStore.createIndex("owner", "owner", { unique: false });
     addPets(petStore);
 	
     //criação da "tabela" de produtos
-    let productsStore = db.createObjectStore("products", { autoIncrement : true });
+    let productsStore = db.createObjectStore("products", { autoIncrement: true });
     productsStore.createIndex("animal", "animal", {unique: false});
     productsStore.createIndex("animal-category", ["animal", "category"], {unique: false});
     addProducts(productsStore);
     
     // criação da "tabela" do carrinho
     let cartStore = db.createObjectStore("cart", { keyPath: "key" });
+    
+    // criação da "tabela" dos pedidos
+    let orderStore = db.createObjectStore("orders", { autoIncrement: true });
+    orderStore.createIndex("user", "user", { unique: false });
 };
 
 //function to change hash
@@ -270,31 +274,48 @@ function changeDeliverAdress() {
 }
 
 function finishOrder() {
-    if($("#number").val().split(" ").join("") == "" || $("#name").val().split(" ").join("") == "" || $("#date").val().split(" ").join("") == "" || $("#code").val().split(" ").join("") == "") {
-        alert("Favor preencher todos os campos.");
-        return;
-    } else {
-        let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
-        objectStore.openCursor().onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
-                db.transaction("products", "readwrite").objectStore("products").openCursor(cursor.value.key).onsuccess = function(event) {
-                    let cursor2 = event.target.result;
-                    if (cursor2) {
-                        let prod = cursor2.value;
-                        prod.quantity -= cursor.value.quantity;
-                        cursor2.update(prod);
-                    }
-                };
-                cursor.delete();
-                cursor.continue();
-            } 
-            else {
+    // cria o objeto com dados do pedido
+    let order = {
+        user: userSession.cpf,
+        date: new Date(),
+        itemTotal: $("#total1").text(),
+        shipTotal: "R$ 10.00",
+        orderTotal: $("#total2").text(),
+        products: []
+    };
+    
+    // carrega os itens do carrinho
+    db.transaction("cart", "readwrite").objectStore("cart").openCursor().onsuccess = function(event) {
+        let cursor = event.target.result;
+        if (cursor) {
+            
+            // adiciona os produtos no pedido
+            order.products.push(cursor.value);
+            
+            // remove os produtos comprados do estoque
+            db.transaction("products", "readwrite").objectStore("products").openCursor(cursor.value.key).onsuccess = function(event) {
+                let cursor2 = event.target.result;
+                if (cursor2) {
+                    let prod = cursor2.value;
+                    prod.quantity -= cursor.value.quantity;
+                    cursor2.update(prod);
+                }
+            };
+            cursor.delete();
+            cursor.continue();
+        }
+        else {
+            // após remover todos itens do carrinho, salvar o pedido no banco
+            let orderTransaction = db.transaction("orders", "readwrite").objectStore("orders").add(order);
+            orderTransaction.onsuccess = function(event) {
                 alert("Pedido realizado com sucesso!");
                 changeHash("my-cart");
+            };
+            orderTransaction.onerror = function(event) {
+                alert("Não foi possível registrar o pedido.");
             }
         }
-    }
+    };
 }
 
 function loadPageEditPet (petKey) {

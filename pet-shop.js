@@ -74,6 +74,10 @@ $(function(){
           modifyProduct(location.hash.split('-')[2]);
           return;
       }
+      if (location.hash.startsWith("#services")) {
+          $("#content").load("services.html");
+          return;
+      }
 
       let content = $("#content");
 
@@ -201,7 +205,7 @@ $(function(){
           break;
 
         case "#schedule-session":
-          content.load("schedule-session.html");
+          loadPageSchedule();
           break;
 
         case "#scheduling-confirmation":
@@ -210,10 +214,6 @@ $(function(){
 
         case "#service-view":
           content.load("service-view.html");
-          break;
-
-        case "#services":
-          content.load("services.html");
           break;
 
         default:
@@ -237,6 +237,21 @@ function loadPageLogin() {
                 startLogin();
         });
     });
+}
+
+function loadPageSchedule() {
+    // verifica se está logado
+    if (!userLoggedIn) {
+        alert("Por favor, faça login para continuar.");
+        changeHash('login');
+    } 
+    // verifica se não é um adm
+    else if (userSession.isAdmin) {
+        alert("Favor logar numa conta de cliente para agendar sessões.");
+    }
+    else {
+        $("#content").load("schedule-session.html");
+    }
 }
 
 function loadPageConfirmation() {

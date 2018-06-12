@@ -285,6 +285,10 @@ function changeDeliverAdress() {
     alert("Funcionalidade não implementada");
 }
 
+function search(){
+    alert("A função de BUSCA será implementada com auxílio do servidor na próxima parte do projeto.");
+}
+
 function finishOrder() {
     // cria o objeto com dados do pedido
     let order = {

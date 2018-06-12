@@ -1043,7 +1043,7 @@ function saveProduct(productKey) {
 		objectStore.get(parseInt(productKey)).onsuccess = function(event) {
 			let product = event.target.result;
 			product.name = $("#name").val();
-			product.quantity = $("#qtd").val();
+			product.quantity = parseInt($("#qtd").val());
 			product.price = $("#price").val();
 			product.description = $("#description").val();
             
@@ -1068,7 +1068,7 @@ function addProduct(){
 	
 	if($.isNumeric($.trim($("#price").val()))){
 		
-		let newProduct = { name: $.trim($("#name").val()) , quantity: $("#qtd").val(), price: $.trim($("#price").val()), animal: $("#animal").val(), category: $("#category").val(), description: $.trim($("#description").val()), picture: "https://cdn.shopify.com/s/files/1/0364/6117/products/DSC0001_25a81afb-f969-4cb9-b760-b3dc038f0885_large.JPG?v=1464631702"};
+		let newProduct = { name: $.trim($("#name").val()) , quantity: parseInt($("#qtd").val()), price: $.trim($("#price").val()), animal: $("#animal").val(), category: $("#category").val(), description: $.trim($("#description").val()), picture: "https://cdn.shopify.com/s/files/1/0364/6117/products/DSC0001_25a81afb-f969-4cb9-b760-b3dc038f0885_large.JPG?v=1464631702"};
 		
 		
 		let objectStore = db.transaction(["products"], "readwrite").objectStore("products");
@@ -1257,6 +1257,13 @@ function addPets(objectStore){
     for (let i in petsData) {
         objectStore.add(petsData[i]);
     }
+}
+
+// adiciona serviços de exemplo
+function addServicer(objectStore) {
+    const serviceData = [
+        { name: ""}
+    ];
 }
 
 // adiciona produtos de exemplo

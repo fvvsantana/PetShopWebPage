@@ -62,6 +62,10 @@ $(function(){
           loadPageProductView(location.hash.split('-')[2]);
           return;
       }
+      if (location.hash.startsWith("#order-detail")) {
+          showOrderDetails(location.hash.split('-')[2]);
+          return;
+      }
       if (location.hash.startsWith("#pet-edit")) {
           loadPageEditPet(location.hash.split('-')[2]);
           return;
@@ -117,6 +121,10 @@ $(function(){
 
         case "#adm-clients":
 			showCustomers();
+          break;
+
+        case "#adm-orders":
+			loadPageAdmOrders();
           break;
 
         case "#adm-new-product":
@@ -277,6 +285,9 @@ function finishOrder() {
     // cria o objeto com dados do pedido
     let order = {
         user: userSession.cpf,
+        name: userSession.name,
+        address: userSession.address,
+        tel: userSession.tel,
         date: new Date(),
         itemTotal: $("#total1").text(),
         shipTotal: "R$ 10.00",
@@ -668,9 +679,9 @@ function loadPageMyOrders() {
                 let newElement = model.clone();        
                 newElement.find("#orderNumber").text("Pedido Nº: " + cursor.primaryKey);
                 newElement.find("#orderDate").text("Realizado em: " + cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " às " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
-                newElement.find("#buyerName").text(userSession.name);
-                newElement.find("#address").text("Endereço: " + userSession.address);
-                newElement.find("#tel").text("Telefone: " + userSession.tel);
+                newElement.find("#buyerName").text(cursor.value.name);
+                newElement.find("#address").text("Endereço: " + cursor.value.address);
+                newElement.find("#tel").text("Telefone: " + cursor.value.tel);
                 newElement.find("#itemTotal").text(cursor.value.itemTotal);
                 newElement.find("#shipTotal").text(cursor.value.shipTotal);
                 newElement.find("#orderTotal").text(cursor.value.orderTotal);
@@ -822,6 +833,89 @@ function editAccount(){
         let requestUpdate = objectStore.put(cursor.value);
         changeHash('my-area');
     }
+}
+
+function showOrderDetails(order) {
+    // carrega o html
+    $("#adm-content").load("my-orders.html", function() {
+        
+        // muda o titulo da pagina
+        $("#title").text("Detalhes do pedido");
+        
+        // carrega o modelo de pedido
+        let model = $("#indiv-order").clone();
+        $("#indiv-order").remove();
+        
+        // carrega o modelo do item
+        let itemModel = model.find("#item").clone();
+        model.find("#item").remove();
+        
+        // abre a tabela de pedidos
+        let objectStore = db.transaction("orders", "readonly").objectStore("orders");
+        objectStore.openCursor(parseInt(order)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                // cria o elemento do pedido
+                let newElement = model.clone();        
+                newElement.find("#orderNumber").text("Pedido Nº: " + cursor.primaryKey);
+                newElement.find("#orderDate").text("Realizado em: " + cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " às " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
+                newElement.find("#buyerName").text(cursor.value.name);
+                newElement.find("#address").text("Endereço: " + cursor.value.address);
+                newElement.find("#tel").text("Telefone: " + cursor.value.tel);
+                newElement.find("#itemTotal").text(cursor.value.itemTotal);
+                newElement.find("#shipTotal").text(cursor.value.shipTotal);
+                newElement.find("#orderTotal").text(cursor.value.orderTotal);
+                
+                // adiciona os produtos
+                cursor.value.products.forEach(function(product){
+                    let newItem = itemModel.clone();
+                    newItem.find("#productPic img").attr('src', product.picture);
+                    newItem.find("#productPic").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
+                    newItem.find("#productName").text(product.name);
+                    newItem.find("#productName").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
+                    newItem.find("#productPrice").text("R$ " + product.price);
+                    newItem.find("#productQtd").text(product.quantity);
+                    newItem.find("#productSubtotal").text("R$ " + (product.price*product.quantity));
+                    newElement.find("#item-list").append(newItem);
+                });
+                
+                // adiciona o pedido na lista
+                $("#order-list").append(newElement);
+            }
+        }
+    });
+}
+
+function loadPageAdmOrders() {
+	
+	$("#adm-content").load("adm/orders.html", function() {
+	
+        let orderInfo = $('<tr/>');
+        orderInfo.append($('<td id="orderNumber"></td>'));
+        orderInfo.append($('<td id="orderClient"></td>'));
+        orderInfo.append($('<td id="orderCpf"></td>'));
+        orderInfo.append($('<td id="orderTotal"></td>'));
+        orderInfo.append($('<td id="orderDate"></td>'));
+        orderInfo.append($('<td><button type="button" id="orderDetail" class="btn btn-default">Detalhes</button></td>'));
+        
+        let objectStore = db.transaction("orders", "readonly").objectStore("orders");
+        objectStore.openCursor(null, 'prev').onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                let newInfo = orderInfo.clone();
+                newInfo.find('#orderNumber').text(cursor.primaryKey);
+                newInfo.find('#orderClient').text(cursor.value.name);
+                newInfo.find('#orderCpf').text(cursor.value.user);
+                newInfo.find('#orderTotal').text(cursor.value.orderTotal);
+                newInfo.find('#orderDate').text(cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " - " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
+                newInfo.find("#orderDetail").attr('onClick', "changeHash('order-detail-" + cursor.primaryKey + "')");
+                
+                $("#ordersTable").append(newInfo);
+            
+                cursor.continue();
+            }
+        }
+	});
 }
 
 function showStock() {

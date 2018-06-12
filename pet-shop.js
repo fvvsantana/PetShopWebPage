@@ -168,7 +168,7 @@ $(function(){
           break;
 
         case "#login":
-          content.load("login.html");
+          loadPageLogin();
           break;
 
         case "#order-confirmation":
@@ -204,6 +204,19 @@ $(function(){
     $(window).trigger('hashchange');
 
 });
+
+function loadPageLogin() {
+    $("#content").load("login.html", function() {
+        $("#user").keydown(function(event){
+            if (event.which == 13 || event.keyCode == 13)
+                startLogin();
+        });
+        $("#password").keydown(function(event){
+            if (event.which == 13 || event.keyCode == 13)
+                startLogin();
+        });
+    });
+}
 
 function loadPageConfirmation() {
     if (!userLoggedIn) {

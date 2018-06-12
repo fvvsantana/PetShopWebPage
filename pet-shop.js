@@ -112,7 +112,7 @@ $(function(){
           break;
 
         case "#adm-clients":
-			showCustomers();
+    			showCustomers();
           break;
 
         case "#adm-new-product":
@@ -955,7 +955,7 @@ function addAdmin(){
 
 function showCustomers() {
 	
-  $("#adm-content").load("adm/users.html").ready(function(){
+  $("#adm-content").load("adm/clients.html").ready(function(){
 	
 	let customerInfo = $('<tr/>');
 	customerInfo.append($('<td class="usersCPF"></td>'));

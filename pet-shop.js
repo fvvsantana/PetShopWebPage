@@ -183,8 +183,8 @@ $(function(){
           $("#adm-content").load("register-admin.html");
           break;
 
-        case "#service-schedule":
-          content.load("service-schedule.html");
+        case "#session-schedule":
+          content.load("session-schedule.html");
           break;
 
         case "#service-view":

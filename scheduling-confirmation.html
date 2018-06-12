@@ -1,0 +1,92 @@
+<div class="container-fluid">
+  <div class="row" style="padding-top: 15px;">
+    <div class="col-sm-2">
+      <div class="panel panel-primary" style="font-size:17px; margin-top:0px; border-color: #007bc7;" width="100%">
+        <div class="panel-heading" style="font-weight:bold; font-size: 22px; background-color: #007bc7;">Serviços</div>
+        <div class="panel-body">
+          <a href="javascript:changeHash('services-esteticos')">Estéticos</a><br><br>
+          <a href="javascript:changeHash('services-medicos')">Médicos</a><br><br>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-9">
+
+      <h2 style="color: #007bc7; margin-top: 0px;">Finalizar pedido</h2>
+      <hr/>
+      <div class="row justify-content-center" style="margin-left:0px; margin-right:0px">
+        <div class="well well-lg col-sm-5">
+          <h4>Dados pessoais</h4>
+          <p id="nome">Nome: xxxxxxx xxxxxx xxxxxx</p>
+          <p id="email">Email: xxxxxx@xxxx.com</p>
+          <p id="telefone">Telefone: (xx) xxxxx-xxxx</p>
+          <p id="cpf">CPF: xxx.xxx.xxx-xx</p>
+          <a onclick="changePersonalData()" class="btn btn-primary">Alterar informações</a>
+        </div>
+        <div class="col-sm-offset-2 col-sm-5">
+          <h3 style="color: #007bc7; margin-top: 0px;">Resumo do pedido</h3>
+          <hr style="margin:5px;"/>
+          <table class="cart-table">
+            <tr>
+              <th>Serviço</th>
+              <td id="serviceName">Banho e tosa</td>
+            </tr>
+            <tr>
+              <th>Pet</th>
+              <td id="petName">Tobi</td>
+            </tr>
+            <tr>
+              <th>Horário</th>
+              <td id="timeInfo">11:00 - 24/05/2018</td>
+            </tr>
+            <tr>
+              <th>Total</th>
+              <td id="total2">R$ 209,99</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="well row" style="margin-top:10px; margin-left: 0px; margin-right: 0px;">
+        <div class="col-sm">
+          <h3>Pagamento</h3>
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a data-toggle="tab" href="#cartao">Cartão de crédito</a>
+            </li>
+            <li>
+              <a data-toggle="tab" href="#boleto">Boleto bancário</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div id="cartao" class="tab-pane fade in active">
+              <form>
+                <div class="form-group" style="margin-top: 15px">
+                  <input id="number" type="text" class="form-control" name="cardnumber" placeholder="Número do cartão">
+                </div>
+                <div class="form-group">
+                  <input id="date" type="text" class="form-control" name="cardexpdate" placeholder="Validade do cartão">
+                </div>
+                <div class="form-group">
+                  <input id="name" type="text" class="form-control" name="ownername" placeholder="Nome impresso no cartão">
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                  <input id="code" type="text" class="form-control" name="securitycode" placeholder="Código de segurança">
+                </div>
+              </form>
+            </div>
+            <div id="boleto" class="tab-pane fade"><br>
+              <p>Código de barras: xxxxx xxxxxx xxxxxx xxxxxx</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="" class="btn btn-danger" style="margin-bottom:15px; margin-right: 20px;">Cancelar</button>
+      <button onclick="" class="btn btn-success" style="margin-bottom:15px">Finalizar agendamento</button>
+
+    </div>
+    <div class="col-sm-offset-1">
+    </div>
+  </div>
+</div>

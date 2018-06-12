@@ -187,6 +187,10 @@ $(function(){
           content.load("schedule-session.html");
           break;
 
+        case "#scheduling-confirmation":
+          content.load("scheduling-confirmation.html");
+          break;
+
         case "#service-view":
           content.load("service-view.html");
           break;

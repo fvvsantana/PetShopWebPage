@@ -160,7 +160,7 @@ $(function(){
           break;
 
         case "#my-orders":
-          loadPageMyOrder();
+          loadPageMyOrders();
           break;
           
         case "#add-pet":
@@ -646,8 +646,55 @@ function loadPageMyPet() {
     });
 }
 
-function loadPageMyOrder() {
-    $("#my-area-content").load("my-orders.html");
+function loadPageMyOrders() {
+    
+    // carrega o html
+    $("#my-area-content").load("my-orders.html", function() {
+        
+        // carrega o modelo de pedido
+        let model = $("#indiv-order").clone();
+        $("#indiv-order").remove();
+        
+        // carrega o modelo do item
+        let itemModel = model.find("#item").clone();
+        model.find("#item").remove();
+        
+        // abre a tabela de pedidos
+        let objectStore = db.transaction("orders", "readonly").objectStore("orders").index("user");
+        objectStore.openCursor(userSession.cpf, 'prev').onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                // cria o elemento do pedido
+                let newElement = model.clone();        
+                newElement.find("#orderNumber").text("Pedido Nº: " + cursor.primaryKey);
+                newElement.find("#orderDate").text("Realizado em: " + cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " às " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
+                newElement.find("#buyerName").text(userSession.name);
+                newElement.find("#address").text("Endereço: " + userSession.address);
+                newElement.find("#tel").text("Telefone: " + userSession.tel);
+                newElement.find("#itemTotal").text(cursor.value.itemTotal);
+                newElement.find("#shipTotal").text(cursor.value.shipTotal);
+                newElement.find("#orderTotal").text(cursor.value.orderTotal);
+                
+                // adiciona os produtos
+                cursor.value.products.forEach(function(product){
+                    let newItem = itemModel.clone();
+                    newItem.find("#productPic img").attr('src', product.picture);
+                    newItem.find("#productPic").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
+                    newItem.find("#productName").text(product.name);
+                    newItem.find("#productName").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
+                    newItem.find("#productPrice").text("R$ " + product.price);
+                    newItem.find("#productQtd").text(product.quantity);
+                    newItem.find("#productSubtotal").text("R$ " + (product.price*product.quantity));
+                    newElement.find("#item-list").append(newItem);
+                });
+                
+                // adiciona o pedido na lista
+                $("#order-list").append(newElement);
+                
+                cursor.continue();
+            }
+        }
+    });
 }
 
 function startLogin() {

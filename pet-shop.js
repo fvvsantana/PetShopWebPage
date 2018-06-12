@@ -25,18 +25,22 @@ request.onupgradeneeded = function(event) {
     addUsers(userStore);
     
     //criação da "tabela" de pets
-    let petStore = db.createObjectStore("pets", { autoIncrement : true });
+    let petStore = db.createObjectStore("pets", { autoIncrement: true });
     petStore.createIndex("owner", "owner", { unique: false });
     addPets(petStore);
 	
     //criação da "tabela" de produtos
-    let productsStore = db.createObjectStore("products", { autoIncrement : true });
+    let productsStore = db.createObjectStore("products", { autoIncrement: true });
     productsStore.createIndex("animal", "animal", {unique: false});
     productsStore.createIndex("animal-category", ["animal", "category"], {unique: false});
     addProducts(productsStore);
     
     // criação da "tabela" do carrinho
     let cartStore = db.createObjectStore("cart", { keyPath: "key" });
+    
+    // criação da "tabela" dos pedidos
+    let orderStore = db.createObjectStore("orders", { autoIncrement: true });
+    orderStore.createIndex("user", "user", { unique: false });
 };
 
 //function to change hash
@@ -56,6 +60,10 @@ $(function(){
       }
       if (location.hash.startsWith("#product-view")) {
           loadPageProductView(location.hash.split('-')[2]);
+          return;
+      }
+      if (location.hash.startsWith("#order-detail")) {
+          showOrderDetails(location.hash.split('-')[2]);
           return;
       }
       if (location.hash.startsWith("#pet-edit")) {
@@ -115,6 +123,10 @@ $(function(){
     			showCustomers();
           break;
 
+        case "#adm-orders":
+			loadPageAdmOrders();
+          break;
+
         case "#adm-new-product":
           $("#adm-content").load("adm/new-product.html");
           break;
@@ -156,7 +168,7 @@ $(function(){
           break;
 
         case "#my-orders":
-          loadPageMyOrder();
+          loadPageMyOrders();
           break;
           
         case "#add-pet":
@@ -223,10 +235,16 @@ function loadPageLogin() {
 }
 
 function loadPageConfirmation() {
+    // verifica se está logado
     if (!userLoggedIn) {
         alert("Por favor, faça login para continuar.");
         changeHash('login');
-    } else {
+    } 
+    // verifica se não é um adm
+    else if (userSession.isAdmin) {
+        alert("Favor logar numa conta de cliente para realizar compras.");
+    }
+    else {
         $("#content").load("order-confirmation.html", function() {
             $("#nome").text("Nome: " + userSession.name);
             $("#email").text("E-mail: " + userSession.email);
@@ -250,7 +268,6 @@ function loadPageConfirmation() {
             }
         });
     }
-    
 }
 
 function loadPageEditProfile() {
@@ -273,32 +290,56 @@ function changeDeliverAdress() {
     alert("Funcionalidade não implementada");
 }
 
+function search(){
+    alert("A função de BUSCA será implementada com auxílio do servidor na próxima parte do projeto.");
+}
+
 function finishOrder() {
-    if($("#number").val().split(" ").join("") == "" || $("#name").val().split(" ").join("") == "" || $("#date").val().split(" ").join("") == "" || $("#code").val().split(" ").join("") == "") {
-        alert("Favor preencher todos os campos.");
-        return;
-    } else {
-        let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
-        objectStore.openCursor().onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
-                db.transaction("products", "readwrite").objectStore("products").openCursor(cursor.value.key).onsuccess = function(event) {
-                    let cursor2 = event.target.result;
-                    if (cursor2) {
-                        let prod = cursor2.value;
-                        prod.quantity -= cursor.value.quantity;
-                        cursor2.update(prod);
-                    }
-                };
-                cursor.delete();
-                cursor.continue();
-            } 
-            else {
+    // cria o objeto com dados do pedido
+    let order = {
+        user: userSession.cpf,
+        name: userSession.name,
+        address: userSession.address,
+        tel: userSession.tel,
+        date: new Date(),
+        itemTotal: $("#total1").text(),
+        shipTotal: "R$ 10.00",
+        orderTotal: $("#total2").text(),
+        products: []
+    };
+    
+    // carrega os itens do carrinho
+    db.transaction("cart", "readwrite").objectStore("cart").openCursor().onsuccess = function(event) {
+        let cursor = event.target.result;
+        if (cursor) {
+            
+            // adiciona os produtos no pedido
+            order.products.push(cursor.value);
+            
+            // remove os produtos comprados do estoque
+            db.transaction("products", "readwrite").objectStore("products").openCursor(cursor.value.key).onsuccess = function(event) {
+                let cursor2 = event.target.result;
+                if (cursor2) {
+                    let prod = cursor2.value;
+                    prod.quantity -= cursor.value.quantity;
+                    cursor2.update(prod);
+                }
+            };
+            cursor.delete();
+            cursor.continue();
+        }
+        else {
+            // após remover todos itens do carrinho, salvar o pedido no banco
+            let orderTransaction = db.transaction("orders", "readwrite").objectStore("orders").add(order);
+            orderTransaction.onsuccess = function(event) {
                 alert("Pedido realizado com sucesso!");
                 changeHash("my-cart");
+            };
+            orderTransaction.onerror = function(event) {
+                alert("Não foi possível registrar o pedido.");
             }
         }
-    }
+    };
 }
 
 function loadPageEditPet (petKey) {
@@ -436,22 +477,31 @@ function removeItem(productKey) {
 }
 
 function updateItemQuantity(productKey) {
-    let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
-    objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
-        let cursor = event.target.result;
-        if (cursor) {
-            let item = cursor.value;
-            item.quantity = $('#itemQuantity-' + productKey).val();
-            
-            let request = cursor.update(item);
-            request.onerror = function(event) {
+    let quantity = parseInt($('#itemQuantity-' + productKey).val());
+    if (quantity < 0) {
+        alert("A quantidade não pode ser menor que zero!");
+    } 
+    else if (quantity == 0) {
+        removeItem(productKey);
+    }
+    else {
+        let objectStore = db.transaction("cart", "readwrite").objectStore("cart");
+        objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                let item = cursor.value;
+                item.quantity = parseInt($('#itemQuantity-' + productKey).val());
+                
+                let request = cursor.update(item);
+                request.onerror = function(event) {
+                    alert("Erro ao atualizar produto");
+                };
+                request.onsuccess = function(event) {
+                    loadPageCart();
+                }
+            } else {
                 alert("Erro ao atualizar produto");
-            };
-            request.onsuccess = function(event) {
-                loadPageCart();
             }
-        } else {
-            alert("Erro ao atualizar produto");
         }
     }
 }
@@ -629,8 +679,55 @@ function loadPageMyPet() {
     });
 }
 
-function loadPageMyOrder() {
-    $("#my-area-content").load("my-orders.html");
+function loadPageMyOrders() {
+    
+    // carrega o html
+    $("#my-area-content").load("my-orders.html", function() {
+        
+        // carrega o modelo de pedido
+        let model = $("#indiv-order").clone();
+        $("#indiv-order").remove();
+        
+        // carrega o modelo do item
+        let itemModel = model.find("#item").clone();
+        model.find("#item").remove();
+        
+        // abre a tabela de pedidos
+        let objectStore = db.transaction("orders", "readonly").objectStore("orders").index("user");
+        objectStore.openCursor(userSession.cpf, 'prev').onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                // cria o elemento do pedido
+                let newElement = model.clone();        
+                newElement.find("#orderNumber").text("Pedido Nº: " + cursor.primaryKey);
+                newElement.find("#orderDate").text("Realizado em: " + cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " às " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
+                newElement.find("#buyerName").text(cursor.value.name);
+                newElement.find("#address").text("Endereço: " + cursor.value.address);
+                newElement.find("#tel").text("Telefone: " + cursor.value.tel);
+                newElement.find("#itemTotal").text(cursor.value.itemTotal);
+                newElement.find("#shipTotal").text(cursor.value.shipTotal);
+                newElement.find("#orderTotal").text(cursor.value.orderTotal);
+                
+                // adiciona os produtos
+                cursor.value.products.forEach(function(product){
+                    let newItem = itemModel.clone();
+                    newItem.find("#productPic img").attr('src', product.picture);
+                    newItem.find("#productPic").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
+                    newItem.find("#productName").text(product.name);
+                    newItem.find("#productName").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
+                    newItem.find("#productPrice").text("R$ " + product.price);
+                    newItem.find("#productQtd").text(product.quantity);
+                    newItem.find("#productSubtotal").text("R$ " + (product.price*product.quantity));
+                    newElement.find("#item-list").append(newItem);
+                });
+                
+                // adiciona o pedido na lista
+                $("#order-list").append(newElement);
+                
+                cursor.continue();
+            }
+        }
+    });
 }
 
 function startLogin() {
@@ -758,6 +855,89 @@ function editAccount(){
         let requestUpdate = objectStore.put(cursor.value);
         changeHash('my-area');
     }
+}
+
+function showOrderDetails(order) {
+    // carrega o html
+    $("#adm-content").load("my-orders.html", function() {
+        
+        // muda o titulo da pagina
+        $("#title").text("Detalhes do pedido");
+        
+        // carrega o modelo de pedido
+        let model = $("#indiv-order").clone();
+        $("#indiv-order").remove();
+        
+        // carrega o modelo do item
+        let itemModel = model.find("#item").clone();
+        model.find("#item").remove();
+        
+        // abre a tabela de pedidos
+        let objectStore = db.transaction("orders", "readonly").objectStore("orders");
+        objectStore.openCursor(parseInt(order)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                // cria o elemento do pedido
+                let newElement = model.clone();        
+                newElement.find("#orderNumber").text("Pedido Nº: " + cursor.primaryKey);
+                newElement.find("#orderDate").text("Realizado em: " + cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " às " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
+                newElement.find("#buyerName").text(cursor.value.name);
+                newElement.find("#address").text("Endereço: " + cursor.value.address);
+                newElement.find("#tel").text("Telefone: " + cursor.value.tel);
+                newElement.find("#itemTotal").text(cursor.value.itemTotal);
+                newElement.find("#shipTotal").text(cursor.value.shipTotal);
+                newElement.find("#orderTotal").text(cursor.value.orderTotal);
+                
+                // adiciona os produtos
+                cursor.value.products.forEach(function(product){
+                    let newItem = itemModel.clone();
+                    newItem.find("#productPic img").attr('src', product.picture);
+                    newItem.find("#productPic").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
+                    newItem.find("#productName").text(product.name);
+                    newItem.find("#productName").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
+                    newItem.find("#productPrice").text("R$ " + product.price);
+                    newItem.find("#productQtd").text(product.quantity);
+                    newItem.find("#productSubtotal").text("R$ " + (product.price*product.quantity));
+                    newElement.find("#item-list").append(newItem);
+                });
+                
+                // adiciona o pedido na lista
+                $("#order-list").append(newElement);
+            }
+        }
+    });
+}
+
+function loadPageAdmOrders() {
+	
+	$("#adm-content").load("adm/orders.html", function() {
+	
+        let orderInfo = $('<tr/>');
+        orderInfo.append($('<td id="orderNumber"></td>'));
+        orderInfo.append($('<td id="orderClient"></td>'));
+        orderInfo.append($('<td id="orderCpf"></td>'));
+        orderInfo.append($('<td id="orderTotal"></td>'));
+        orderInfo.append($('<td id="orderDate"></td>'));
+        orderInfo.append($('<td><button type="button" id="orderDetail" class="btn btn-default">Detalhes</button></td>'));
+        
+        let objectStore = db.transaction("orders", "readonly").objectStore("orders");
+        objectStore.openCursor(null, 'prev').onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                let newInfo = orderInfo.clone();
+                newInfo.find('#orderNumber').text(cursor.primaryKey);
+                newInfo.find('#orderClient').text(cursor.value.name);
+                newInfo.find('#orderCpf').text(cursor.value.user);
+                newInfo.find('#orderTotal').text(cursor.value.orderTotal);
+                newInfo.find('#orderDate').text(cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " - " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
+                newInfo.find("#orderDetail").attr('onClick', "changeHash('order-detail-" + cursor.primaryKey + "')");
+                
+                $("#ordersTable").append(newInfo);
+            
+                cursor.continue();
+            }
+        }
+	});
 }
 
 function showStock() {

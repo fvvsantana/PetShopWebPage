@@ -136,7 +136,7 @@ $(function(){
           break;
 
         case "#adm-stock":
-			showStock();
+    			showStock();
           break;
 
         case "#my-cart":
@@ -163,7 +163,7 @@ $(function(){
           $("#my-area-content").load("new-pet.html");
           break;
 		
-		case "#my-profile-edit":
+    		case "#my-profile-edit":
           loadPageEditProfile();
           break;
 
@@ -183,8 +183,8 @@ $(function(){
           $("#adm-content").load("register-admin.html");
           break;
 
-        case "#session-schedule":
-          content.load("session-schedule.html");
+        case "#schedule-session":
+          content.load("schedule-session.html");
           break;
 
         case "#service-view":

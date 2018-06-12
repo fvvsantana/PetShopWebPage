@@ -128,11 +128,11 @@ $(function(){
           break;
 
         case "#adm-services":
-          $("#adm-content").load("adm/services-not-ready.html");
+          $("#adm-content").load("adm/services.html");
           break;
 
         case "#adm-sessions":
-          $("#adm-content").load("adm/sessions-not-ready.html");
+          $("#adm-content").load("adm/sessions.html");
           break;
 
         case "#adm-stock":

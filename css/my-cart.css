@@ -1,20 +1,16 @@
-.cart-table{
-	margin: 16px;
-}
-
-
 .cart-table th{
 	border-bottom: #e6e7e8 1px solid;
 	color: #515151;
 	font-size: 20px;
-	text-align: center;
+	text-align: left;
 }
 
 
 .cart-table td{
 	border-bottom: #e6e7e8 1px solid;
-	text-align: center;
+	text-align: left;
 	padding: 0 16px;
+	font-size: 18px;
 }
 
 .cart-table a{

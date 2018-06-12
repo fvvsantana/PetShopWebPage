@@ -121,6 +121,7 @@ li.dropdown{
 }
 
 .dropdown-content button{
+    width: 100%;
     color: black;
     border: none;
     padding: 12px 16px;
@@ -128,18 +129,29 @@ li.dropdown{
     display: block;
     text-align: left;
     font-size: 16px;
+    background-color: #eeeeee;
 }
-/*
-.dropdown-content a:hover {
+
+.dropdown-content button:hover {
     background-color: white;
 
 }
-*/
 
 .dropdown:hover .dropdown-content{
     display: block;
 }
 
+.btn-red {
+    color: #fff;
+    background-color: #e60000;
+    border-color: #a20101;
+}
+
+.btn-red:hover {
+    color: #fff;
+    background-color: #a20101;
+    border-color: #a20101;
+}
 
 /*
 #content{

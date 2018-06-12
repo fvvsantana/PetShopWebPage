@@ -1,6 +1,6 @@
 <div class="container">
   <h2 style="color:#007bc7">Administradores</h2>
-  <button type="button" class="btn btn-default">Cadastrar novo administrador</button>
+  <button type="button" class="btn btn-default" onclick="changeHash('register-admin')">Cadastrar novo administrador</button>
   <div class="table-responsive" style="margin-top:40px">          
   <table class="table">
     <thead>
@@ -12,16 +12,8 @@
         <th>Endereço</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td id="adminsCPF">admin</td>
-        <td id="adminsName">admin</td>
-        <td id="adminsEmail">admin@happypet.com</td>
-        <td id="adminsTel">1234567</td>
-        <td id="adminsAddress">Rua Aquidaban</td>
-		<td><button type="button" class="btn btn-default">Alterar</button></td>
-		<td><button type="button" class="btn btn-default">Deletar</button></td>
-      </tr>
+    <tbody id="adminsTable">
+	
     </tbody>
   </table>
   

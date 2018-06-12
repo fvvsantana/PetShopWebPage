@@ -76,17 +76,10 @@
 	text-align: center;
 }
 
-#products-section .page-navigation{
-	align-items: center;
-	justify-content: center;
+#products-section .product-cell p{
+	color: #000;
 }
 
-#products-section .page-navigation a{
-    display: inline-block;
-    text-decoration: none;
-    background-color: #007bc7;
-    color: white;
-
-    margin: 4px;
-    padding: 4px 8px;
+#products-section .product-cell p:hover{
+	color: #004e75;
 }

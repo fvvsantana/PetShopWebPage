@@ -1,0 +1,53 @@
+<div class="row" style="margin-top:20px">
+  <div class="col-sm-10 col-sm-offset-1">
+    <h2 style="color:#007bc7">Modificar informaçõs</h2>
+    <hr/>
+    <form style="margin-bottom:40px">
+      <div class="form-group">
+        <label for="name">Nome:</label>
+        <input type="text" class="form-control" id="name">
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="age">Idade:</label>
+            <input type="number" min="0" value="0" class="form-control" id="age">
+          </div>
+        </div>
+	  </div>
+	  <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="species">Animal:</label>
+            <select class="form-control" id="species">
+              <option value="Cachorro">Cachorro</option>
+              <option value="Gato">Gato</option>
+            </select>
+          </div>
+		</div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="sel1">Sexo:</label>
+            <select class="form-control" id="gender">
+              <option value="Masculino" selected>Masculino</option>
+              <option value="Feminino">Feminino</option>
+            </select>
+			</div>
+         </div>
+      </div>
+      <div class="form-group">
+        <label for="name">Raça:</label>
+        <input type="text" class="form-control" id="breed">
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="productPic">Foto do pet:</label>
+        <div class="col-sm-6">          
+          <input type="file" class="form-control" id="picture" accept=".png, .jpeg, .jpg">
+        </div>
+      </div>
+      <button type="button" class="btn btn-success btn-lg" id="save">Salvar</button> 
+    </form>
+  </div>
+  <div class="col-sm-1">
+  </div>
+</div>

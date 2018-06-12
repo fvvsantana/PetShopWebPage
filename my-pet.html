@@ -1,85 +1,52 @@
-<h1 style="color:blue">Meus pets</h1>
-<div class="foo">
-  <div id="photo">
-    <img src="image/cachorro.jpg" width="300" height="auto">
-    <a href="#">Alterar foto</a>
+<div class="row" style="margin-top:20px; margin-bottom:30px">
+  <div class="col-sm-10 col-sm-offset-1">
+    <h2 style="color:#007bc7">Meus pets</h2>
+    <div id="petList" >
+      <div id="indiv-pet">
+        <hr/>
+        <div style="border:1px solid gray; padding:15px; border-radius:5px">
+          <center>
+            <div class="thumbnail" style="width:30%">
+              <img id="petPic" src="image/default.jpg" alt="foto do pet" width="300" height="auto" style="margin-bottom: 10px;">
+              <button type="button" class="btn btn-primary">Alterar foto</button>
+            </div>
+          </center>
+          <div class="row">
+            <div class="col-sm-4 well" style="margin-bottom:0">
+              <h4>Nome:</h4>
+              <span id="petName"></span>
+            </div>
+            <div class="col-sm-4 well" style="margin-bottom:0">
+              <h4>Espécie:</h4>
+              <span id="petSpecies"></span>
+            </div>
+            <div class="col-sm-4 well" style="margin-bottom:0">
+              <h4>Idade:</h6>
+              <span id="petAge"></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 well" style="margin-bottom:0">
+              <h4>Sexo:</h4>
+              <span id="petGender"></span>
+            </div>
+            <div class="col-sm-6 well" style="margin-bottom:0">
+              <h4>Raça:</h4>
+              <span id="petBreed"></span>
+            </div>
+          </div>
+          <center style="margin-top:10px">
+            <button id="petEdit" type="button" class="btn btn-primary">Modificar informações</button>
+            <button id="petRemove" type="button" class="btn btn-red" style="margin-left:15px">Remover Pet</button>
+          </center>
+        </div>
+      </div>
+    </div>
+    <hr/>
+    <center>
+      <button id="newEdit" type="button" class="btn btn-primary" onclick="changeHash('add-pet')">Adicionar Pet</button>
+    </center>
   </div>
-  <div class="myAreaInfo">
-    <div>
-      <h4>Nome:</h4>
-      <span>Rex</span>
-    </div>
-    <div>
-      <h4>Espécie:</h4>
-      <span>Canina</span>
-    </div>
-    <div>
-      <h4>Idade:</h4>
-      <span>5 anos</span>
-    </div>
-    <div>
-      <h4>Sexo:</h4>
-      <span>Masculino</span>
-    </div>
-    <div>
-      <h4>Raça:</h4>
-      <span>Golden Retriever</span>
-    </div>
-  </div>
-</div>
-<div class="foo">
-  <div id="photo">
-    <img src="image/siames.jpg" width="300" height="auto">
-    <a href="#">Alterar foto</a>
-  </div>
-  <div class="myAreaInfo">
-    <div>
-      <h4>Nome:</h4>
-      <span>Melinda</span>
-    </div>
-    <div>
-      <h4>Espécie:</h4>
-      <span>Gato</span>
-    </div>
-    <div>
-      <h4>Idade:</h4>
-      <span>2 anos</span>
-    </div>
-    <div>
-      <h4>Sexo:</h4>
-      <span>Feminino</span>
-    </div>
-    <div>
-      <h4>Raça:</h4>
-      <span>Siamês</span>
-    </div>
-  </div>
-</div>
-<div class="foo">
-  <div id="photo">
-    <img src="image/cachorro2.jpg" width="300" height="auto">
-    <a href="#">Alterar foto</a>
-  </div>
-  <div class="myAreaInfo">
-    <div>
-      <h4>Nome:</h4>
-      <span>Lassie</span>
-    </div>
-    <div>
-      <h4>Espécie:</h4>
-      <span>Canina</span>
-    </div>
-    <div>
-      <h4>Idade:</h4>
-      <span>3 anos</span>
-    </div>
-    <div>
-      <h4>Sexo:</h4>
-      <span>Feminino</span>
-    </div>
-    <div>
-      <h4>Raça:</h4>
-      <span>Husky Siberiano</span>
-    </div>
+  <div class="col-sm-1">
   </div>
 </div>

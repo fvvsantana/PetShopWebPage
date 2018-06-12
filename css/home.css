@@ -8,3 +8,11 @@
   color:black;
   text-shadow: 2px 2px 4px white;
 }
+
+.carousel-indicators .active {
+    background-color: #007bc7;
+}
+
+.carousel-indicators li {
+    border: 1px solid #007bc7;
+}

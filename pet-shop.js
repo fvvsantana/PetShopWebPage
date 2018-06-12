@@ -90,13 +90,18 @@ $(function(){
           content.load("about.html");
           break;
 		  
-		 case"#addProduct":
-			content.load("new-product.html");
+        case "#add-pet":
+          $("#my-area-content").load("new-pet.html");
+          break;
+    
+        case"#addProduct":
+    			content.load("new-product.html");
+          break;
 
         case "#adm-admins":
           $("#adm-content").load("adm/admins.html").ready(function(){
-				showAdmins();
-		  });
+    				showAdmins();
+    		  });
           break;
 
         case "#adm-alter-client":
@@ -124,7 +129,7 @@ $(function(){
           break;
 
         case "#adm-orders":
-			loadPageAdmOrders();
+    			loadPageAdmOrders();
           break;
 
         case "#adm-new-product":
@@ -151,6 +156,10 @@ $(function(){
     			showStock();
           break;
 
+        case "#login":
+          loadPageLogin();
+          break;
+
         case "#my-cart":
           loadPageCart();
           break;
@@ -171,16 +180,12 @@ $(function(){
           loadPageMyOrders();
           break;
           
-        case "#add-pet":
-          $("#my-area-content").load("new-pet.html");
-          break;
-		
     		case "#my-profile-edit":
           loadPageEditProfile();
           break;
 
-        case "#login":
-          loadPageLogin();
+        case "#my-sessions":
+          loadPageMySessions();
           break;
 
         case "#order-confirmation":
@@ -727,6 +732,14 @@ function loadPageMyOrders() {
                 cursor.continue();
             }
         }
+    });
+}
+
+function loadPageMySessions() {
+    
+    // carrega o html
+    $("#my-area-content").load("my-sessions.html", function() {
+        
     });
 }
 

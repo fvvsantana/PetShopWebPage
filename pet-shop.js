@@ -235,10 +235,16 @@ function loadPageLogin() {
 }
 
 function loadPageConfirmation() {
+    // verifica se está logado
     if (!userLoggedIn) {
         alert("Por favor, faça login para continuar.");
         changeHash('login');
-    } else {
+    } 
+    // verifica se não é um adm
+    else if (userSession.isAdmin) {
+        alert("Favor logar numa conta de cliente para realizar compras.");
+    }
+    else {
         $("#content").load("order-confirmation.html", function() {
             $("#nome").text("Nome: " + userSession.name);
             $("#email").text("E-mail: " + userSession.email);
@@ -262,7 +268,6 @@ function loadPageConfirmation() {
             }
         });
     }
-    
 }
 
 function loadPageEditProfile() {

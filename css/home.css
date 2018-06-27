@@ -1,0 +1,18 @@
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+  width: 100%;
+  margin: auto;
+}
+
+.carousel-caption h2 {
+  color:black;
+  text-shadow: 2px 2px 4px white;
+}
+
+.carousel-indicators .active {
+    background-color: #007bc7;
+}
+
+.carousel-indicators li {
+    border: 1px solid #007bc7;
+}

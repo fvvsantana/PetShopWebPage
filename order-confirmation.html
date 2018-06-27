@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9">
+      <h2 style="color: #007bc7;">Finalizar pedido</h2>
+      <hr/>
+      <div class="row justify-content-center" style="margin-left:0px; margin-right:0px">
+        <div class="well well-lg col-sm-5">
+          <h4>Dados pessoais</h4>
+          <p id="nome">Nome: xxxxxxx xxxxxx xxxxxx</p>
+          <p id="email">Email: xxxxxx@xxxx.com</p>
+          <p id="telefone">Telefone: (xx) xxxxx-xxxx</p>
+          <p id="cpf">CPF: xxx.xxx.xxx-xx</p>
+          <a onclick="changePersonalData()" class="btn btn-primary">Alterar informações</a>
+        </div>
+        <div class="well well-lg col-sm-offset-1 col-sm-5 col-sm-offset-1">
+          <h4>Endereço de entrega</h4>
+          <p id="endereco">Rua: xxxxxxxx xxxxx xxxxxx</p>
+          <a onclick="changeDeliverAdress()" class="btn btn-primary">Alterar endereço</a>
+        </div>
+      </div>
+      <div class="well row" style="margin-top:10px">
+        <div class="col-sm">
+          <h3>Pagamento</h3>
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a data-toggle="tab" href="#cartao">Cartão de crédito</a>
+            </li>
+            <li>
+              <a data-toggle="tab" href="#boleto">Boleto bancário</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div id="cartao" class="tab-pane fade in active">
+              <form>
+                <div class="form-group" style="margin-top: 15px">
+                  <input id="number" type="text" class="form-control" name="cardnumber" placeholder="Número do cartão">
+                </div>
+                <div class="form-group">
+                  <input id="date" type="text" class="form-control" name="cardexpdate" placeholder="Validade do cartão">
+                </div>
+                <div class="form-group">
+                  <input id="name" type="text" class="form-control" name="ownername" placeholder="Nome impresso no cartão">
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                  <input id="code" type="text" class="form-control" name="securitycode" placeholder="Código de segurança">
+                </div>
+              </form>
+            </div>
+            <div id="boleto" class="tab-pane fade"><br>
+              <p>Código de barras: xxxxx xxxxxx xxxxxx xxxxxx</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3" style="margin-top:6px">
+      <h3 style="color: #007bc7;">Resumo do pedido</h3>
+      <hr/>
+      <table class="cart-table">
+        <tr>
+          <th>Subtotal</th>
+          <td><h4 id="total1">R$ 209,99</h4></td>
+        </tr>
+        <tr>
+          <th>Frete</th>
+          <td><h4>R$ 10,00</h4></td>
+        </tr>
+        <tr>
+          <th>Total</th>
+          <td><h4 id="total2">R$ 209,99</h4></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <button onclick="changeHash('my-cart')" class="btn btn-danger" style="margin-bottom:15px; margin-right: 20px;">Cancelar</button>
+  <button onclick="finishOrder()" class="btn btn-success" style="margin-bottom:15px">Finalizar pedido</button>
+</div>

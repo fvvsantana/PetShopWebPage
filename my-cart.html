@@ -1,0 +1,42 @@
+<h2 style="color:#007bc7; text-align:center">Meu Carrinho</h2>
+<hr/>
+<h3 id="emptyCart" style="text-align:center; display:none;">Você ainda não tem produtos no carrinho.</h3>
+<section class="cart-section">
+  <table id="itemList" class="cart-table">
+    <tr>
+      <th>Produtos</th>
+      <th>Nome</th>
+      <th width="150px">Preço</th>
+      <th width="150px">Quantidade</th>
+      <th></th>
+    </tr>
+    <tr id="item">
+      <td><a id="itemImage" href="#"><img src="image/products/product01.jpg" alt="prod1" style="max-width:30%"></a></td>
+      <td><a id="itemName" href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a></td>
+      <td><h4 id="itemPrice">R$ 209,99</h4></td>
+      <td>
+        <input id="itemQuantity" class="quantity" type="number" placeholder="1">
+        <span id="itemUpdate" class="btn btn-primary glyphicon glyphicon-refresh"></span>
+      </td>
+      <td><span id="itemRemove" class="btn btn-primary">Remover</span></td>
+    </tr>
+  </table>
+</section>
+
+<section class="confirmation-section">
+  <table class="cart-table">
+    <tr>
+      <th>Subtotal</th>
+      <td><h4 id="total1">R$ 209,99</h4></td>
+    </tr>
+    <tr>
+      <th>Frete</th>
+      <td><h4>R$ 10,00</h4></td>
+    </tr>
+    <tr>
+      <th>Total</th>
+      <td><h4 id="total2">R$ 209,99</h4></td>
+    </tr>
+  </table>
+  <button id="productCart" class="btn btn-primary btn-lg" onclick="changeHash('order-confirmation')">Confirmar pedido</button>
+</section>

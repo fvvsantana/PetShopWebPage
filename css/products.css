@@ -1,10 +1,5 @@
 /* list */
 
-#categories{
-	flex:15%;
-	margin: 16px;
-}
-
 #categories hr{
     color: #007bc7;
     width: 100%;
@@ -49,25 +44,9 @@
 /**/
 
 
-#page{
-	display: flex;
-	flex-flow: column;
-}
-
-.row{
-	display: flex;
-	flex-flow: row;
-}
-
 #products-section{
-	display: flex;
-	flex: 85%;
-	flex-flow: column;
 	align-items: center;
-	flex-grow: 1;
-
-
-	margin: 16px;
+	padding-right: 100px;
 }
 
 #products-section .title{
@@ -78,23 +57,11 @@
 #products-section hr{
     color: #007bc7;
     width: 100%;
-
-}
-
-#products-section .grid{
-	display: flex;
-	flex-flow: row wrap;
 }
 
 #products-section .product-cell{
-	display: flex;
-	flex: 13%;
-	flex-flow: column;
 	justify-content: center;
 	align-items: center;
-
-
-	margin: 16px;
 
 }
 
@@ -104,24 +71,15 @@
 	text-align: center;
 }
 
-#products-section .product-cell h2{
+#products-section .product-cell h3{
 	color: #007bc7;
 	text-align: center;
 }
 
-#products-section .page-navigation{
-	display: flex;
-	flex-flow: row wrap;
-	align-items: center;
-	justify-content: center;
+#products-section .product-cell p{
+	color: #000;
 }
 
-#products-section .page-navigation a{
-    display: inline-block;
-    text-decoration: none;
-    background-color: #007bc7;
-    color: white;
-
-    margin: 4px;
-    padding: 4px 8px;
+#products-section .product-cell p:hover{
+	color: #004e75;
 }

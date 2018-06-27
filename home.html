@@ -1,0 +1,62 @@
+<div class="container">
+  <br>
+  <div id="my-carousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#my-carousel" data-slide-to="0" class="active"></li>
+      <li data-target="#my-carousel" data-slide-to="1"></li>
+      <li data-target="#my-carousel" data-slide-to="2"></li>
+      <li data-target="#my-carousel" data-slide-to="3"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+      <div class="item active">
+        <a href="javascript:changeHash('products')">
+            <img src="image/aloha.jpg" alt="Produto 1">
+            <div class="carousel-caption">
+              <h2>Todos os produtos Aloha com 30% de desconto!</h2>
+            </div>
+        </a>
+      </div>
+
+      <div class="item">
+        <a href="javascript:changeHash('products')">
+            <img src="image/royal.jpg" alt="Produto 2">
+            <div class="carousel-caption">
+              <h2>Confira nossa linha de rações especiais</h2>
+            </div>
+        </a>
+      </div>
+    
+      <div class="item">
+        <a href="javascript:changeHash('services')">
+            <img src="image/banho.jpg" alt="Serviço 1">
+            <div class="carousel-caption">
+              <h2>Agende agora mesmo o banho do seu pet!</h2>
+            </div>
+        </a>
+      </div>
+
+      <div class="item">
+        <a href="javascript:changeHash('services')">
+            <img src="image/consulta.jpg" alt="Serviço 2">
+            <div class="carousel-caption">
+              <h2>Traga seu pet para uma consulta com nossos veterinários</h2>
+            </div>
+        </a>
+      </div>
+  
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#my-carousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only">Anterior</span>
+    </a>
+    <a class="right carousel-control" href="#my-carousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Próximo</span>
+    </a>
+  </div>
+</div>

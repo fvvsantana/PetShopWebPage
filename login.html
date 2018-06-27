@@ -1,78 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="css/login.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
-</head>
-<style>
-
-</style>
-</head>
-<body>
-
-  <header id="header">
-    <div class="space">
-      <div class="logo">
-		<a href="main.html">
-			<img src="image/logo.png" alt="Logo" width="100%"> 
-		</a>
-      </div >
-      <form class="search-product">
-        <input type="text" id="product-input" placeholder="O que você procura?">
-        <a class="navbarbtn" href="products.html">Buscar</a>
-        
+<div class="container">
+  <div class="row">
+    <h2 style="color:#007bc7; text-align:center">Login de usuário</h2>
+    <hr/>
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <form style="margin-bottom:40px">
+        <div class="form-group">
+          <label for="cpf">CPF:</label>
+          <input class="form-control" type="text" id="user" name="cpf" placeholder="CPF" required maxlength="11">
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha:</label>
+          <input type="password" class="form-control" id="password" placeholder="Senha" name="senha" required>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="startLogin();">Login</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:changeHash('register')">Criar Conta</button>
       </form>
-      <div class="mystuff">
-        <a class="navbarbtn" href="myprofile.html">Minha área</a>
-        <a class="navbarbtn" href="cart.html">Meu carrinho</a>
-      </div>
     </div>
-    <nav>
-      <ul id="navbar">
-        <li class="dropdown">
-          <a href="products.html" class="dropbtn">Produtos</a>
-          <div class="dropdown-content">
-            <a href="products.html">Cães</a>
-            <a href="products.html">Gatos</a>
-            <a href="products.html">Pássaros</a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="services.html" class="dropbtn">Serviços</a>
-          <div class="dropdown-content">
-            <a href="service_view.html">Médicos</a>
-            <a href="service_view.html">Estéticos</a>
-          </div>
-        </li>
-        <li><a class="navbarbtn" href="about.html">Quem somos</a></li>
-      </ul>
-    </nav>
-  </header>
-
-
-<h2 class="tituloTela">Login de usuário</h2>
-
-<form>
-  <div class="container">
-  
-    <label for="usuario"><b>CPF</b></label><br>
-    <input type="text" placeholder="Usuário" name="usuario" required><br><br>
-	
-    <label for="senha"><b>Senha</b></label><br>
-    <input type="password" placeholder="Senha" name="senha" required><br>
-	
-	<label><input type="checkbox" name="lembrar"> Lembrar de mim</label><br>
-	
-    <button class="senha" type="submit">Login</button>
-        
+    <div class="col-sm-4"></div>
   </div>
- </form>
-
-  <div class="container">
-    <a href="#">Esqueci minha senha</a>
-  </div>
-
-</body>
-</html>
+</div>

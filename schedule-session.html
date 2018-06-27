@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <div class="row" style="padding-top: 15px;">
+    <div class="col-sm-2">
+      <div class="panel panel-primary" style="font-size:17px; margin-top:0px; border-color: #007bc7;" width="100%">
+        <div class="panel-heading" style="font-weight:bold; font-size: 22px; background-color: #007bc7;">Serviços</div>
+        <div class="panel-body">
+          <a href="javascript:changeHash('services-esteticos')">Estéticos</a><br><br>
+          <a href="javascript:changeHash('services-medicos')">Médicos</a><br><br>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-9" style="padding-left: 50px;">
+      <h2 style="color:#007bc7; margin-top: 0px;">Agendar sessão</h2>
+      <hr/>
+      <form style="margin-bottom:40px">
+        <div class="form-group row" >
+          <div class="col-xs-2">
+            <label for="date"><h4>Data:</h4></label>
+            <input type="date" class="form-control" id="date">
+          </div>
+        </div>
+        <div class="form-group row" >
+          <div class="col-xs-2">
+            <label for="time"><h4>Horário:</h4></label>
+            <input type="time" class="form-control" id="time">
+          </div>
+        </div>
+        <div class="form-group row" style="margin-bottom: 30px;">
+          <div class="col-xs-2">
+            <label for="pet"><h4>Pet:</h4></label>
+            <select class="form-control" id="type">
+              <option>Tobi</option>
+              <option>Rex</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-danger btn-md" style="margin-right: 20px;" onclick="">Cancelar</button> 
+        <button type="submit" class="btn btn-success btn-md" onclick="changeHash('scheduling-confirmation');">Confirmar</button> 
+      </form>
+    </div>
+    <div class="col-sm-1">
+    </div>
+  </div>
+</div>

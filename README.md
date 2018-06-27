@@ -1,2 +1,0 @@
-# PetShopWebPage
-Trabalho de faculdade.

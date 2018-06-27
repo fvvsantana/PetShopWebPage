@@ -1,209 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="css/styles.css">
-	<link rel="stylesheet" href="css/products.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Buscando produto</title>
-</head>
-<body>
+<div class="container-fluid">
+  <div class="row">
 
-  <header id="header">
-    <div class="space">
-      <div class="logo">
-		<a href="main.html">
-			<img src="image/logo.png" alt="Logo" width="100%"> 
-		</a>
-      </div >
-      <form class="search-product">
-        <input type="text" id="product-input" placeholder="O que você procura?">
-        <a class="navbarbtn" href="products.html">Buscar</a>
-        
-      </form>
-      <div class="mystuff">
-        <a class="navbarbtn" href="myprofile.html">Minha área</a>
-        <a class="navbarbtn" href="cart.html">Meu carrinho</a>
-      </div>
+    <div id="categories" class="col-sm-2">
+      <h3 class="title">CATEGORIAS</h3>
+      <hr/>
+      <ul class="animals-list">
+        <li><h4 class="animal-name"><a href="javascript:changeHash('products-cachorro')">Cachorro</a></h4></li>
+        <ul class="categories-list">
+          <li><a href="javascript:changeHash('products-cachorro-alimentos')">Alimentos</a></li>
+          <li><a href="javascript:changeHash('products-cachorro-brinquedos')">Brinquedos</a></li>
+        </ul> 
+        <li><h4 class="animal-name"><a href="javascript:changeHash('products-gato')">Gato</a></h4></li>
+        <ul class="categories-list">
+          <li><a href="javascript:changeHash('products-gato-alimentos')">Alimentos</a></li>
+          <li><a href="javascript:changeHash('products-gato-brinquedos')">Brinquedos</a></li>
+        </ul>
+      </ul> 
     </div>
-    <nav>
-      <ul id="navbar">
-        <li class="dropdown">
-          <a href="products.html" class="dropbtn">Produtos</a>
-          <div class="dropdown-content">
-            <a href="products.html">Cães</a>
-            <a href="products.html">Gatos</a>
-            <a href="products.html">Pássaros</a>
-          </div>
-        </li>
-        <li class="dropdown">
-          <a href="services.html" class="dropbtn">Serviços</a>
-          <div class="dropdown-content">
-            <a href="service_view.html">Médicos</a>
-            <a href="service_view.html">Estéticos</a>
-          </div>
-        </li>
-        <li><a class="navbarbtn" href="about.html">Quem somos</a></li>
-      </ul>
-    </nav>
-  </header>
-  
-	<div id="page">
-		<div class="row">
 
-			<aside id="categories">
-				<h3 class="title">CATEGORIAS</h3>
-				<hr>
-				<ul class="animals-list">
-					<li><h4 class="animal-name"><a href="#">Cachorro</a></h4></li>
-					<ul class="categories-list">
-						<li><a href="#">Alimentos</a></li>
-						<li><a href="#">Brinquedos</a></li>
-						<li><a href="#">Higiene</a></li>
-					</ul> 
-					<li><h4 class="animal-name"><a href="#">Gato</a></h4></li>
-					<ul class="categories-list">
-						<li><a href="#">Alimentos</a></li>
-						<li><a href="#">Brinquedos</a></li>
-						<li><a href="#">Higiene</a></li>
-					</ul> 
-					<li><h4 class="animal-name"><a href="#">Pássaro</a></h4></li>
-					<ul class="categories-list">
-						<li><a href="#">Alimentos</a></li>
-						<li><a href="#">Brinquedos</a></li>
-						<li><a href="#">Higiene</a></li>
-					</ul> 
-				</ul> 
-			</aside>
+    <div class="col-sm-10" id="products-section">
+      <h1 id="title" class="title">Produtos para cães</h1>
+      <hr/>
+      <div class="row">
+        
+        <div class="product-cell col-sm-2">
+          <a href="javascript:changeHash('product-view')">
+            <img id="productImage" src="image/products/product01.jpg" alt="product" width="100%"/>
+            <p id="productTitle">Ração Royal Canin Maxi - Cães Adultos - 15kg</p>
+            <h3 id="productPrice">R$ 209,99</h3>
+          </a>
+        </div>
 
-			<section id="products-section">
-					<h1 class="title">Produtos para cães</h1>
+      </div>     
+    </div>
 
-					<hr>
-
-					<div class="grid">
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-						
-						<div class="product-cell">
-							<a href="#"><img src="image/products/product01.jpg" alt="prod1" width="100%"></a>
-							<a href="#">Ração Royal Canin Maxi - Cães Adultos - 15kg</a>
-							<h2>R$ 209,99</h2>
-						</div>
-					</div>
-
-					<div class="page-navigation">
-						<h2><a href="#">1</a></h2>
-						<h2><a href="#">2</a></h2>
-						<h2><a href="#">3</a></h2>
-						<h2><a href="#">4</a></h2>
-						<h2><a href="#">5</a></h2>
-					</div>
-			</section>
-
-		</div>
-	</div>
-
-
-
-</body>
-</html>
+  </div>
+</div>

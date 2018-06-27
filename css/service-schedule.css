@@ -1,0 +1,103 @@
+/***************************/
+/* Services screen */
+
+.calendar {
+	max-width: 800px;
+}
+
+.month {
+    padding: 40px 25px;
+    width: 100%;
+    background: #007bc7;
+    text-align: center;
+}
+
+.month ul {
+    margin: 0;
+    padding: 0;
+	list-style-type: none;
+}
+
+.month ul li {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.month .prev {
+    float: left;
+    padding-top: 10px;
+	cursor: pointer;
+}
+
+.month .next {
+    float: right;
+    padding-top: 10px;
+	cursor: pointer;
+}
+
+.weekdays {
+    margin: 0;
+    padding: 10px 0;
+    background-color: #ddd;
+}
+
+.weekdays li {
+    display: inline-block;
+    width: 13.6%;
+    color: #666;
+    text-align: center;
+}
+
+.days {
+    padding: 10px 0;
+    background: #eee;
+    margin: 0;
+}
+
+.days li {
+    list-style-type: none;
+    display: inline-block;
+	padding: 10px;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size:12px;
+    color: #777;
+	cursor: pointer;
+}
+
+.days li:hover {
+	padding: 10px;
+    background: #007bc7;
+    color: white
+}
+
+.days li .active {
+	padding: 10px;
+    background: #fbcf3b;
+    color: white !important
+}
+
+select {
+	min-width: 20%;
+	font-size: 20px;
+	text-align: center;
+	text-align-last: center;
+}
+
+.agendar {
+	background-color: Green;
+	color: White;
+	padding: 15px 40px;
+	display: inline-block;
+	border-radius: 5px;
+}
+
+.agendar:hover {
+	background-color: #006800;
+}
+
+/***************************/
+

@@ -569,21 +569,22 @@ function addCart(productKey) {
 }
 
 function loadPageProductView (productKey) {
-    $("#content").load("product-view.html", function() {
-        let objectStore = db.transaction("products", "readonly").objectStore("products");
-        objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
-                $("#productImage").attr('src', cursor.value.picture);
-                $("#productName strong").text(cursor.value.name);
-                $("#productPrice").text("R$ " + cursor.value.price);
-                $("#productDesc").text(cursor.value.description);
+    // load the product details first
+    $.get('/product/', {id: productKey}, function(result){
+        // load the page html
+        $("#content").load("product-view.html", function() {
+            if (result) {
+                $("#productImage").attr('src', result.picture);
+                $("#productName strong").text(result.name);
+                $("#productPrice").text("R$ " + result.price);
+                $("#productDesc").text(result.description);
                 $("#productCart").attr('onclick', "addCart('" + productKey + "')");
-            } else {
+            }
+            else {
                 $("#productName strong").text("Produto não encontrado");
                 $("#productPrice").text("R$ ??");
             }
-        } 
+        })
     });
 }
 

@@ -629,7 +629,7 @@ function loadPageProducts(hash) {
 				let newElement = model.clone();
 				newElement.find("#productImage").attr('src', product.picture);
 				newElement.find("#productTitle").text(product.name);
-				newElement.find("#productPrice").text("R$ " + product.price);
+				newElement.find("#productPrice").text("R$ " + product.price.toFixed(2));
 				newElement.find("a").attr('href', "javascript:changeHash('product-view-" + product._id + "')");
 				$("#products-section > .row").append(newElement);	
 			}
@@ -1073,26 +1073,41 @@ function saveProduct(productKey) {
 
 
 function addProduct(){
-	
+    // vefica se os campos não estão vazios
     if($("#name").val().split(" ").join("") == "" || $("#price").val().split(" ").join("") == "" ){
-            alert("Preencha todos os campos!");
-            return;
+        alert("Preencha todos os campos!");
+        return;
     }
 	
-	if($.isNumeric($.trim($("#price").val()))){
-		
-		let newProduct = { name: $.trim($("#name").val()) , quantity: parseInt($("#qtd").val()), price: $.trim($("#price").val()), animal: $("#animal").val(), category: $("#category").val(), description: $.trim($("#description").val()), picture: "https://cdn.shopify.com/s/files/1/0364/6117/products/DSC0001_25a81afb-f969-4cb9-b760-b3dc038f0885_large.JPG?v=1464631702"};
-		
-		
-		let objectStore = db.transaction(["products"], "readwrite").objectStore("products");
-        objectStore.add(newProduct);
-		changeHash("adm-area");
-		
-	}
-	else{
-		alert("O preço deve ser um número!");
-	}
-	
+    // verifica se o preço é válido
+  	if(!$.isNumeric($.trim($("#price").val()))){
+        alert("O preço deve ser um número!");
+        return;  		
+  	}
+
+    // obtem  o id do novo produto
+    $.get('/product-id', function(result){
+
+        // cria o objeto do novo produto
+        let newProduct = {
+          _id: parseInt(result.new_id),
+          name: $.trim($("#name").val()), 
+          quantity: parseInt($("#qtd").val()), 
+          price: parseFloat($("#price").val()),
+          animal: $("#animal").val(), 
+          category: $("#category").val(), 
+          description: $("#description").val(), 
+          picture: "https://cdn.shopify.com/s/files/1/0364/6117/products/DSC0001_25a81afb-f969-4cb9-b760-b3dc038f0885_large.JPG?v=1464631702"
+        };
+
+        // adiciona o novo produto
+        $.post('/new-product', {product: JSON.stringify(newProduct)}, function(result){
+            if (result.success)
+              changeHash("adm-area");
+            else
+              alert("Erro ao inserir produto");
+        });
+    });
 }
 
 function showAdmins() {

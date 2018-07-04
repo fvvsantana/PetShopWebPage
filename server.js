@@ -105,7 +105,7 @@ app.get('/orders', (req, res)=>{
 // receive requests for details of an order
 app.get('/order', (req, res)=>{
 	// find orders made
-	db.collection('orders').find(_id: parseInt(req.body.id)).toArray(function(err, result){
+	db.collection('orders').find({_id: req.body.id}).toArray(function(err, result){
 		if(err) throw err;
 		// return the orders
 		res.send(result);

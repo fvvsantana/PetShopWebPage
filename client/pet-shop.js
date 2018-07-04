@@ -372,82 +372,6 @@ function finishOrder() {
     };
 }
 
-function loadPageEditPet (petKey) {
-    $("#my-area-content").load("pet-edit.html", function() {
-        let objectStore = db.transaction("pets", "readonly").objectStore("pets");
-        objectStore.openCursor(parseInt(petKey)).onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
-                $("#name").val(cursor.value.name);
-                $("#age").val(cursor.value.age);
-                $("#species").val(cursor.value.species);
-                $("#gender").val(cursor.value.gender);
-                $("#breed").val(cursor.value.breed);
-                $("#save").attr('onClick', "savePet(" + petKey + ");");
-            }
-        }
-    });
-}
-
-function removePet(petKey) {
-    if (confirm("Você tem certeza que quer remover este pet?")) {
-        let objectStore = db.transaction("pets", "readwrite").objectStore("pets");
-        let request = objectStore.delete(parseInt(petKey));
-        request.onerror = function(event) {
-            alert("Erro ao remover pet");
-        };
-        request.onsuccess = function(event) {
-            loadPageMyPet();
-        }
-    }
-}
-
-function savePet(petKey) {
-    // abre a tabela para escrita
-    let objectStore = db.transaction("pets", "readwrite").objectStore("pets");
-    
-    // chave igual a zero significa que é um novo pet
-    if (petKey == 0) {
-        let newPet = { 
-            owner: userSession.cpf, 
-            name: $("#name").val(), 
-            species: $("#species").val(), 
-            age: $("#age").val(), 
-            gender: $("#gender").val(), 
-            breed: $("#breed").val(), 
-            petPic:"https://i.ytimg.com/vi/z4Ysnd2bBJA/maxresdefault.jpg"};
-        if (newPet.species == "Gato")
-            newPet.petPic = "http://tabooh.info/wp-content/uploads/drawing-of-cats-cat-drawing-images-insssrenterprisesco-drawings-of-cats-bik-drawing.jpg";
-        
-        request = objectStore.add(newPet);
-        request.onerror = function(event) {
-            alert("Erro ao adicionar pet");
-        };
-        request.onsuccess = function(event) {
-            changeHash("my-pets");
-        }
-    }
-    // se a chave não é zero, está editando um pet existente
-    else {
-        objectStore.get(parseInt(petKey)).onsuccess = function(event) {
-            let pet = event.target.result;
-            pet.name = $("#name").val();
-            pet.age = $("#age").val();
-            pet.species = $("#species").val();
-            pet.gender = $("#gender").val();
-            pet.breed = $("#breed").val();
-            
-            let requestUpdate = objectStore.put(pet, petKey);
-            requestUpdate.onerror = function(event) {
-                alert("Erro ao atualizar pet");
-            };
-            requestUpdate.onsuccess = function(event) {
-                changeHash("my-pets");
-            }
-        }
-    }
-}
-
 function loadPageCart() {
     $("#content").load("my-cart.html", function() {
         // open the table
@@ -671,13 +595,16 @@ function loadPageMyArea() {
 }
 
 function loadPageMyProfile() {
+		
     $("#my-area-content").load("my-profile.html", function() {
-        $("#userName").text(userSession.name);
-        $("#userCPF").text(userSession.cpf);
-        $("#userAddress").text(userSession.address);
-        $("#userEmail").text(userSession.email);
-        $("#userTel").text(userSession.tel);
-        $("#userPic").attr('src', userSession.profilePic);
+		
+		$.get('/user/', {id: userSession.cpf}, function(result){
+			$("#userName").text(userSession.name);
+			$("#userCPF").text(userSession.cpf);
+			$("#userAddress").text(userSession.address);
+			$("#userEmail").text(userSession.email);
+			$("#userTel").text(userSession.tel);
+			$("#userPic").attr('src', userSession.profilePic);
     });
 }
 
@@ -685,27 +612,77 @@ function loadPageMyPet() {
     $("#my-area-content").load("my-pet.html", function() {
         let model = $("#indiv-pet").clone();
         $("#indiv-pet").remove();
-        
-        let objectStore = db.transaction("pets", "readonly").objectStore("pets").index("owner");
-        objectStore.openCursor(userSession.cpf).onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
-                let newElement = model.clone();        
-                newElement.find("#petPic").attr('src', cursor.value.petPic);
-                newElement.find("#petName").text(cursor.value.name);
-                newElement.find("#petSpecies").text(cursor.value.species);
-                newElement.find("#petAge").text(cursor.value.age);
-                newElement.find("#petGender").text(cursor.value.gender);
-                newElement.find("#petBreed").text(cursor.value.breed);
-                newElement.find("#petEdit").attr('onClick', "changeHash('pet-edit-" + cursor.primaryKey + "')");
-                newElement.find("#petRemove").attr('onClick', "removePet(" + cursor.primaryKey + ")");
+				
+	$.get('/pets/', {id: userSession.cpf}, function(result){
+			let i;	
+			for(i = 0; i < result.length; i++){
+				
+				let pet = result[i];
+                let newElement = model.clone();
+				
+                newElement.find("#petPic").attr('src', pet.petPic);
+                newElement.find("#petName").text(pet.name);
+                newElement.find("#petSpecies").text(pet.species);
+                newElement.find("#petAge").text(pet.age);
+                newElement.find("#petGender").text(pet.gender);
+                newElement.find("#petBreed").text(pet.breed);
+                newElement.find("#petEdit").attr('onClick', "changeHash('pet-edit-" + pet._id + "')");
+                newElement.find("#petRemove").attr('onClick', "removePet(" + pet._id + ")");
                 $("#petList").append(newElement);
                 
-                cursor.continue();
+            }
+        });
+    });
+}
+
+function loadPageEditPet (petKey) {
+    $("#my-area-content").load("pet-edit.html", function() {
+        let objectStore = db.transaction("pets", "readonly").objectStore("pets");
+        objectStore.openCursor(parseInt(petKey)).onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                $("#name").val(cursor.value.name);
+                $("#age").val(cursor.value.age);
+                $("#species").val(cursor.value.species);
+                $("#gender").val(cursor.value.gender);
+                $("#breed").val(cursor.value.breed);
+                $("#save").attr('onClick', "savePet(" + petKey + ");");
             }
         }
     });
 }
+
+function removePet(petKey) {
+    if (confirm("Você tem certeza que quer remover este pet?")) {
+        let objectStore = db.transaction("pets", "readwrite").objectStore("pets");
+        let request = objectStore.delete(parseInt(petKey));
+        request.onerror = function(event) {
+            alert("Erro ao remover pet");
+        };
+        request.onsuccess = function(event) {
+            loadPageMyPet();
+        }
+    }
+}
+
+function savePet(petKey) {
+
+    let pet = event.target.result;
+    pet.name = $("#name").val();
+    pet.age = $("#age").val();
+    pet.species = $("#species").val();
+    pet.gender = $("#gender").val();
+    pet.breed = $("#breed").val();
+            
+    let requestUpdate = objectStore.put(pet, petKey);
+        requestUpdate.onerror = function(event) {
+            alert("Erro ao atualizar pet");
+        };
+        requestUpdate.onsuccess = function(event) {
+            changeHash("my-pets");
+        }
+}
+
 
 function loadPageMyOrders() {
     
@@ -908,24 +885,24 @@ function showOrderDetails(order) {
         let itemModel = model.find("#item").clone();
         model.find("#item").remove();
         
-        // abre a tabela de pedidos
-        let objectStore = db.transaction("orders", "readonly").objectStore("orders");
-        objectStore.openCursor(parseInt(order)).onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
+        $.get('/order/', function(result){
+            let i;
+			for(i = 0; i < result.length; i++){
+				
+				let order = result[i];
                 // cria o elemento do pedido
                 let newElement = model.clone();        
-                newElement.find("#orderNumber").text("Pedido Nº: " + cursor.primaryKey);
-                newElement.find("#orderDate").text("Realizado em: " + cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " às " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
-                newElement.find("#buyerName").text(cursor.value.name);
-                newElement.find("#address").text("Endereço: " + cursor.value.address);
-                newElement.find("#tel").text("Telefone: " + cursor.value.tel);
-                newElement.find("#itemTotal").text(cursor.value.itemTotal);
-                newElement.find("#shipTotal").text(cursor.value.shipTotal);
-                newElement.find("#orderTotal").text(cursor.value.orderTotal);
+                newElement.find("#orderNumber").text("Pedido Nº: " + order._id);
+                newElement.find("#orderDate").text("Realizado em: " + order.date.getDate() + '/' + (order.date.getMonth()+1) + '/' + order.date.getFullYear() + " às " + order.date.getHours() + ':' + order.date.getMinutes());
+                newElement.find("#buyerName").text(order.name);
+                newElement.find("#address").text("Endereço: " + order.address);
+                newElement.find("#tel").text("Telefone: " + order.tel);
+                newElement.find("#itemTotal").text(order.itemTotal);
+                newElement.find("#shipTotal").text(order.shipTotal);
+                newElement.find("#orderTotal").text(order.orderTotal);
                 
                 // adiciona os produtos
-                cursor.value.products.forEach(function(product){
+                order.products.forEach(function(product){
                     let newItem = itemModel.clone();
                     newItem.find("#productPic img").attr('src', product.picture);
                     newItem.find("#productPic").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
@@ -956,23 +933,24 @@ function loadPageAdmOrders() {
         orderInfo.append($('<td id="orderDate"></td>'));
         orderInfo.append($('<td><button type="button" id="orderDetail" class="btn btn-default">Detalhes</button></td>'));
         
-        let objectStore = db.transaction("orders", "readonly").objectStore("orders");
-        objectStore.openCursor(null, 'prev').onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
+        $.get('/orders/', function(result){
+            let i;
+			for(i = 0; i < result.length; i++){
+				
+				let order = result[i];
                 let newInfo = orderInfo.clone();
-                newInfo.find('#orderNumber').text(cursor.primaryKey);
-                newInfo.find('#orderClient').text(cursor.value.name);
-                newInfo.find('#orderCpf').text(cursor.value.user);
-                newInfo.find('#orderTotal').text(cursor.value.orderTotal);
-                newInfo.find('#orderDate').text(cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " - " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
-                newInfo.find("#orderDetail").attr('onClick', "changeHash('order-detail-" + cursor.primaryKey + "')");
+				
+                newInfo.find('#orderNumber').text(order._id);
+                newInfo.find('#orderClient').text(order.name);
+                newInfo.find('#orderCpf').text(order.user);
+                newInfo.find('#orderTotal').text(order.orderTotal);
+                newInfo.find('#orderDate').text(order.date.getDate() + '/' + (order.date.getMonth()+1) + '/' + order.date.getFullYear() + " - " + order.date.getHours() + ':' + order.date.getMinutes());
+                newInfo.find("#orderDetail").attr('onClick', "changeHash('order-detail-" + order._id + "')");
                 
                 $("#ordersTable").append(newInfo);
             
-                cursor.continue();
             }
-        }
+        });
 	});
 }
 

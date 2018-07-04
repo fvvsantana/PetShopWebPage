@@ -53,6 +53,7 @@ app.get('/product-id', (req, res)=>{
 	);
 })
 
+//request for adding new products
 app.post('/new-product', (req, res)=>{
 	db.collection('products').insertOne(JSON.parse(req.body.product), function(err, result){
 		if(err) {
@@ -77,6 +78,36 @@ app.get('/users', (req, res)=>{
 	db.collection('users').find(req.query.user).toArray(function(err, result){
 		if(err) throw err;
 		// return the users
+		res.send(result);
+	});
+});
+
+// receive requests for pets
+app.get('/pets', (req, res)=>{
+	// find the pets of an user
+	db.collection('pets').find({owner: req.query.id}).toArray(function(err, result){
+		if(err) throw err;
+		// return the pets
+		res.send(result);
+	});
+});
+
+// receive requests for orders
+app.get('/orders', (req, res)=>{
+	// find orders made
+	db.collection('orders').find().toArray(function(err, result){
+		if(err) throw err;
+		// return the orders
+		res.send(result);
+	});
+});
+
+// receive requests for details of an order
+app.get('/order', (req, res)=>{
+	// find orders made
+	db.collection('orders').find(_id: parseInt(req.body.id)).toArray(function(err, result){
+		if(err) throw err;
+		// return the orders
 		res.send(result);
 	});
 });

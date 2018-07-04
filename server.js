@@ -63,6 +63,24 @@ app.post('/new-product', (req, res)=>{
 	});
 });
 
+// requests for deleting products
+app.delete('/products', (req, res)=>{
+	console.log(product);
+	db.collection('products').deleteOne(req.query.product, function(err, obj) {
+		if (err) throw err;
+	});
+});
+
+// receive requests for users
+app.get('/users', (req, res)=>{
+	// find the products
+	db.collection('users').find(req.query.user).toArray(function(err, result){
+		if(err) throw err;
+		// return the users
+		res.send(result);
+	});
+});
+
 let server = app.listen(3000, ()=>{
    let host = server.address().address;
    let port = server.address().port;

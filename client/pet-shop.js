@@ -15,6 +15,23 @@ request.onsuccess = function(event) {
     db = event.target.result;
 }
 
+$.delete = function(url, data, callback, type){
+ 
+  if ( $.isFunction(data) ){
+    type = type || callback,
+        callback = data,
+        data = {}
+  }
+ 
+  return $.ajax({
+    url: url,
+    type: 'DELETE',
+    success: callback,
+    data: data,
+    contentType: type
+  });
+}
+
 // criação do banco (caso necessário)
 request.onupgradeneeded = function(event) {
     
@@ -979,39 +996,37 @@ function showStock() {
         productInfo.append($('<td><button type="button" id="productEdit" class="btn btn-default">Alterar</button></td>'));
         productInfo.append($('<td><button type="button" id="productRemove" class="btn btn-default">Deletar</button></td>'));
         
-        let objectStore = db.transaction(["products"], "readonly").objectStore("products");
-        objectStore.openCursor().onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
-                let newInfo = productInfo.clone();
+		let query = {};
+        $.get('/products/', {product: query}, function(result){
+            let i;
+			for(i = 0; i < result.length; i++){
+		
+				product = result[i];
+				
+				let newInfo = productInfo.clone();
 
-                newInfo.find('.productName').text(cursor.value.name);
-                newInfo.find('.productQuantity').text(cursor.value.quantity);
-                newInfo.find('.productPrice').text('R$ ' + cursor.value.price);
-                newInfo.find('.productAnimal').text(cursor.value.animal);
-                newInfo.find('.productCategory').text(cursor.value.category);
-                newInfo.find("#productEdit").attr('onClick', "changeHash('product-edit-" + cursor.primaryKey + "')");
-                newInfo.find("#productRemove").attr('onClick', "removeProduct(" + cursor.primaryKey + ")");
+                newInfo.find('.productName').text(product.name);
+                newInfo.find('.productQuantity').text(product.quantity);
+                newInfo.find('.productPrice').text('R$ ' + product.price);
+                newInfo.find('.productAnimal').text(product.animal);
+                newInfo.find('.productCategory').text(product.category);
+                newInfo.find("#productEdit").attr('onClick', "changeHash('product-edit-" + product._id + "')");
+                newInfo.find("#productRemove").attr('onClick', "removeProduct(" + product._id + ")");
                 
                 $("#stockTable").append(newInfo);
-            
-                cursor.continue();
             }
-        }
+        });
 	});
 }
 
 function removeProduct(productKey) {
     if (confirm("Você tem certeza que quer remover este produto?")) {
-        let objectStore = db.transaction("products", "readwrite").objectStore("products");
-        let request = objectStore.delete(parseInt(productKey));
-        request.onerror = function(event) {
-            alert("Erro ao remover produto");
-        };
-        request.onsuccess = function(event) {
-            showStock();
-        }
+		let query = {id: productKey};
+			$.delete('/products', {product: query}, function(result){
+				showStock();
+		});	
     }
+	else return;
 }
 
 function modifyProduct (productKey) {
@@ -1107,33 +1122,33 @@ function showAdmins() {
 	adminInfo.append($('<td class="adminsAddress"></td>'));
 	adminInfo.append($('<td><button type="button" id="adminRemove" class="btn btn-default">Deletar</button></td>'));
 	
-	let objectStore = db.transaction(["users"], "readonly").objectStore("users");
-    objectStore.openCursor().onsuccess = function(event) {
-        let cursor = event.target.result;
-        if (cursor) {
-			
-			if(cursor.value.isAdmin == true){
-				
-				if(cursor.value.cpf != "admin"){
-				
-					let newInfo = adminInfo.clone();
-
-					newInfo.find('.adminsCPF').text(cursor.value.cpf);
-					newInfo.find('.adminsName').text(cursor.value.name);
-					newInfo.find('.adminsEmail').text(cursor.value.email);
-					newInfo.find('.adminsTel').text(cursor.value.tel);
-					newInfo.find('.adminsAddress').text(cursor.value.address);
-					newInfo.find("#adminRemove").attr('onClick', "removeAdmin(" + cursor.primaryKey + ")");
-			
-					$("#adminsTable").append(newInfo);
-				
-				}
-				
-			}
+	let query = {};
+        $.get('/users/', {product: query}, function(result){
+            let i;
+			for(i = 0; i < result.length; i++){
 		
-			cursor.continue();
-		}
-	}
+				user = result[i];
+				
+				if(user.isAdmin == true){
+					
+					if(user.cpf == "admin"){
+					
+						let newInfo = adminInfo.clone();
+        
+						newInfo.find('.adminsCPF').text(user.cpf);
+						newInfo.find('.adminsName').text(user.name);
+						newInfo.find('.adminsEmail').text(user.email);
+						newInfo.find('.adminsTel').text(user.tel);
+						newInfo.find('.adminsAddress').text(user.address);
+						newInfo.find("#adminsRemove").attr('onClick', "removeAdmin(" + user.cpf + ")");
+			
+						$("#usersTable").append(newInfo);
+					
+					}
+				}
+					
+			}
+		});
 }
 
 function removeAdmin(adminKey) {
@@ -1184,34 +1199,30 @@ function showCustomers() {
 	customerInfo.append($('<td class="usersAddress"></td>'));
 	customerInfo.append($('<td><button type="button" id="userRemove" class="btn btn-default">Deletar</button></td>'));
 	
-	let transaction = db.transaction("users", "readonly").objectStore("users").openCursor();
-    transaction.onsuccess = function(event) {
-        let cursor = event.target.result;
-        if (cursor) {
-			
-			if(cursor.value.isAdmin == false){
+	let query = {};
+        $.get('/users/', {product: query}, function(result){
+            let i;
+			for(i = 0; i < result.length; i++){
+		
+				user = result[i];
 				
-				let newInfo = customerInfo.clone();
+				if(user.isAdmin == false){
+					
+					let newInfo = customerInfo.clone();
         
-				newInfo.find('.usersCPF').text(cursor.value.cpf);
-				newInfo.find('.usersName').text(cursor.value.name);
-				newInfo.find('.usersEmail').text(cursor.value.email);
-				newInfo.find('.usersTel').text(cursor.value.tel);
-				newInfo.find('.usersAddress').text(cursor.value.address);
-				newInfo.find("#userRemove").attr('onClick', "removeUser(" + cursor.primaryKey + ")");
+					newInfo.find('.usersCPF').text(user.cpf);
+					newInfo.find('.usersName').text(user.name);
+					newInfo.find('.usersEmail').text(user.email);
+					newInfo.find('.usersTel').text(user.tel);
+					newInfo.find('.usersAddress').text(user.address);
+					newInfo.find("#userRemove").attr('onClick', "removeUser(" + user.cpf + ")");
 			
-				$("#usersTable").append(newInfo);
+					$("#usersTable").append(newInfo);
+				}
 					
 			}
-		
-			cursor.continue();
-		}
-	};
-    transaction.onerror = function(event) {
-        alert("Erro ao carregar clientes")
-    }
-    
-  });
+		});
+	});
 }
 
 function removeUser(userKey) {

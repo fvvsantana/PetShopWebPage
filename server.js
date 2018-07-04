@@ -26,8 +26,18 @@ app.get('/product', (req, res)=>{
 	})
 })
 
+// receive requests for products
+app.get('/products', (req, res)=>{
+	// find the products
+	db.collection('products').find(req.query.product).toArray(function(err, result){
+		if(err) throw err;
+		// return the products
+		res.send(result);
+	});
+});
+
 let server = app.listen(3000, ()=>{
    let host = server.address().address;
    let port = server.address().port;
-   console.log("Example app listening at http://%s:%s", host, port);
+   console.log("Happy Pet listening at port %s", port);
 })

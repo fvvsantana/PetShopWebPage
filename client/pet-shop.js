@@ -596,7 +596,7 @@ function capitalizeFirstLetter(string) {
 function loadPageProducts(hash) {
     // get the animal and category information
     let data = hash.split("-");
-    
+
     // load the products html
     $("#content").load("products.html", function() {
         
@@ -604,40 +604,37 @@ function loadPageProducts(hash) {
         let model = $(".product-cell").clone();
         $(".product-cell").remove();
         
-        // open the objectStore
-        let objectStore = db.transaction("products").objectStore("products");
-        let request;
-        
+		      
         // show all products
+		let query = {};
         if (data.length == 1) {
             $("#title").text("Todos os produtos");
-            request = objectStore.openCursor();
+			query = {};		
         }
         // show products for only one animal
         else if (data.length == 2) {
             $("#title").text("Produtos para " + data[1] + "s");
-            request = objectStore.index("animal").openCursor(capitalizeFirstLetter(data[1]));
+			query = {animal: capitalizeFirstLetter(data[1])};
         }
         // show products for only one animal and one category
         else {
             $("#title").text(capitalizeFirstLetter(data[2]) + " para " + data[1] + "s");
-            request = objectStore.index("animal-category").openCursor([capitalizeFirstLetter(data[1]),capitalizeFirstLetter(data[2])]);
+			query = {animal: capitalizeFirstLetter(data[1]), category: capitalizeFirstLetter(data[2])};
         }
-        
-        request.onsuccess =  event => {
-            let cursor = event.target.result;
-            if(cursor){
-                let product = cursor.value;
-                let newElement = model.clone();
-                newElement.find("#productImage").attr('src', product.picture);
-                newElement.find("#productTitle").text(product.name);
-                newElement.find("#productPrice").text("R$ " + product.price);
-                newElement.find("a").attr('href', "javascript:changeHash('product-view-" + cursor.primaryKey + "')");
-                $("#products-section > .row").append(newElement);
-                cursor.continue();
-            }
-        }
-    });
+		
+		$.get('/products/', {product: query}, function(result){
+			let i;
+			for(i = 0; i < result.length; i++){
+				let product = result[i];
+				let newElement = model.clone();
+				newElement.find("#productImage").attr('src', product.picture);
+				newElement.find("#productTitle").text(product.name);
+				newElement.find("#productPrice").text("R$ " + product.price);
+				newElement.find("a").attr('href', "javascript:changeHash('product-view-" + product._id + "')");
+				$("#products-section > .row").append(newElement);	
+			}
+        });
+	});
 }
 
 function loginClick() {

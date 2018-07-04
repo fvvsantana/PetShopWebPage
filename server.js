@@ -65,9 +65,9 @@ app.post('/new-product', (req, res)=>{
 
 // requests for deleting products
 app.delete('/products', (req, res)=>{
-	console.log(product);
-	db.collection('products').deleteOne(req.query.product, function(err, obj) {
+	db.collection('products').deleteOne({_id: parseInt(req.body.id)}, function(err, obj) {
 		if (err) throw err;
+		res.send('');
 	});
 });
 

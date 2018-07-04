@@ -15,20 +15,13 @@ request.onsuccess = function(event) {
     db = event.target.result;
 }
 
-$.delete = function(url, data, callback, type){
- 
-  if ( $.isFunction(data) ){
-    type = type || callback,
-        callback = data,
-        data = {}
-  }
+$.delete = function(url, data, callback){
  
   return $.ajax({
     url: url,
     type: 'DELETE',
     success: callback,
     data: data,
-    contentType: type
   });
 }
 
@@ -1020,13 +1013,12 @@ function showStock() {
 }
 
 function removeProduct(productKey) {
-    if (confirm("Você tem certeza que quer remover este produto?")) {
-		let query = {id: productKey};
-			$.delete('/products', {product: query}, function(result){
+  if (confirm("Você tem certeza que quer remover este produto?")) {
+			$.delete('/products', {id: parseInt(productKey)}, function(result){
 				showStock();
 		});	
-    }
-	else return;
+  }
+  else return;
 }
 
 function modifyProduct (productKey) {
@@ -1050,40 +1042,21 @@ function saveProduct(productKey) {
     // abre a tabela para escrita
     let objectStore = db.transaction("products", "readwrite").objectStore("products");
     
-    // chave igual a zero significa que é um novo produto
-    if (productKey == 0) {
-        let newProduct = {  
-            name: $("#name").val(), 
-            quantity: $("#qtd").val(), 
-            price: $("#price").val(), 
-            description: $("#description").val()};
-        
-        request = objectStore.add(newProduct);
-        request.onerror = function(event) {
-            alert("Erro ao adicionar produto");
-        };
-        request.onsuccess = function(event) {
-            changeHash("adm-area");
-        }
-    }
-    // se a chave não é zero, está editando um produto existente
-    else {
 		objectStore.get(parseInt(productKey)).onsuccess = function(event) {
-			let product = event.target.result;
-			product.name = $("#name").val();
-			product.quantity = parseInt($("#qtd").val());
-			product.price = $("#price").val();
-			product.description = $("#description").val();
-            
-			let requestUpdate = objectStore.put(product, productKey);
-			requestUpdate.onerror = function(event) {
-				alert("Erro ao atualizar produto");
-			};
-			requestUpdate.onsuccess = function(event) {
-				changeHash("adm-area");
-			}
+  			let product = event.target.result;
+  			product.name = $("#name").val();
+  			product.quantity = parseInt($("#qtd").val());
+  			product.price = $("#price").val();
+  			product.description = $("#description").val();
+              
+  			let requestUpdate = objectStore.put(product, productKey);
+  			requestUpdate.onerror = function(event) {
+  				alert("Erro ao atualizar produto");
+  			};
+  			requestUpdate.onsuccess = function(event) {
+  				changeHash("adm-area");
+  			}
 		}
-	}
 }
 
 

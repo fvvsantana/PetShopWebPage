@@ -151,6 +151,7 @@ app.post('/new-admin', (req, res)=>{
 	});
 });
 
+//receive requests for a specific pet
 app.get('/pet', (req, res)=>{
 	// find the pet with the received id
 	console.log(req.query.id);
@@ -164,6 +165,7 @@ app.get('/pet', (req, res)=>{
 	});
 });
 
+//receive requests for editing a pet
 app.put('/edit-pet', (req, res)=>{
   let modPet = JSON.parse(req.body.pet);
   console.log(modPet);
@@ -178,6 +180,16 @@ app.put('/edit-pet', (req, res)=>{
   });
 });
 
+//receive requests for deleting a specific pet
+app.delete('/remove-pet', (req, res)=>{
+	let ObjectId = require('mongodb').ObjectId;
+	x = new ObjectId(req.body.id);
+	db.collection('pets').deleteOne({_id: x}, function(err, obj) {
+		if (err) throw err;
+		res.send('');
+	});
+});
+
 // receive requests for pets (user page)
 app.get('/pets', (req, res)=>{
 	// find the pets of an user
@@ -188,6 +200,7 @@ app.get('/pets', (req, res)=>{
 	});
 });
 
+//receive requests for new pets
 app.post('/new-pet', (req, res)=>{
 	db.collection('pets').insertOne(JSON.parse(req.body.pet), function(err, result){
 		if(err) {

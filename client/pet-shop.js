@@ -636,7 +636,7 @@ function loadPageMyPet() {
                 newElement.find("#petGender").text(pet.gender);
                 newElement.find("#petBreed").text(pet.breed);
                 newElement.find("#petEdit").attr('onClick', "changeHash('pet-edit-" + pet._id + "')");
-                newElement.find("#petRemove").attr('onClick', "removePet(" + pet._id + ")");
+                newElement.find("#petRemove").attr('onClick', "removePet('" + pet._id + "')");
                 $("#petList").append(newElement);
                 
             }
@@ -659,16 +659,12 @@ function loadPageEditPet (petKey) {
 }
 
 function removePet(petKey) {
-    if (confirm("Você tem certeza que quer remover este pet?")) {
-        let objectStore = db.transaction("pets", "readwrite").objectStore("pets");
-        let request = objectStore.delete(parseInt(petKey));
-        request.onerror = function(event) {
-            alert("Erro ao remover pet");
-        };
-        request.onsuccess = function(event) {
-            loadPageMyPet();
-        }
-    }
+	if (confirm("Você tem certeza que quer remover este pet?")) {
+			$.delete('/remove-pet', {id: petKey}, function(result){
+				loadPageMyPet();
+		});	
+  }
+  else return;
 }
 
 function savePet(petKey) {

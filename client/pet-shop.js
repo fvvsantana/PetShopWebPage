@@ -833,14 +833,12 @@ function saveAccount(){
         }
     
         if($("#registerConfirmPassword").val() == newUser.password){
-			let objectStore = db.transaction("users","readwrite").objectStore("users");
-            let request = objectStore.put(newUser);
-            request.onerror = function(event) {
-                alert("Erro ao salvar a conta");
-            };
-            request.onsuccess = function(event) {
-                changeHash("my-area");
-            }
+            $.post('/new-user', {user: JSON.stringify(newUser)}, function(result){
+                if (result.success)
+                  changeHash('login');
+                else
+                  alert("Erro ao inserir usuário");
+            });
         }
         else{
             alert("Erro na confirmação de senha!");

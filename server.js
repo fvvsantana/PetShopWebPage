@@ -120,6 +120,20 @@ app.delete('/users', (req, res)=>{
 	});
 });
 
+//request for adding new users
+app.post('/new-user', (req, res)=>{
+	db.collection('users').insertOne(JSON.parse(req.body.user), function(err, result){
+		if(err) {
+            return res.send({
+                success: false,
+                message: 'Pessoa já cadastrada!'
+            });
+		}
+		res.send({success: true});
+	});
+});
+
+
 //request for adding new admins (admin page)
 app.post('/new-admin', (req, res)=>{
 	db.collection('users').insertOne(JSON.parse(req.body.admin), function(err, result){

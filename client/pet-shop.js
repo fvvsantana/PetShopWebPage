@@ -676,20 +676,22 @@ function removePet(petKey) {
 
 function savePet(petKey) {
 
-    let pet = event.target.result;
-    pet.name = $("#name").val();
-    pet.age = $("#age").val();
-    pet.species = $("#species").val();
-    pet.gender = $("#gender").val();
-    pet.breed = $("#breed").val();
-            
-    let requestUpdate = objectStore.put(pet, petKey);
-        requestUpdate.onerror = function(event) {
-            alert("Erro ao atualizar pet");
-        };
-        requestUpdate.onsuccess = function(event) {
-            changeHash("my-pets");
-        }
+	if(petKey == 0){
+		let newPet = {	name: $("#name").val(),
+						age: $("#age").val(),
+						owner: userSession.cpf,
+						species: $("#species").val(),
+						gender: $("#gender").val(),
+						breed: $("#breed").val(),
+					  };
+		$.post('/new-pet', {pet: JSON.stringify(newPet)}, function(result){
+            if (result.success)
+              changeHash("my-area");
+            else
+              alert("Erro ao inserir pet");
+        });
+	}       
+
 }
 
 

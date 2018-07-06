@@ -70,6 +70,11 @@ app.put('/product-modify', (req, res)=>{
   let modProduct = JSON.parse(req.body.product);
   console.log(modProduct);
   db.collection("products").updateOne({_id:modProduct._id}, { $set: modProduct }, function(err, result) {
+		if(err) {
+			res.send({success: false});
+			throw err;
+		}
+		res.send({success: true});
   });
 });
 
@@ -140,6 +145,18 @@ app.get('/pets', (req, res)=>{
 		if(err) throw err;
 		// return the pets
 		res.send(result);
+	});
+});
+
+app.post('/new-pet', (req, res)=>{
+	db.collection('pets').insertOne(JSON.parse(req.body.pet), function(err, result){
+		if(err) {
+            return res.send({
+                success: false,
+                message: 'Pet já cadastrado!'
+            });
+		}
+		res.send({success: true});
 	});
 });
 

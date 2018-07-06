@@ -573,7 +573,7 @@ function loadPageProducts(hash) {
 				let newElement = model.clone();
 				newElement.find("#productImage").attr('src', product.picture);
 				newElement.find("#productTitle").text(product.name);
-				newElement.find("#productPrice").text("R$ " + product.price.toFixed(2));
+				newElement.find("#productPrice").text("R$ " + parseFloat(product.price).toFixed(2));
 				newElement.find("a").attr('href', "javascript:changeHash('product-view-" + product._id + "')");
 				$("#products-section > .row").append(newElement);	
 			}
@@ -755,51 +755,51 @@ function loadPageMySessions() {
 function startLogin() {
     let loginID = $("#user").val();
     let loginPass = $("#password").val();
+	
+	let loginInfo = { 	cpf: $("#user").val(),
+						password: $("#password").val()
+					};
     
     if($("#user").val() == "" || loginPass == ""){
         alert("Preencha todos os campos!");
         return;
     }
     else{
-        let objectStore = db.transaction(["users"]).objectStore("users");
-        let request = objectStore.openCursor(loginID);
-        request.onsuccess =  event => {
-        
-            let cursor = event.target.result;
-            if(cursor){
-                if(loginPass == cursor.value.password){
-                    // set user as logged in 
-                    userLoggedIn = true;
+		
+		$.get('/login', {user: loginInfo}, function(result){
+			if (result == ''){
+				alert("CPF e/ou senha errada!");
+				return;
+			}
+			else{
+				
+				// set user as logged in
+				userLoggedIn = true;
                     
-                    // get the user data
-                    userSession.name = cursor.value.name;
-                    userSession.cpf = cursor.value.cpf;
-                    userSession.email = cursor.value.email;
-                    userSession.address = cursor.value.address;
-                    userSession.tel = cursor.value.tel;
-                    userSession.profilePic = cursor.value.profilePic;
-                    userSession.isAdmin = cursor.value.isAdmin;
+				// get the user data
+				userSession.name = result.name;
+				userSession.cpf = result.cpf;
+				userSession.email = result.email;
+				userSession.address = result.address;
+				userSession.tel = result.tel;
+				userSession.profilePic = result.profilePic;
+				userSession.isAdmin = result.isAdmin;
                     
-                    // update the header according to the user type
-                    if (userSession.isAdmin) {
-                        $("#loginButton").text("Área do Administrador");
-                        $("#cartButton").hide();
-                        changeHash('adm-area');
-                    } else {
-                        $("#loginButton").text("Minha Área");
-                        changeHash('my-area');
-                    }
-            }
-                else{
-                    alert("Senha incorreta");
-                }
-            }
-            else{
-                alert("Não existe um usuário com esse CPF");
-            }
-        };
+				// update the header according to the user type
+				if (userSession.isAdmin) {
+					$("#loginButton").text("Área do Administrador");
+					$("#cartButton").hide();
+					changeHash('adm-area');
+				} else {
+					$("#loginButton").text("Minha Área");
+					changeHash('my-area');
+					return;
+				}
+			}
+		});
     }
 }
+
 
 function startLogoff(){
     // reset buttons
@@ -1146,9 +1146,10 @@ function addAdmin(){
 			$.post('/new-admin', {admin: JSON.stringify(newAdmin)}, function(result){
 				if (result.success)
 					changeHash("adm-area");
-				else
+				else{
 					alert("Erro ao inserir administrador (já existe um administrador com o CPF utilizado)");
 					return;
+				}
 			});
             changeHash('adm-area');
         }

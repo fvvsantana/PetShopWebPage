@@ -81,12 +81,33 @@ app.delete('/products', (req, res)=>{
 	});
 });
 
+// receive requests for login
+app.get('/login', (req, res)=>{
+	// find the users
+	db.collection('users').findOne(req.query.user, function(err, result){
+		console.log(result);
+		if(err) {
+            return res.send({
+                success: false,
+                message: 'Erro ao pegar usuário!'
+            });
+		}
+		// return the users
+		res.send(result);
+	});
+});
+
 // receive requests for users
 app.get('/users', (req, res)=>{
 	// find the users
 	db.collection('users').find(req.query.user).toArray(function(err, result){
-		if(err) throw err;
 		console.log(result);
+		if(err) {
+            return res.send({
+                success: false,
+                message: 'Erro ao pegar usuário!'
+            });
+		}
 		// return the users
 		res.send(result);
 	});

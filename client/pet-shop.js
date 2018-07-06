@@ -25,6 +25,16 @@ $.delete = function(url, data, callback){
   });
 }
 
+$.put = function(url, data, callback){
+ 
+  return $.ajax({
+    url: url,
+    type: 'PUT',
+    success: callback,
+    data: data,
+  });
+}
+
 // criação do banco (caso necessário)
 request.onupgradeneeded = function(event) {
     
@@ -597,15 +607,14 @@ function loadPageMyArea() {
 function loadPageMyProfile() {
 		
     $("#my-area-content").load("my-profile.html", function() {
-		
-		$.get('/user/', {id: userSession.cpf}, function(result){
-			$("#userName").text(userSession.name);
-			$("#userCPF").text(userSession.cpf);
-			$("#userAddress").text(userSession.address);
-			$("#userEmail").text(userSession.email);
-			$("#userTel").text(userSession.tel);
-			$("#userPic").attr('src', userSession.profilePic);
+        $("#userName").text(userSession.name);
+        $("#userCPF").text(userSession.cpf);
+        $("#userAddress").text(userSession.address);
+        $("#userEmail").text(userSession.email);
+        $("#userTel").text(userSession.tel);
+        $("#userPic").attr('src', userSession.profilePic);
     });
+
 }
 
 function loadPageMyPet() {
@@ -917,7 +926,7 @@ function showOrderDetails(order) {
                 // adiciona o pedido na lista
                 $("#order-list").append(newElement);
             }
-        }
+        });
     });
 }
 
@@ -1001,41 +1010,31 @@ function removeProduct(productKey) {
 
 function modifyProduct (productKey) {
     $("#adm-content").load("adm/alter-product.html", function() {
-        let objectStore = db.transaction("products", "readonly").objectStore("products");
-        objectStore.openCursor(parseInt(productKey)).onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
-                $("#name").val(cursor.value.name);
-                $("#qtd").val(cursor.value.quantity);
-                $("#price").val(cursor.value.price);
-                $("#description").val(cursor.value.description);
-				$("#picture").attr('src', cursor.value.picture);
-                $("#save").attr('onClick', "saveProduct(" + productKey + ");");
-            }
-        }
+        $.get('/product', {id: parseInt(productKey)}, function(result){
+			let product = result;
+            $("#name").val(product.name);
+            $("#qtd").val(product.quantity);
+            $("#price").val(product.price);
+            $("#description").val(product.description);
+			$("#picture").attr('src', product.picture);
+            $("#save").attr('onClick', "saveProduct(" + product._id + ");");
+        });
     });
 }
 
 function saveProduct(productKey) {
-    // abre a tabela para escrita
-    let objectStore = db.transaction("products", "readwrite").objectStore("products");
-    
-		objectStore.get(parseInt(productKey)).onsuccess = function(event) {
-  			let product = event.target.result;
-  			product.name = $("#name").val();
-  			product.quantity = parseInt($("#qtd").val());
-  			product.price = $("#price").val();
-  			product.description = $("#description").val();
-              
-  			let requestUpdate = objectStore.put(product, productKey);
-  			requestUpdate.onerror = function(event) {
-  				alert("Erro ao atualizar produto");
-  			};
-  			requestUpdate.onsuccess = function(event) {
-  				changeHash("adm-area");
-  			}
-		}
+  
+	let newProduct = {	_id: productKey,
+					name: $("#name").val(),
+					quantity: parseInt($("#qtd").val()),
+					price: $("#price").val(),
+					description: $("#description").val(),
+					};
+					
+    $.put('product-modify', {product: JSON.stringify(newProduct)});
+  	changeHash("adm-area");
 }
+
 
 
 function addProduct(){
@@ -1089,7 +1088,7 @@ function showAdmins() {
 	adminInfo.append($('<td><button type="button" id="adminRemove" class="btn btn-default">Deletar</button></td>'));
 	
 	let query = {};
-        $.get('/users/', {product: query}, function(result){
+        $.get('/users/', {user: query}, function(result){
             let i;
 			for(i = 0; i < result.length; i++){
 		
@@ -1097,7 +1096,7 @@ function showAdmins() {
 				
 				if(user.isAdmin == true){
 					
-					if(user.cpf == "admin"){
+					if(user.cpf != "admin"){
 					
 						let newInfo = adminInfo.clone();
         
@@ -1106,9 +1105,9 @@ function showAdmins() {
 						newInfo.find('.adminsEmail').text(user.email);
 						newInfo.find('.adminsTel').text(user.tel);
 						newInfo.find('.adminsAddress').text(user.address);
-						newInfo.find("#adminsRemove").attr('onClick', "removeAdmin(" + user.cpf + ")");
+						newInfo.find('#adminRemove').attr('onClick', "removeAdmin(" + user.cpf + ")");
 			
-						$("#usersTable").append(newInfo);
+						$("#adminsTable").append(newInfo);
 					
 					}
 				}
@@ -1120,15 +1119,11 @@ function showAdmins() {
 function removeAdmin(adminKey) {
     if (confirm("Você tem certeza que quer remover este administrador?")) {
 		adminKey = adminKey.toString();
-        let objectStore = db.transaction("users", "readwrite").objectStore("users");
-        let request = objectStore.delete(adminKey);
-        request.onerror = function(event) {
-            alert("Erro ao remover administrador");
-        };
-        request.onsuccess = function(event) {
-            showAdmins();
-        };
+		$.delete('/users', {id: adminKey}, function(result){
+			showAdmins();
+		});
     }
+	else return;
 }
 
 function addAdmin(){
@@ -1138,12 +1133,23 @@ function addAdmin(){
             return;
     }
     else{
-        let newUser = { cpf: $.trim($("#registerCPF").val()), name: $.trim($("#registerName").val()), tel: $.trim($("#registerTel").val()), address: $.trim($("#registerAddress").val()), email: $.trim($("#registerEmail").val()), password: $("#registerPassword").val(), profilePic: $("#registerProfilePic").val(), isAdmin: true };
+        let newAdmin = { cpf: $.trim($("#registerCPF").val()), 
+						name: $.trim($("#registerName").val()), 
+						tel: $.trim($("#registerTel").val()), 
+						address: $.trim($("#registerAddress").val()), 
+						email: $.trim($("#registerEmail").val()), 
+						password: $("#registerPassword").val(), 
+						profilePic: $("#registerProfilePic").val(), 
+						isAdmin: true };
     
-        if($("#registerConfirmPassword").val() == newUser.password){
-			let objectStore = db.transaction(["users"],"readwrite").objectStore("users");
-            objectStore.add(newUser);
-            
+        if($("#registerConfirmPassword").val() == newAdmin.password){
+			$.post('/new-admin', {admin: JSON.stringify(newAdmin)}, function(result){
+				if (result.success)
+					changeHash("adm-area");
+				else
+					alert("Erro ao inserir administrador (já existe um administrador com o CPF utilizado)");
+					return;
+			});
             changeHash('adm-area');
         }
         else{
@@ -1166,7 +1172,7 @@ function showCustomers() {
 	customerInfo.append($('<td><button type="button" id="userRemove" class="btn btn-default">Deletar</button></td>'));
 	
 	let query = {};
-        $.get('/users/', {product: query}, function(result){
+        $.get('/users/', {user: query}, function(result){
             let i;
 			for(i = 0; i < result.length; i++){
 		
@@ -1191,29 +1197,16 @@ function showCustomers() {
 	});
 }
 
+//FUNÇÃO INCOMPLETA
 function removeUser(userKey) {
     if (confirm("Você tem certeza que quer remover este cliente?")) {
 		userKey = userKey.toString();
-		
-        let objectStore = db.transaction("users", "readwrite").objectStore("users");
-        let request = objectStore.delete(userKey);
-        request.onerror = function(event) {
-            alert("Erro ao remover cliente");
-        };
-        request.onsuccess = function(event) {
-			let petsStore = db.transaction("pets", "readwrite").objectStore("pets").index("owner");
-			let petsDelete = petsStore.openKeyCursor(userKey);       
-			petsDelete.onsucess = function(){
-				let cursor = petsDelete.result;
-				if(cursor){
-					petsStore.delete(cursor.key);
-					cursor.continue;
-				}
-				
-			}
-			showCustomers();
-		}
+		$.delete('/users', {id: userKey}, function(result){
+			$.delete('/pets', {id: userKey}, function(result){
+			});
+		});
     }
+	else return;
 }
 
 /* FUNÇÕES PARA ADIÇÃO DE EXEMPLOS NO BANCO: */

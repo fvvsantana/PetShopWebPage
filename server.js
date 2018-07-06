@@ -15,13 +15,13 @@ MongoClient.connect(uri, function(err, client) {
 	db = client.db('petshop');
 });
 
+//initiate the SPA
 app.get('/', (req, res)=>{
    res.sendFile('/client/index.html', {root: __dirname });
 })
 
 // receive requests for product details
 app.get('/product', (req, res)=>{
-	console.log('procurando ' + req.query.id);
 	// find the product with the received id
 	db.collection('products').findOne({_id: parseInt(req.query.id)}, function(err, result){
 		if(err) throw err;
@@ -30,7 +30,7 @@ app.get('/product', (req, res)=>{
 	})
 })
 
-// receive requests for products
+// receive requests for all products (products page)
 app.get('/products', (req, res)=>{
 	// find the products
 	db.collection('products').find(req.query.product).toArray(function(err, result){
@@ -40,6 +40,7 @@ app.get('/products', (req, res)=>{
 	});
 });
 
+//generate a sequence of ids for products
 app.get('/product-id', (req, res)=>{
 	db.collection('product-counter').findAndModify(
 		{_id: 'product_id'},
@@ -53,7 +54,7 @@ app.get('/product-id', (req, res)=>{
 	);
 })
 
-//request for adding new products
+//request for adding new products (admin page)
 app.post('/new-product', (req, res)=>{
 	db.collection('products').insertOne(JSON.parse(req.body.product), function(err, result){
 		if(err) {
@@ -64,7 +65,15 @@ app.post('/new-product', (req, res)=>{
 	});
 });
 
-// requests for deleting products
+//request for updating a product (admin page)
+app.put('/product-modify', (req, res)=>{
+  let modProduct = JSON.parse(req.body.product);
+  console.log(modProduct);
+  db.collection("products").updateOne({_id:modProduct._id}, { $set: modProduct }, function(err, result) {
+  });
+});
+
+// requests for deleting products (admin page)
 app.delete('/products', (req, res)=>{
 	db.collection('products').deleteOne({_id: parseInt(req.body.id)}, function(err, obj) {
 		if (err) throw err;
@@ -74,15 +83,36 @@ app.delete('/products', (req, res)=>{
 
 // receive requests for users
 app.get('/users', (req, res)=>{
-	// find the products
+	// find the users
 	db.collection('users').find(req.query.user).toArray(function(err, result){
 		if(err) throw err;
+		console.log(result);
 		// return the users
 		res.send(result);
 	});
 });
 
-// receive requests for pets
+app.delete('/users', (req, res)=>{
+	db.collection('users').deleteOne({cpf: req.body.id}, function(err, obj) {
+		if (err) throw err;
+		res.send('');
+	});
+});
+
+//request for adding new admins (admin page)
+app.post('/new-admin', (req, res)=>{
+	db.collection('users').insertOne(JSON.parse(req.body.admin), function(err, result){
+		if(err) {
+            return res.send({
+                success: false,
+                message: 'Pessoa já cadastrada!'
+            });
+		}
+		res.send({success: true});
+	});
+});
+
+// receive requests for pets (user page)
 app.get('/pets', (req, res)=>{
 	// find the pets of an user
 	db.collection('pets').find({owner: req.query.id}).toArray(function(err, result){
@@ -92,7 +122,7 @@ app.get('/pets', (req, res)=>{
 	});
 });
 
-// receive requests for orders
+// receive requests for all orders (admin page)
 app.get('/orders', (req, res)=>{
 	// find orders made
 	db.collection('orders').find().toArray(function(err, result){
@@ -102,7 +132,7 @@ app.get('/orders', (req, res)=>{
 	});
 });
 
-// receive requests for details of an order
+// receive requests for details of an order (user page)
 app.get('/order', (req, res)=>{
 	// find orders made
 	db.collection('orders').find({_id: req.body.id}).toArray(function(err, result){
@@ -112,6 +142,7 @@ app.get('/order', (req, res)=>{
 	});
 });
 
+//initiate the server at port 3000
 let server = app.listen(3000, ()=>{
    let host = server.address().address;
    let port = server.address().port;

@@ -90,7 +90,6 @@ app.delete('/products', (req, res)=>{
 app.get('/login', (req, res)=>{
 	// find the users
 	db.collection('users').findOne(req.query.user, function(err, result){
-		console.log(result);
 		if(err) {
             return res.send({
                 success: false,
@@ -153,8 +152,12 @@ app.post('/new-admin', (req, res)=>{
 });
 
 app.get('/pet', (req, res)=>{
-	// find the product with the received id
-	db.collection('pets').findOne({_id: "ObjectId(" + req.query.id + ")"}, function(err, result){
+	// find the pet with the received id
+	console.log(req.query.id);
+	let ObjectId = require('mongodb').ObjectId;
+	x = new ObjectId(req.query.id);
+	db.collection('pets').findOne({_id:x}, function(err, result){
+		console.log(result);
 		if(err) throw err;
 		// return the product object
 		res.send(result);
@@ -163,8 +166,10 @@ app.get('/pet', (req, res)=>{
 
 app.put('/edit-pet', (req, res)=>{
   let modPet = JSON.parse(req.body.pet);
-  console.log(modProduct);
-  db.collection("pets").updateOne({_id:modPet._id}, { $set: modPet }, function(err, result) {
+  console.log(modPet);
+  let ObjectId = require('mongodb').ObjectId;
+	x = new ObjectId(req.body.petId);
+  db.collection("pets").updateOne({_id:x}, { $set: modPet }, function(err, result) {
 		if(err) {
 			res.send({success: false});
 			throw err;

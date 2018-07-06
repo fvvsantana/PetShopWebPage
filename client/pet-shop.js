@@ -653,7 +653,7 @@ function loadPageEditPet (petKey) {
             $("#species").val(pet.species);
             $("#gender").val(pet.gender);
             $("#breed").val(pet.breed);
-            $("#save").attr('onClick', "savePet(" + petKey + ");");
+            $("#save").attr('onClick', "savePet('" + petKey + "')");
         });
     });
 }
@@ -672,8 +672,8 @@ function removePet(petKey) {
 }
 
 function savePet(petKey) {
-
-	if(petKey == 0){
+	console.log(petKey);
+	if(petKey == '0'){
 		let newPet = {	name: $("#name").val(),
 						age: $("#age").val(),
 						owner: userSession.cpf,
@@ -686,7 +686,7 @@ function savePet(petKey) {
               changeHash("my-pets");
             else
               alert("Erro ao inserir pet");
-    });
+		});
 	}       
   else
   {
@@ -696,9 +696,8 @@ function savePet(petKey) {
                     species: $("#species").val(),
                     gender: $("#gender").val(),
                     breed: $("#breed").val(),
-                    _id: petKey,
                   };
-		$.put('/edit-pet', {pet: JSON.stringify(editPet)}, function(result){
+		$.put('/edit-pet', {pet: JSON.stringify(editPet), petId: petKey}, function(result){
             if (result.success)
               changeHash("my-pets");
             else

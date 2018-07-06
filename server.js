@@ -68,7 +68,6 @@ app.post('/new-product', (req, res)=>{
 //request for updating a product (admin page)
 app.put('/product-modify', (req, res)=>{
   let modProduct = JSON.parse(req.body.product);
-  console.log(modProduct);
   db.collection("products").updateOne({_id:modProduct._id}, { $set: modProduct }, function(err, result) {
 		if(err) {
 			res.send({success: false});
@@ -105,7 +104,6 @@ app.get('/login', (req, res)=>{
 app.get('/users', (req, res)=>{
 	// find the users
 	db.collection('users').find(req.query.user).toArray(function(err, result){
-		console.log(result);
 		if(err) {
             return res.send({
                 success: false,
@@ -137,6 +135,17 @@ app.post('/new-user', (req, res)=>{
 	});
 });
 
+//request for editing a profile
+app.put('/edit-profile', (req, res)=>{
+  let modUser = JSON.parse(req.body.user);
+  db.collection("users").updateOne({cpf: red.body.userId}, { $set: modUser }, function(err, result) {
+		if(err) {
+			res.send({success: false});
+			throw err;
+		}
+		res.send({success: true});
+  });
+});
 
 //request for adding new admins (admin page)
 app.post('/new-admin', (req, res)=>{
@@ -154,11 +163,9 @@ app.post('/new-admin', (req, res)=>{
 //receive requests for a specific pet
 app.get('/pet', (req, res)=>{
 	// find the pet with the received id
-	console.log(req.query.id);
 	let ObjectId = require('mongodb').ObjectId;
 	x = new ObjectId(req.query.id);
 	db.collection('pets').findOne({_id:x}, function(err, result){
-		console.log(result);
 		if(err) throw err;
 		// return the product object
 		res.send(result);
@@ -168,9 +175,8 @@ app.get('/pet', (req, res)=>{
 //receive requests for editing a pet
 app.put('/edit-pet', (req, res)=>{
   let modPet = JSON.parse(req.body.pet);
-  console.log(modPet);
   let ObjectId = require('mongodb').ObjectId;
-	x = new ObjectId(req.body.petId);
+  x = new ObjectId(req.body.petId);
   db.collection("pets").updateOne({_id:x}, { $set: modPet }, function(err, result) {
 		if(err) {
 			res.send({success: false});
@@ -210,6 +216,13 @@ app.post('/new-pet', (req, res)=>{
             });
 		}
 		res.send({success: true});
+	});
+});
+
+app.delete('/petByUser', (req, res)=>{
+	db.collection('pets').deleteMany({owner: req.body.id}, function(err, obj) {
+		if (err) throw err;
+		res.send('');
 	});
 });
 

@@ -310,16 +310,6 @@ function loadPageConfirmation() {
     }
 }
 
-function loadPageEditProfile() {
-    $("#my-area-content").load("my-profile-edit.html", function() {
-        $("#registerName").val(userSession.name);
-        $("#registerCPF").val(userSession.cpf);
-        $("#registerEmail").val(userSession.email);
-        $("#registerTel").val(userSession.tel);
-        $("#registerAddress").val(userSession.address);
-    });
-}
-
 function changePersonalData() {
     $("#content").load("my-area.html", function() {
         changeHash("my-profile-edit");
@@ -643,7 +633,6 @@ function loadPageMyPet() {
         });
     });
 }
-
 function loadPageEditPet (petKey) {
     $("#my-area-content").load("pet-edit.html", function() {
         $.get('/pet', {id: petKey}, function(result){
@@ -841,51 +830,63 @@ function saveAccount(){
             newUser.profilePic = userSession.profilePic;
         } else {
             newUser.profilePic = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png";
-        }
-    
-        if($("#registerConfirmPassword").val() == newUser.password){
-            $.post('/new-user', {user: JSON.stringify(newUser)}, function(result){
-                if (result.success)
-                  changeHash('login');
-                else
-                  alert("Erro ao inserir usuário");
-            });
-        }
-        else{
-            alert("Erro na confirmação de senha!");
-        }
+			if($("#registerConfirmPassword").val() == newUser.password){
+				$.post('/new-user', {user: JSON.stringify(newUser)}, function(result){
+					if (result.success)
+						changeHash('login');
+					else
+						alert("Erro ao inserir usuário");
+				});
+			}        
+			else{
+				alert("Erro na confirmação de senha!");
+			}		
+		}
     }
+}
+
+function loadPageEditProfile() {
+    $("#my-area-content").load("my-profile-edit.html", function() {
+        $("#registerName").val(userSession.name);
+        $("#registerCPF").val(userSession.cpf);
+        $("#registerEmail").val(userSession.email);
+        $("#registerTel").val(userSession.tel);
+        $("#registerAddress").val(userSession.address);
+		$("#save").attr('onClick', "editAccount()");
+    });
 }
 
 function editAccount(){
 
-    let objectStore = db.transaction("users", "readwrite").objectStore("users");
-    let request = objectStore.openCursor(userSession.cpf);
-    request.onsuccess =  event => {
-        
-        let cursor = event.target.result;
-        if($("#editEmail").val().split(" ").join("") != ""){
+		if($("#registerPassword").val().split(" ").join("") == ""){
+			console.log("Nao mudou a senha");
+			let editUser = {	name: $("#registerName").val(),
+								email: $("#registerEmail").val(),
+								tel: $("#registerTel").val(),
+								address: $("#registerAddress").val()
+							};		
+		}
+		else{
+			if($("#registerPassword").val() != $("#registerConfirmPassword").val()){
+				alert("Erro na confirmação de senha!");
+				return;
+			}
+			else{
+				let editUser = {	name: $("#registerName").val(),
+									email: $("#registerEmail").val(),
+									tel: $("#registerTel").val(),
+									address: $("#registerAddress").val(),
+									password: $("#registerPassword").val()
+								};					
+			}
+		}
 
-            cursor.value.email = $("#editEmail").val();
-            userSession.email = cursor.value.email;
-        }
-        if($("#editTel").val().split(" ").join("") != ""){
-            cursor.value.tel = $("#editTel").val();
-            userSession.tel = cursor.value.tel;
-        }
-        if($("#editPassword").val().split(" ").join("") != ""){
-            if($("#editPassword").val() == $("#editConfirmPassword").val()){
-                cursor.value.password = $("#editPassword").val();
-            }
-            else{
-                alert("Erro na confirmação de senha!");
-                return;
-            }
-        }
-		let objectStore = db.transaction(["users"], "readwrite").objectStore("users");
-        let requestUpdate = objectStore.put(cursor.value);
-        changeHash('my-area');
-    }
+		$.put('/edit-profile', {user: JSON.stringify(editUser), userId: userSession.cpf}, function(result){
+            if (result.success)
+              changeHash("my-area");
+            else
+              alert("Erro ao alterar conta");
+    });
 }
 
 function showOrderDetails(order) {
@@ -1197,7 +1198,7 @@ function showCustomers() {
 					newInfo.find('.usersEmail').text(user.email);
 					newInfo.find('.usersTel').text(user.tel);
 					newInfo.find('.usersAddress').text(user.address);
-					newInfo.find("#userRemove").attr('onClick', "removeUser(" + user.cpf + ")");
+					newInfo.find("#userRemove").attr('onClick', "removeUser('" + user.cpf + "')");
 			
 					$("#usersTable").append(newInfo);
 				}
@@ -1210,9 +1211,9 @@ function showCustomers() {
 //FUNÇÃO INCOMPLETA
 function removeUser(userKey) {
     if (confirm("Você tem certeza que quer remover este cliente?")) {
-		userKey = userKey.toString();
 		$.delete('/users', {id: userKey}, function(result){
-			$.delete('/pets', {id: userKey}, function(result){
+			$.delete('/petByUser', {id: userKey}, function(result){
+				showCustomers();
 			});
 		});
     }

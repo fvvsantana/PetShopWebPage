@@ -646,18 +646,15 @@ function loadPageMyPet() {
 
 function loadPageEditPet (petKey) {
     $("#my-area-content").load("pet-edit.html", function() {
-        let objectStore = db.transaction("pets", "readonly").objectStore("pets");
-        objectStore.openCursor(parseInt(petKey)).onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
-                $("#name").val(cursor.value.name);
-                $("#age").val(cursor.value.age);
-                $("#species").val(cursor.value.species);
-                $("#gender").val(cursor.value.gender);
-                $("#breed").val(cursor.value.breed);
-                $("#save").attr('onClick', "savePet(" + petKey + ");");
-            }
-        }
+        $.get('/pet', {id: petKey}, function(result){
+            let pet = result;
+            $("#name").val(pet.name);
+            $("#age").val(pet.age);
+            $("#species").val(pet.species);
+            $("#gender").val(pet.gender);
+            $("#breed").val(pet.breed);
+            $("#save").attr('onClick', "savePet(" + petKey + ");");
+        });
     });
 }
 
@@ -686,11 +683,28 @@ function savePet(petKey) {
 					  };
 		$.post('/new-pet', {pet: JSON.stringify(newPet)}, function(result){
             if (result.success)
-              changeHash("my-area");
+              changeHash("my-pets");
             else
               alert("Erro ao inserir pet");
-        });
+    });
 	}       
+  else
+  {
+		let editPet = {	name: $("#name").val(),
+                    age: $("#age").val(),
+                    owner: userSession.cpf,
+                    species: $("#species").val(),
+                    gender: $("#gender").val(),
+                    breed: $("#breed").val(),
+                    _id: petKey,
+                  };
+		$.put('/edit-pet', {pet: JSON.stringify(editPet)}, function(result){
+            if (result.success)
+              changeHash("my-pets");
+            else
+              alert("Erro ao alterar pet");
+    });
+  }
 
 }
 
@@ -1011,12 +1025,12 @@ function removeProduct(productKey) {
 function modifyProduct (productKey) {
     $("#adm-content").load("adm/alter-product.html", function() {
         $.get('/product', {id: parseInt(productKey)}, function(result){
-			let product = result;
+            let product = result;
             $("#name").val(product.name);
             $("#qtd").val(product.quantity);
             $("#price").val(product.price);
             $("#description").val(product.description);
-			$("#picture").attr('src', product.picture);
+            $("#picture").attr('src', product.picture);
             $("#save").attr('onClick', "saveProduct(" + product._id + ");");
         });
     });

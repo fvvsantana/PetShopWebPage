@@ -152,6 +152,27 @@ app.post('/new-admin', (req, res)=>{
 	});
 });
 
+app.get('/pet', (req, res)=>{
+	// find the product with the received id
+	db.collection('pets').findOne({_id: "ObjectId(" + req.query.id + ")"}, function(err, result){
+		if(err) throw err;
+		// return the product object
+		res.send(result);
+	});
+});
+
+app.put('/edit-pet', (req, res)=>{
+  let modPet = JSON.parse(req.body.pet);
+  console.log(modProduct);
+  db.collection("pets").updateOne({_id:modPet._id}, { $set: modPet }, function(err, result) {
+		if(err) {
+			res.send({success: false});
+			throw err;
+		}
+		res.send({success: true});
+  });
+});
+
 // receive requests for pets (user page)
 app.get('/pets', (req, res)=>{
 	// find the pets of an user

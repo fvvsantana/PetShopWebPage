@@ -138,7 +138,7 @@ app.post('/new-user', (req, res)=>{
 //request for editing a profile
 app.put('/edit-profile', (req, res)=>{
   let modUser = JSON.parse(req.body.user);
-  db.collection("users").updateOne({cpf: red.body.userId}, { $set: modUser }, function(err, result) {
+  db.collection("users").updateOne({cpf: req.body.userId}, { $set: modUser }, function(err, result) {
 		if(err) {
 			res.send({success: false});
 			throw err;

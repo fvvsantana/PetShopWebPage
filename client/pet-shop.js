@@ -5,7 +5,7 @@ let db;
 let userLoggedIn = false;
 
 //Dados do usuário que estiver em uma sessão estarão aqui
-let userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false};
+let userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false, password:""};
 
 //abertura do banco de dados
 let request = indexedDB.open("HappyPet_db", 1);
@@ -784,6 +784,7 @@ function startLogin() {
 				userSession.tel = result.tel;
 				userSession.profilePic = result.profilePic;
 				userSession.isAdmin = result.isAdmin;
+				userSession.password = result.password;
                     
 				// update the header according to the user type
 				if (userSession.isAdmin) {
@@ -807,7 +808,7 @@ function startLogoff(){
     $("#cartButton").show();
     
     // finish session variables
-    userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false};
+    userSession = {name: "", cpf: "", email: "", address: "", tel:"", profilePic: "", isAdmin: false, password:""};
     userLoggedIn = false;
     
     // open login screen
@@ -847,46 +848,46 @@ function saveAccount(){
 
 function loadPageEditProfile() {
     $("#my-area-content").load("my-profile-edit.html", function() {
+		
         $("#registerName").val(userSession.name);
         $("#registerCPF").val(userSession.cpf);
         $("#registerEmail").val(userSession.email);
         $("#registerTel").val(userSession.tel);
         $("#registerAddress").val(userSession.address);
+		$("#registerPassword").val(userSession.password);
 		$("#save").attr('onClick', "editAccount()");
     });
 }
 
 function editAccount(){
 
-		if($("#registerPassword").val().split(" ").join("") == ""){
-			console.log("Nao mudou a senha");
-			let editUser = {	name: $("#registerName").val(),
-								email: $("#registerEmail").val(),
-								tel: $("#registerTel").val(),
-								address: $("#registerAddress").val()
-							};		
-		}
-		else{
-			if($("#registerPassword").val() != $("#registerConfirmPassword").val()){
-				alert("Erro na confirmação de senha!");
-				return;
-			}
-			else{
-				let editUser = {	name: $("#registerName").val(),
-									email: $("#registerEmail").val(),
-									tel: $("#registerTel").val(),
-									address: $("#registerAddress").val(),
-									password: $("#registerPassword").val()
-								};					
-			}
-		}
+	if($("#registerPassword").val() != $("#registerConfirmPassword").val()){
+		alert("Erro na confirmação de senha!");
+		return;
+	}
+	else{
+		let editUser = {	name: $("#registerName").val(),
+							email: $("#registerEmail").val(),
+							tel: $("#registerTel").val(),
+							address: $("#registerAddress").val(),
+							password: $("#registerPassword").val()
+						};
 
 		$.put('/edit-profile', {user: JSON.stringify(editUser), userId: userSession.cpf}, function(result){
-            if (result.success)
-              changeHash("my-area");
-            else
-              alert("Erro ao alterar conta");
-    });
+			if (result.success){
+				userSession.name = editUser.name;
+				userSession.email = editUser.email;
+				userSession.tel = editUser.tel;
+				userSession.address = editUser.address;
+				userSession.password = editUser.password;
+				changeHash("my-area");
+			}
+			else
+				alert("Erro ao alterar conta");
+		});						
+	}
+
+
 }
 
 function showOrderDetails(order) {

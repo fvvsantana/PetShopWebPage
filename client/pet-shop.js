@@ -756,15 +756,15 @@ function startLogin() {
     let loginID = $("#user").val();
     let loginPass = $("#password").val();
 	
-	let loginInfo = { 	cpf: $("#user").val(),
-						password: $("#password").val()
-					};
+	  let loginInfo = {
+        cpf: $("#user").val(),
+				password: $("#password").val()
+		};
     
-    if($("#user").val() == "" || loginPass == ""){
+    if(loginID == "" || loginPass == ""){
         alert("Preencha todos os campos!");
         return;
     }
-    else{
 		
 		$.get('/login', {user: loginInfo}, function(result){
 			if (result == ''){
@@ -798,7 +798,6 @@ function startLogin() {
 				}
 			}
 		});
-    }
 }
 
 

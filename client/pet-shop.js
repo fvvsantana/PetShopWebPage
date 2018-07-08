@@ -608,31 +608,27 @@ function loadPageMyProfile() {
 }
 
 function loadPageMyPet() {
-    $("#my-area-content").load("my-pet.html", function() {
-        let model = $("#indiv-pet").clone();
-        $("#indiv-pet").remove();
+  $("#my-area-content").load("my-pet.html", function() {
+      let model = $("#indiv-pet").clone();
+      $("#indiv-pet").remove();
 				
-	$.get('/pets/', {id: userSession.cpf}, function(result){
-			let i;	
-			for(i = 0; i < result.length; i++){
-				
-				let pet = result[i];
-                let newElement = model.clone();
-				
-                newElement.find("#petPic").attr('src', pet.petPic);
-                newElement.find("#petName").text(pet.name);
-                newElement.find("#petSpecies").text(pet.species);
-                newElement.find("#petAge").text(pet.age);
-                newElement.find("#petGender").text(pet.gender);
-                newElement.find("#petBreed").text(pet.breed);
-                newElement.find("#petEdit").attr('onClick', "changeHash('pet-edit-" + pet._id + "')");
-                newElement.find("#petRemove").attr('onClick', "removePet('" + pet._id + "')");
-                $("#petList").append(newElement);
-                
-            }
-        });
-    });
+    	$.get('/pets/', {id: userSession.cpf}, function(result){
+          result.forEach(function(pet){
+              let newElement = model.clone();
+              newElement.find("#petPic").attr('src', pet.petPic);
+              newElement.find("#petName").text(pet.name);
+              newElement.find("#petSpecies").text(pet.species);
+              newElement.find("#petAge").text(pet.age);
+              newElement.find("#petGender").text(pet.gender);
+              newElement.find("#petBreed").text(pet.breed);
+              newElement.find("#petEdit").attr('onClick', "changeHash('pet-edit-" + pet._id + "')");
+              newElement.find("#petRemove").attr('onClick', "removePet('" + pet._id + "')");
+              $("#petList").append(newElement);
+          });
+      });
+  });
 }
+
 function loadPageEditPet (petKey) {
     $("#my-area-content").load("pet-edit.html", function() {
         $.get('/pet', {id: petKey}, function(result){

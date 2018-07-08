@@ -62,7 +62,8 @@
 #products-section .product-cell{
 	justify-content: center;
 	align-items: center;
-
+	width: 150px;
+	padding: 10px;
 }
 
 #products-section .product-cell a{

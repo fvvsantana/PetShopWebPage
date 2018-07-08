@@ -239,10 +239,30 @@ app.get('/orders', (req, res)=>{
 // receive requests for details of an order (user page)
 app.get('/order', (req, res)=>{
 	// find orders made
-	db.collection('orders').find({_id: req.body.id}).toArray(function(err, result){
+	db.collection('orders').find({_id: req.query.id}).toArray(function(err, result){
 		if(err) throw err;
 		// return the orders
 		res.send(result);
+	});
+});
+
+// receive requests to create an order
+app.post('/new-order', (req, res)=>{
+	let order = JSON.parse(req.body.order);
+	
+	// remove the products from the stock
+	order.products.forEach(function(product){
+		db.collection('products').findAndModify(
+			{_id: product.key},
+			[],
+			{$inc: {quantity: -product.quantity}}
+		);
+	});
+		
+	db.collection('orders').insertOne(order, function(err, result){
+		if(err)
+            return res.send({success: false});
+		res.send({success: true});
 	});
 });
 

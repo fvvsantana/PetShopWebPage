@@ -346,28 +346,20 @@ function finishOrder() {
             // adiciona os produtos no pedido
             order.products.push(cursor.value);
             
-            // remove os produtos comprados do estoque
-            db.transaction("products", "readwrite").objectStore("products").openCursor(cursor.value.key).onsuccess = function(event) {
-                let cursor2 = event.target.result;
-                if (cursor2) {
-                    let prod = cursor2.value;
-                    prod.quantity -= cursor.value.quantity;
-                    cursor2.update(prod);
-                }
-            };
+            // remove os produtos do carrinho
             cursor.delete();
             cursor.continue();
         }
         else {
             // após remover todos itens do carrinho, salvar o pedido no banco
-            let orderTransaction = db.transaction("orders", "readwrite").objectStore("orders").add(order);
-            orderTransaction.onsuccess = function(event) {
+            $.post('/new-order', {order: JSON.stringify(order)}, function(result){
+              if (result.success) {
                 alert("Pedido realizado com sucesso!");
                 changeHash("my-cart");
-            };
-            orderTransaction.onerror = function(event) {
+              }
+              else
                 alert("Não foi possível registrar o pedido.");
-            }
+            });
         }
     };
 }

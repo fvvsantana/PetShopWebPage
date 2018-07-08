@@ -932,32 +932,28 @@ function loadPageAdmOrders() {
 	
 	$("#adm-content").load("adm/orders.html", function() {
 	
-        let orderInfo = $('<tr/>');
-        orderInfo.append($('<td id="orderNumber"></td>'));
-        orderInfo.append($('<td id="orderClient"></td>'));
-        orderInfo.append($('<td id="orderCpf"></td>'));
-        orderInfo.append($('<td id="orderTotal"></td>'));
-        orderInfo.append($('<td id="orderDate"></td>'));
-        orderInfo.append($('<td><button type="button" id="orderDetail" class="btn btn-default">Detalhes</button></td>'));
+      let orderInfo = $('<tr/>');
+      orderInfo.append($('<td id="orderNumber"></td>'));
+      orderInfo.append($('<td id="orderClient"></td>'));
+      orderInfo.append($('<td id="orderCpf"></td>'));
+      orderInfo.append($('<td id="orderTotal"></td>'));
+      orderInfo.append($('<td id="orderDate"></td>'));
+      orderInfo.append($('<td><button type="button" id="orderDetail" class="btn btn-default">Detalhes</button></td>'));
         
-        $.get('/orders/', function(result){
-            let i;
-			for(i = 0; i < result.length; i++){
-				
-				let order = result[i];
-                let newInfo = orderInfo.clone();
-				
-                newInfo.find('#orderNumber').text(order._id);
-                newInfo.find('#orderClient').text(order.name);
-                newInfo.find('#orderCpf').text(order.user);
-                newInfo.find('#orderTotal').text(order.orderTotal);
-                newInfo.find('#orderDate').text(order.date.getDate() + '/' + (order.date.getMonth()+1) + '/' + order.date.getFullYear() + " - " + order.date.getHours() + ':' + order.date.getMinutes());
-                newInfo.find("#orderDetail").attr('onClick', "changeHash('order-detail-" + order._id + "')");
-                
-                $("#ordersTable").append(newInfo);
-            
-            }
-        });
+      $.get('/orders/', function(result){
+          result.forEach(function(order){
+              console.log(JSON.stringify(order));
+              let newInfo = orderInfo.clone();
+              newInfo.find('#orderNumber').text(order._id);
+              newInfo.find('#orderClient').text(order.name);
+              newInfo.find('#orderCpf').text(order.user);
+              newInfo.find('#orderTotal').text(order.orderTotal);
+              let d = new Date(order.date);
+              newInfo.find('#orderDate').text(d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + " - " + d.getHours() + ':' + d.getMinutes());
+              newInfo.find("#orderDetail").attr('onClick', "changeHash('order-detail-" + order._id + "')");
+              $("#ordersTable").append(newInfo);
+          });
+      });
 	});
 }
 

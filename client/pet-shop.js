@@ -39,28 +39,9 @@ $.put = function(url, data, callback){
 request.onupgradeneeded = function(event) {
     
     db = event.target.result;
-
-    //criação da "tabela" de usuários
-    let userStore = db.createObjectStore("users", { keyPath: "cpf" });
-    addUsers(userStore);
-    
-    //criação da "tabela" de pets
-    let petStore = db.createObjectStore("pets", { autoIncrement: true });
-    petStore.createIndex("owner", "owner", { unique: false });
-    addPets(petStore);
-	
-    //criação da "tabela" de produtos
-    let productsStore = db.createObjectStore("products", { autoIncrement: true });
-    productsStore.createIndex("animal", "animal", {unique: false});
-    productsStore.createIndex("animal-category", ["animal", "category"], {unique: false});
-    addProducts(productsStore);
     
     // criação da "tabela" do carrinho
     let cartStore = db.createObjectStore("cart", { keyPath: "key" });
-    
-    // criação da "tabela" dos pedidos
-    let orderStore = db.createObjectStore("orders", { autoIncrement: true });
-    orderStore.createIndex("user", "user", { unique: false });
 };
 
 //function to change hash
@@ -325,43 +306,47 @@ function search(){
 }
 
 function finishOrder() {
-    // cria o objeto com dados do pedido
-    let order = {
-        user: userSession.cpf,
-        name: userSession.name,
-        address: userSession.address,
-        tel: userSession.tel,
-        date: new Date(),
-        itemTotal: $("#total1").text(),
-        shipTotal: "R$ 10.00",
-        orderTotal: $("#total2").text(),
-        products: []
-    };
-    
-    // carrega os itens do carrinho
-    db.transaction("cart", "readwrite").objectStore("cart").openCursor().onsuccess = function(event) {
-        let cursor = event.target.result;
-        if (cursor) {
-            
-            // adiciona os produtos no pedido
-            order.products.push(cursor.value);
-            
-            // remove os produtos do carrinho
-            cursor.delete();
-            cursor.continue();
-        }
-        else {
-            // após remover todos itens do carrinho, salvar o pedido no banco
-            $.post('/new-order', {order: JSON.stringify(order)}, function(result){
-              if (result.success) {
-                alert("Pedido realizado com sucesso!");
-                changeHash("my-cart");
-              }
-              else
-                alert("Não foi possível registrar o pedido.");
-            });
-        }
-    };
+    // obtem o id do pedido
+    $.get('/get-id', {type: 'order_id'}, function(result){
+        // cria o objeto com dados do pedido
+        let order = {
+            _id: result.new_id,
+            user: userSession.cpf,
+            name: userSession.name,
+            address: userSession.address,
+            tel: userSession.tel,
+            date: new Date(),
+            itemTotal: $("#total1").text(),
+            shipTotal: "R$ 10.00",
+            orderTotal: $("#total2").text(),
+            products: []
+        };
+        
+        // carrega os itens do carrinho
+        db.transaction("cart", "readwrite").objectStore("cart").openCursor().onsuccess = function(event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                
+                // adiciona os produtos no pedido
+                order.products.push(cursor.value);
+                
+                // remove os produtos do carrinho
+                cursor.delete();
+                cursor.continue();
+            }
+            else {
+                // após remover todos itens do carrinho, salvar o pedido no banco
+                $.post('/new-order', {order: JSON.stringify(order)}, function(result){
+                  if (result.success) {
+                    alert("Pedido realizado com sucesso!");
+                    changeHash("my-cart");
+                  }
+                  else
+                    alert("Não foi possível registrar o pedido.");
+                });
+            }
+        };
+    });
 }
 
 function loadPageCart() {
@@ -472,11 +457,9 @@ function addCart(productKey) {
         }
         else {
             // precisa encontrar os dados do produto
-            let productStore = db.transaction("products", "readonly").objectStore("products");
-            productStore.get(parseInt(productKey)).onsuccess = function(event) {
-                let product = event.target.result;
+            $.get('/product/', {id: productKey}, function(product){
                 let newItem = {
-                    key: parseInt(productKey),
+                    key: product._id,
                     picture: product.picture,
                     name: product.name,
                     price: product.price,
@@ -489,7 +472,7 @@ function addCart(productKey) {
                 request.onsuccess = function(event) {
                     changeHash("my-cart");
                 }
-            }
+            });
         }
     }
 }
@@ -682,7 +665,7 @@ function savePet(petKey) {
 
 
 function loadPageMyOrders() {
-    
+
     // carrega o html
     $("#my-area-content").load("my-orders.html", function() {
         
@@ -694,24 +677,23 @@ function loadPageMyOrders() {
         let itemModel = model.find("#item").clone();
         model.find("#item").remove();
         
-        // abre a tabela de pedidos
-        let objectStore = db.transaction("orders", "readonly").objectStore("orders").index("user");
-        objectStore.openCursor(userSession.cpf, 'prev').onsuccess = function(event) {
-            let cursor = event.target.result;
-            if (cursor) {
+        // carrega a lista de pedidos
+        $.get('/user-orders', {user: userSession.cpf}, function(result){
+            result.forEach(function(order){
                 // cria o elemento do pedido
                 let newElement = model.clone();        
-                newElement.find("#orderNumber").text("Pedido Nº: " + cursor.primaryKey);
-                newElement.find("#orderDate").text("Realizado em: " + cursor.value.date.getDate() + '/' + (cursor.value.date.getMonth()+1) + '/' + cursor.value.date.getFullYear() + " às " + cursor.value.date.getHours() + ':' + cursor.value.date.getMinutes());
-                newElement.find("#buyerName").text(cursor.value.name);
-                newElement.find("#address").text("Endereço: " + cursor.value.address);
-                newElement.find("#tel").text("Telefone: " + cursor.value.tel);
-                newElement.find("#itemTotal").text(cursor.value.itemTotal);
-                newElement.find("#shipTotal").text(cursor.value.shipTotal);
-                newElement.find("#orderTotal").text(cursor.value.orderTotal);
+                newElement.find("#orderNumber").text("Pedido Nº: " + order._id);
+                let d = new Date(order.date);
+                newElement.find("#orderDate").text("Realizado em: " + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + " às " + d.getHours() + ':' + d.getMinutes());
+                newElement.find("#buyerName").text(order.name);
+                newElement.find("#address").text("Endereço: " + order.address);
+                newElement.find("#tel").text("Telefone: " + order.tel);
+                newElement.find("#itemTotal").text(order.itemTotal);
+                newElement.find("#shipTotal").text(order.shipTotal);
+                newElement.find("#orderTotal").text(order.orderTotal);
                 
                 // adiciona os produtos
-                cursor.value.products.forEach(function(product){
+                order.products.forEach(function(product){
                     let newItem = itemModel.clone();
                     newItem.find("#productPic img").attr('src', product.picture);
                     newItem.find("#productPic").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
@@ -725,10 +707,8 @@ function loadPageMyOrders() {
                 
                 // adiciona o pedido na lista
                 $("#order-list").append(newElement);
-                
-                cursor.continue();
-            }
-        }
+            });
+        });
     });
 }
 
@@ -892,15 +872,13 @@ function showOrderDetails(order) {
         let itemModel = model.find("#item").clone();
         model.find("#item").remove();
         
-        $.get('/order/', function(result){
-            let i;
-			for(i = 0; i < result.length; i++){
+        $.get('/order-details', {order_id: order}, function(order){
 				
-				let order = result[i];
                 // cria o elemento do pedido
                 let newElement = model.clone();        
                 newElement.find("#orderNumber").text("Pedido Nº: " + order._id);
-                newElement.find("#orderDate").text("Realizado em: " + order.date.getDate() + '/' + (order.date.getMonth()+1) + '/' + order.date.getFullYear() + " às " + order.date.getHours() + ':' + order.date.getMinutes());
+                let d = new Date(order.date);
+                newElement.find("#orderDate").text("Realizado em: " + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + " às " + d.getHours() + ':' + d.getMinutes());
                 newElement.find("#buyerName").text(order.name);
                 newElement.find("#address").text("Endereço: " + order.address);
                 newElement.find("#tel").text("Telefone: " + order.tel);
@@ -923,7 +901,6 @@ function showOrderDetails(order) {
                 
                 // adiciona o pedido na lista
                 $("#order-list").append(newElement);
-            }
         });
     });
 }
@@ -940,9 +917,8 @@ function loadPageAdmOrders() {
       orderInfo.append($('<td id="orderDate"></td>'));
       orderInfo.append($('<td><button type="button" id="orderDetail" class="btn btn-default">Detalhes</button></td>'));
         
-      $.get('/orders/', function(result){
+      $.get('/all-orders', function(result){
           result.forEach(function(order){
-              console.log(JSON.stringify(order));
               let newInfo = orderInfo.clone();
               newInfo.find('#orderNumber').text(order._id);
               newInfo.find('#orderClient').text(order.name);
@@ -1045,8 +1021,9 @@ function addProduct(){
   	}
 
     // obtem  o id do novo produto
-    $.get('/product-id', function(result){
+    $.get('/get-id', {type: 'product_id'}, function(result){
 
+        console.log(parseInt(result.new_id));
         // cria o objeto do novo produto
         let newProduct = {
           _id: parseInt(result.new_id),
@@ -1202,97 +1179,4 @@ function removeUser(userKey) {
 		});
     }
 	else return;
-}
-
-/* FUNÇÕES PARA ADIÇÃO DE EXEMPLOS NO BANCO: */
-
-// adiciona usuários de exemplo
-function addUsers(objectStore){
-    
-    //dados dos usuários iniciais
-    const userData = [
-        { cpf: "admin", name: "Bill", tel: "123", address: "Rua 1", email: "bill@mypet.com", password: "admin", profilePic:"http://meganandtimmy.com/wp-content/uploads/2012/09/4ce4a17fb7f35-447x600.jpg", isAdmin: true },
-        { cpf: "321", name: "Jubileu", tel: "321", address: "Rua 3", email: "jubileu@gmail.com", password: "321", profilePic:"https://pbs.twimg.com/media/C3BxfpmWIAAGJpw.jpg", isAdmin: false }
-    ];
-    
-    //inserção dos usuários no banco de dados
-    for (let i in userData) {
-        objectStore.add(userData[i]);
-    }
-}
-
-// adiciona pets de exemplo
-function addPets(objectStore){
-    
-    //dados dos pets iniciais
-    const petsData = [
-        { owner: "321", name: "Rex", species: "Cachorro", age: 5, gender: "Masculino", breed:"Golden Retriever" , petPic:"http://portaldodog.com.br/cachorros/wp-content/uploads/2015/05/golden-retriever-8-375x500.jpg"},
-        { owner: "321", name: "Melinda", species: "Gato", age: 2, gender: "Feminino", breed:"Siamês" , petPic:"http://cdn2-www.cattime.com/assets/uploads/gallery/siamese-cats-and-kittens-pictures/siamese-cat-kitten-picture-5.jpg"},
-        { owner: "admin", name: "Lassie", species: "Cachorro", age: 3, gender: "Feminino", breed:"Husky Siberiano" , petPic:"https://upload.wikimedia.org/wikipedia/commons/a/a3/Black-Magic-Big-Boy.jpg"}
-    ];
-        
-    //inserção dos pets no banco de dados
-    for (let i in petsData) {
-        objectStore.add(petsData[i]);
-    }
-}
-
-// adiciona serviços de exemplo
-function addServicer(objectStore) {
-    const serviceData = [
-        { name: ""}
-    ];
-}
-
-// adiciona produtos de exemplo
-function addProducts(objectStore){
-    
-    const stockData = [
-        { name: "Ração Royal Canin Maxi - Cães Adultos - 15kg", quantity: 200, price: "209.99", animal: "Cachorro", category: "Alimentos", picture: "https://cdn-petz-imgs.stoom.com.br/fotos/1515444639412.jpg", description:`- Indicado para cães adultos de grande porte;
-- Oferece todos os nutrientes que seu cão de grande porte precisa para uma vida longa e saudável;
-- Especialmente formulada para favorecer a saúde dos ossos e articulações também preserva a tonicidade muscular graças a um aporte adequado de proteínas;
-- Assegura uma ótima digestão e atende até mesmo os paladares mais exigentes;
-- Disponível em embalagem de 15kg.` }, 
-        { name: "Ração Royal Canin Golden Retriever - Cães Adultos - 12kg", quantity: 100, price: "204.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1515429480749.jpg",description:`- Indicado para cães
-- Ajuda na manutenção ideal do peso do seu pet
-- Contribui para o funcionamento da musculatura cardíaca
-- Auxilia na eliminação dos efeitos do envelhecimento celular
-- Disponível em embalagem de 12kg` },
-		{ name: "Royal Canin Renal Veterinary Diet Cães - 10kg", quantity: 10, price: "289.99", animal: "Cachorro", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458082860525.jpg", description:`- Indicada para cães adultos;
-- Recomendado para cães com insuficiência renal crônica;
-- Ajuda a eliminar e prevenir a formação de radicais livres;
-- Equilibra o sistema digestivo,` },
-		{ name: "Ração Royal Canin Veterinary Hypoallergenic - Gatos Adultos - 1,5kg", quantity: 150, price: "104.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1507918511559.jpg", description:`- Indicada para gatos adultos e alérgicos;
-- Proteínas hidrolisadas que tornam o alimento altamente digestivo e com baixo potencial alergênico;
-- Complexo patenteado que ajuda a reforçar a barreira cutânea;
-- Enriquecido com EPA/DHA;` },
-		{ name: "Ração Royal Canin Premium Cat Vitalidade para Gatos Adultos - 10kg", quantity: 180, price: "134.94", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264968346.jpg", description:`- Indicada para gatos adultos;
-- Alimentação completa e balanceada;
-- Sabor irresistível para seu gatinho;
-- Favorece a saúde do trato urinário;` },
-		{ name: "Ração Royal Canin Premium Cat Beleza da Pelagem para Gatos Adultos - 10kg", quantity: 50, price: "134.99", animal: "Gato", category: "Alimentos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1508264680318.jpg", description:`- Indicada para gatos adultos;
-- Formula altamente palatável;
-- Promove a saúde do trato urinário;
-- Enriquecida com ômegas 3 e 6 proporcionando beleza da pelagem;` },
-		{ name: "Brinquedo Chalesco Para Cães Pelúcia Cachorro Luxo Rosa e Azul", quantity: 20, price: "34.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1458848516726.jpg", description:`- Indicado para cães;
-- Divertido e criativo;
-- Ajuda a combater o estresse do seu pet;
-- Possui textura macia de pelúcia.` },
-		{ name: "Brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido", quantity: "30", price: "19.19", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/10037080001297-1.jpg", description:`Você sabia que cães que permanecem longos períodos sem seus donos, sem uma atividade física, sem estímulos, podem se tornar animais deprimidos? Por isso a Chalesco criou o brinquedo Chalesco Para Cães Pelúcia Hamburguer Colorido, que além de apresentar formato criativo e divertido, possui textura macia de pelúcia. ` },
-		{ name: "Brinquedo de Pelúcia Chalesco Crocodilo", quantity: "40", price: "20.99", animal: "Cachorro", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992186939.jpg", description:`- Indicado para cães;
-- Divertido e criativo;
-- Ajuda a combater o estresse do seu pet;
-- Possui textura macia de pelúcia.` },
-		{ name: "Arranhador 4 Estações Para Gatos Cone Sisal com Penas", quantity: 20, price: "209.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/20037081000050-1.jpg", description:`O Arranhador 4 Estações Para Gatos Cone Sisal com Penas foi desenvolvido para proporcionar atividades físicas, evitando o stress preservando seus móveis. Um lugar adequado para arranhar, dormir e brincar. Tem um design bonito que pode situar-se em qualquer lugar da sua casa. Para evitar que o seu gato estrague móveis, paredes ou sofás, tenha a certeza de lhe proporcionar um lugar adequado para arranhar, assim poderá esticar-se, espreguiçar-se e afiar as suas unhas. Tamanho: 80cm. ` },
-		{ name: "Brinquedo Chalesco Kit com 2 Ratinhos de Corda", quantity: 100, price: "20.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1457992630932.jpg", description:`- Indicado para gatos;
-- Provoque seu gatinho para brincar com estes ratinhos que são pura diversão;
-- Feitos de tecido de algodão, são ideais para seu melhor amigo que precisa diariamente de uma boa dose de entretenimento.` },
-		{ name: "Brinquedo Jambo Gatos Joaninha Amarelo e Preto Vibratória", quantity: 50, price: "19.99", animal: "Gato", category: "Brinquedos", picture:"https://cdn-petz-imgs.stoom.com.br/fotos/1455921490800.jpg", description:`Presentear seu gatinho é uma forma divertida de descontrair o seu animal de estimação e evitar que eles mordam os móveis da sua casa. O Brinquedo Jambo Pet Gatos Joaninha Amarelo e Preto Vibratória é feito em poliéster e é perfeito para seu gatinho gastar as energias, pois vem com um dispositivo que vibra, deixando seu pet instigado durante longos períodos de tempo. ` }
-		
-    ];
-    
-    //inserção dos produtos no banco de dados
-    for (let i in stockData) {
-        objectStore.add(stockData[i]);
-    }
 }

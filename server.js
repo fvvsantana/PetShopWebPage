@@ -41,9 +41,9 @@ app.get('/products', (req, res)=>{
 });
 
 //generate a sequence of ids for products
-app.get('/product-id', (req, res)=>{
-	db.collection('product-counter').findAndModify(
-		{_id: 'product_id'},
+app.get('/get-id', (req, res)=>{
+	db.collection('id-counter').findAndModify(
+		{_id: req.query.type},
 		[],
 		{$inc: {new_id: 1}},
 		function(err, result){
@@ -227,7 +227,7 @@ app.delete('/petByUser', (req, res)=>{
 });
 
 // receive requests for all orders (admin page)
-app.get('/orders', (req, res)=>{
+app.get('/all-orders', (req, res)=>{
 	// find orders made
 	db.collection('orders').find().toArray(function(err, result){
 		if(err) throw err;
@@ -236,10 +236,20 @@ app.get('/orders', (req, res)=>{
 	});
 });
 
-// receive requests for details of an order (user page)
-app.get('/order', (req, res)=>{
+// receive requests for one order details
+app.get('/order-details', (req, res)=>{
 	// find orders made
-	db.collection('orders').find({_id: req.query.id}).toArray(function(err, result){
+	db.collection('orders').findOne({_id: parseInt(req.query.order_id)}, function(err, result){
+		if(err) throw err;
+		// return the orders
+		res.send(result);
+	});
+});
+
+// receive requests for one user orders (user page)
+app.get('/user-orders', (req, res)=>{
+	// find orders made
+	db.collection('orders').find({user: req.query.user}).toArray(function(err, result){
 		if(err) throw err;
 		// return the orders
 		res.send(result);

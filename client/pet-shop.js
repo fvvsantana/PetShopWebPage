@@ -302,7 +302,7 @@ function changeDeliverAdress() {
 }
 
 function search(){
-    alert("A função de BUSCA será implementada com auxílio do servidor na próxima parte do projeto.");
+    alert("Funcionalidade não implementada");
 }
 
 function finishOrder() {
@@ -701,7 +701,7 @@ function loadPageMyOrders() {
                     newItem.find("#productName").attr('href', "javascript:changeHash('product-view-" + product.key + "')");
                     newItem.find("#productPrice").text("R$ " + product.price);
                     newItem.find("#productQtd").text(product.quantity);
-                    newItem.find("#productSubtotal").text("R$ " + (product.price*product.quantity));
+                    newItem.find("#productSubtotal").text("R$ " + (product.price*product.quantity).toFixed(2));
                     newElement.find("#item-list").append(newItem);
                 });
                 

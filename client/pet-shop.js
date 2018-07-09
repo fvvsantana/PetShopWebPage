@@ -1169,7 +1169,6 @@ function showCustomers() {
 	});
 }
 
-//FUNÇÃO INCOMPLETA
 function removeUser(userKey) {
     if (confirm("Você tem certeza que quer remover este cliente?")) {
 		$.delete('/users', {id: userKey}, function(result){
